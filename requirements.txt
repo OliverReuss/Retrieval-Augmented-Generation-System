@@ -1,0 +1,29 @@
+# requirements.txt
+# Alle benötigten Python-Pakete für die AOK RAG-Pipeline
+
+# Web Scraping
+Scrapy>=2.11.0
+
+# Text Processing und Chunking
+langchain>=0.1.0
+langchain-text-splitters>=0.0.1
+
+# Embeddings und ML
+sentence-transformers>=2.2.0
+torch>=2.0.0
+
+# Vektordatenbank
+chromadb>=0.4.0
+
+# LLM Integration
+langchain-openai>=0.0.5
+openai>=1.0.0
+requests>=2.31.0
+
+# Evaluation
+ragas>=0.1.0
+datasets>=2.14.0
+
+# Hilfsbibliotheken
+numpy>=1.24.0
+pandas>=2.0.0
