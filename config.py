@@ -2,147 +2,80 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 
-# config.py
-# Diese Datei enthält alle Konfigurationsparameter für die RAG-Pipeline
-# Hier können alle Einstellungen zentral angepasst werden
+# Proxy, Zertifikat und Warnungen
+# In den VSC-Einstellungen: @id:http.proxy -> http://proxy.your-company.com:8080 @id:http.proxyStrictSSL -> optional auf true
+PROXY = "http://proxy.your-company.com:8080"
+CERTIFICATE = "certificate.crt"
+os.environ['HTTP_PROXY'] = PROXY
+os.environ['HTTPS_PROXY'] = PROXY
+os.environ['http_proxy'] = PROXY
+os.environ['https_proxy'] = PROXY
+os.environ['CURL_CA_BUNDLE'] = CERTIFICATE
+os.environ['REQUESTS_CA_BUNDLE'] = CERTIFICATE
+os.environ['HF_HUB_DISABLE_SSL_VERIFICATION'] = '1'
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+os.environ['SSL_CERT_FILE'] = CERTIFICATE
 
-# ============================================
-# WEB SCRAPING KONFIGURATION
-# ============================================
+# Verzeichnisse
+DATA_DIRECTORY = "data"
+MODELS_DIRECTORY = "models"
 
-# Die Start-URL von der aus gecrawlt wird
-SCRAPING_START_URL = "https://www.aok.de"
+# Web Scraping
+WEB_SCRAPING_START_URL = "https://www.example.com/"
+WEB_SCRAPING_MAX_DEPTH = 2
+WEB_SCRAPING_EXCLUDED_TERMS = ["nordwest", "bw", "bayern", "bremen", "hessen", "nordost", "plus", "niedersachsen", "rps", "rh", "gp", "fk", "fm", "pp", "magazin", "datenschutzerklaerung", "karriere"]
+WEB_SCRAPING_DOWNLOAD_DELAY = 1.0
+WEB_SCRAPING_OUTPUT_PATH = "data/documents.json"
 
-# Maximale Tiefe für das Crawling (wie viele Links tief verfolgt werden)
-SCRAPING_MAX_DEPTH = 2
-
-# Diese Begriffe in URLs führen zum Ausschluss der Seite
-SCRAPING_EXCLUDED_TERMS = [
-    "nordwest", "bw", "bayern", "bremen", "hessen", 
-    "nordost", "plus", "niedersachsen", "rps", "rh", 
-    "gp", "fk", "fm", "pp", "magazin", 
-    "datenschutzerklaerung", "karriere"
-]
-
-# Pfad für die gespeicherten Scraping-Ergebnisse
-SCRAPING_OUTPUT_PATH = "data/scraped_data.json"
-
-# Wartezeit zwischen Anfragen (in Sekunden) - respektiert robots.txt
-SCRAPING_DOWNLOAD_DELAY = 1.0
-
-# Proxy-Einstellungen für Firmennetzwerke (optional)
-# Setze auf None wenn kein Proxy benötigt wird
-# Beispiel: "http://proxy.firma.de:8080" oder "http://user:passwort@proxy.firma.de:8080"
-SCRAPING_PROXY = "http://proxy.your-company.com:8080"  # z.B. "http://proxy.example.com:8080"
-
-# ============================================
-# CHUNKING KONFIGURATION
-# ============================================
-
-# Maximale Länge eines Chunks in Zeichen
-CHUNKING_CHUNK_SIZE = 1000
-
-# Überlappung zwischen Chunks in Zeichen
-CHUNKING_CHUNK_OVERLAP = 200
-
-# Pfad für die gespeicherten Chunks
+# Chunking
+CHUNKING_CHUNK_SIZE = 1200
+CHUNKING_CHUNK_OVERLAP = 100
 CHUNKING_OUTPUT_PATH = "data/chunks.json"
 
-# ============================================
-# EMBEDDING KONFIGURATION
-# ============================================
-
-# Name des Embedding-Modells (wird von HuggingFace geladen)
-EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large"
-
-# Lokaler Pfad zum Speichern des Modells
-EMBEDDING_MODEL_PATH = "models/infloat"
-
-# Batch-Größe für das Embedding (wie viele Texte gleichzeitig verarbeitet werden)
+# Embedding
+EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large" # "paraphrase-multilingual-mpnet-base-v2"
 EMBEDDING_BATCH_SIZE = 32
+EMBEDDING_MODEL_PATH = "models"
 
-# ============================================
-# RETRIEVAL / VEKTORDATENBANK KONFIGURATION
-# ============================================
-
-# Pfad zur ChromaDB Datenbank
-CHROMA_DB_PATH = "data/chroma_db"
-
-# Name der Collection in ChromaDB
-CHROMA_COLLECTION_NAME = "aok_documents"
-
-# Anzahl der zurückgegebenen Ergebnisse bei einer Suche
+# Retrieval
+RETRIEVAL_DB_PATH = "data/database"
+RETRIEVAL_COLLECTION_NAME = "documents_collection"
 RETRIEVAL_TOP_K = 10
+RETRIEVAL_HNSW_SPACE = "cosine"
+RETRIEVAL_HNSW_M = 32
+RETRIEVAL_STOP_WORDS_PATH = "data/stop_words.txt"
+RETRIEVAL_USE_RERANKING = False
+RETRIEVAL_CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+RETRIEVAL_RERANKING_TOP_K = 5
 
-# HNSW Parameter M (Anzahl der Verbindungen pro Knoten im Graph)
-# Höhere Werte = bessere Qualität, aber mehr Speicher
-HNSW_M = 16
+# Generation
+GENERATION_API_URL = "https://api.your-company.com/v1/chat/completions" # "https://openrouter.ai/api/v1/chat/completions"
+GENERATION_API_KEY = os.getenv("CHATBOT_API_KEY")
+GENERATION_MODEL_NAME = "Qwen3-30B-A3B-Q6_K.gguf:latest" # "qwen/qwen3-30b-a3b:free"
+GENERATION_TEMPERATURE = 0.1
+GENERATION_MAX_TOKENS = 800
+GENERATION_TOP_P = 0.9
+GENERATION_FREQUENCY_PENALTY = 0.1
+GENERATION_SEED = 1
+GENERATION_TIMEOUT = 60
+GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Fragen basierend auf bereitgestellten Dokumenten. 
 
-# Pfad zur Datei mit Stoppwörtern
-STOP_WORDS_PATH = "stop_words.txt"
+    AUFGABE: Beantworte die Nutzerfrage präzise und vollständig unter Verwendung AUSSCHLIESSLICH der bereitgestellten Kontextinformationen.
 
-# Cross Encoder Reranking aktivieren/deaktivieren
-# True = Reranking verwenden (bessere Ergebnisse, aber langsamer)
-# False = Nur Vektorsuche (schneller, aber weniger präzise)
-USE_RERANKING = False
+    REGELN:
+    - Nutze nur Informationen aus dem bereitgestellten Kontext
+    - Nutze relevante Textpassagen wörtlich, wenn möglich
+    - Strukturiere deine Antwort logisch und übersichtlich
+    - Erkläre komplexe Sachverhalte verständlich
+    - Bei unvollständigen Informationen im Kontext: ergänze mit "Weitere Details sind im bereitgestellten Kontext nicht verfügbar"
+    - Bei fehlenden Informationen: "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor"
+    - Bei unzurecheichendem oder widersprüchlichem Input: "Bitte präzisiere deine Frage oder gib mehr Informationen an."
 
-# Cross Encoder Modell für Reranking
-CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    ANTWORTFORMAT:
+    1. Beginne direkt mit der Antwort
+    2. Verwende Absätze für bessere Lesbarkeit
+    3. Markiere wichtige Punkte deutlich"""
 
-# Anzahl der Ergebnisse nach dem Reranking
-RERANKING_TOP_K = 5
-
-# ============================================
-# LLM / GENERATION KONFIGURATION
-# ============================================
-
-# URL des LLM-API-Endpunkts (z.B. OpenAI-kompatibel)
-LLM_API_URL = "https://api.your-company.com/v1/chat/completions"
-
-# API-Schlüssel für das LLM (sollte als Umgebungsvariable gesetzt werden)
-LLM_API_KEY = os.getenv("CHATBOT_API_KEY")
-
-# Name des zu verwendenden Modells
-LLM_MODEL_NAME = "Qwen3-30B-A3B-Q6_K.gguf:latest"
-
-# Temperatur für die Textgenerierung (0.0 = deterministisch, 1.0 = kreativ)
-LLM_TEMPERATURE = 0.3
-
-# Maximale Anzahl der generierten Tokens
-LLM_MAX_TOKENS = 1024
-
-# Top-P Sampling Parameter
-LLM_TOP_P = 0.9
-
-# Frequency Penalty (reduziert Wiederholungen)
-LLM_FREQUENCY_PENALTY = 0.0
-
-# Seed für reproduzierbare Ergebnisse (None = zufällig)
-LLM_SEED = 42
-
-# System-Prompt für das LLM
-LLM_SYSTEM_PROMPT = """Du bist ein hilfreicher Assistent der AOK Sachsen-Anhalt. 
-Deine Aufgabe ist es, Fragen zu Gesundheitsthemen und AOK-Leistungen zu beantworten.
-Basiere deine Antworten ausschließlich auf den bereitgestellten Kontext-Informationen.
-Wenn du eine Frage nicht basierend auf dem Kontext beantworten kannst, sage das ehrlich.
-Antworte immer auf Deutsch und in einem freundlichen, verständlichen Ton."""
-
-# ============================================
-# EVALUATION KONFIGURATION
-# ============================================
-
-# Pfad zur Datei mit Testfällen
+# Evaluation
 EVALUATION_TEST_CASES_PATH = "data/test_cases.json"
-
-# Pfad für die Evaluations-Ergebnisse
 EVALUATION_OUTPUT_PATH = "data/evaluation_results.json"
-
-# ============================================
-# ALLGEMEINE KONFIGURATION
-# ============================================
-
-# Verzeichnis für alle Daten
-DATA_DIR = "data"
-
-# Verzeichnis für Modelle
-MODELS_DIR = "models"

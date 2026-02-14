@@ -1,77 +1,30 @@
-# evaluation.py
-# Dieses Modul ist für die Evaluation der RAG-Pipeline zuständig
-# Es nutzt RAGAS als Framework für verschiedene Metriken
-
+from datasets import Dataset
+from datetime import datetime
+from generation import Generator
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from ragas import evaluate
+from ragas.embeddings import LangchainEmbeddingsWrapper
+from ragas.llms import LangchainLLMWrapper
+from ragas.metrics import (context_entity_recall, context_precision, context_recall, answer_correctness, answer_relevancy, answer_similarity, faithfulness)
+from ragas.metrics._summarization import SummarizationScore
+from retrieval import RetrievalManager
+from web_scraping import Web_Scraper, load_scraped_data
+import config
 import json
 import os
-from datetime import datetime
 
-# RAGAS ist ein Framework für RAG-Evaluation
-from ragas import evaluate
-from ragas.metrics import (
-    context_entity_recall,
-    context_precision,
-    context_recall,
-    answer_correctness,
-    answer_relevancy,
-    answer_similarity,
-    faithfulness,
-)
-from ragas.metrics._summarization import SummarizationScore
-from ragas.llms import LangchainLLMWrapper
-from ragas.embeddings import LangchainEmbeddingsWrapper
+class Evaluator:
 
-# Für die Datasets
-from datasets import Dataset
-
-# LangChain für das LLM (wird von RAGAS benötigt)
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-
-# Wir importieren unsere Konfiguration
-import config
-
-# Wir importieren die anderen Module
-from web_scraping import WebScrapingManager, load_scraped_data
-from retrieval import RetrievalManager
-from generation import GenerationManager
-
-
-class EvaluationManager:
-    """
-    Diese Klasse ist für die Evaluation der RAG-Pipeline zuständig.
-    Sie führt Testfälle durch und berechnet verschiedene Metriken.
-    """
-    
     def __init__(self):
-        """
-        Initialisiert den EvaluationManager mit den Konfigurationswerten.
-        """
-        # Pfad zur Testfälle-Datei
         self.test_cases_path = config.EVALUATION_TEST_CASES_PATH
-        
-        # Pfad für die Ergebnisse
         self.output_path = config.EVALUATION_OUTPUT_PATH
-        
-        # Die anderen Manager
         self.retrieval_manager = RetrievalManager()
-        self.generation_manager = GenerationManager()
-        
-        # Die Testfälle (werden bei Bedarf geladen)
+        self.generator = Generator()
         self.test_cases = []
-        
-        # Die Ergebnisse der Evaluation
         self.results = []
-        
-        # Die Web Scraping Statistiken (werden einmal berechnet)
         self.webscraping_stats = None
-        
-        # LLM für RAGAS Evaluation
         self.llm = None
         self.embeddings = None
-        
-        print(f"EvaluationManager initialisiert:")
-        print(f"  Testfälle: {self.test_cases_path}")
-        print(f"  Ausgabe: {self.output_path}")
     
     def setup_ragas_llm(self):
         """
@@ -225,7 +178,7 @@ class EvaluationManager:
         sources = self.retrieval_manager.get_sources(search_results)
         
         # 2. Die Antwort generieren
-        response = self.generation_manager.generate_answer_with_context(prompt, context, sources)
+        response = self.generator.generate_answer_with_context(prompt, context, sources)
         
         print(f"Antwort: {response[:50]}..." if len(response) > 50 else f"Antwort: {response}")
         
