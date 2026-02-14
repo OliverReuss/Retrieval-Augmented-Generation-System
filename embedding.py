@@ -42,6 +42,9 @@ class Embedder:
         self.model = None
         self.db_client = None
         self.collection = None
+
+        # Automatisch starten
+        self.process()
     
     def load_model(self) -> SentenceTransformer:
         if self.model is None:
@@ -64,7 +67,7 @@ class Embedder:
             # Aktueller Batch
             batch = texts[i:i + self.batch_size]
             batch_num = (i // self.batch_size) + 1
-            print(f"  Verarbeite Batch {batch_num}/{total_batches}...")
+            print(f"\nEmebdding | Batch {batch_num}/{total_batches}...")
             
             # Embeddings für Batch erstellen
             batch_embeddings = self.model.encode(
@@ -78,11 +81,12 @@ class Embedder:
             for embedding in batch_embeddings:
                 all_embeddings.append(embedding.tolist())
         
-        print(f"Embeddings erstellt: {len(all_embeddings)}")
         return all_embeddings
     
     def setup_db(self) -> chromadb.Collection:
-        os.makedirs(self.db_path)
+        dir_name = os.path.dirname(self.db_path)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
         self.db_client = chromadb.PersistentClient(path=self.db_path)
         self.collection = self.db_client.get_or_create_collection(name=self.collection_name, metadata={"hnsw:M": self.hnsw_m,"hnsw:space": self.hnsw_space})
         return self.collection
@@ -121,7 +125,6 @@ class Embedder:
             # Fortschrittsanzeige
             batch_num = (i // batch_size) + 1
             total_batches = (len(ids) + batch_size - 1) // batch_size
-            print(f"  Speichere Batch {batch_num}/{total_batches}...")
             
             # Zur Collection hinzufügen
             self.collection.upsert(
@@ -132,6 +135,11 @@ class Embedder:
             )
     
     def process(self) -> None:
+        if os.path.exists(self.db_path):
+            return
+        
+        print("\nℹ️ Starte Emebdding")
+        
         chunks = load_chunks()
         self.load_model()
         texts = []
@@ -140,6 +148,8 @@ class Embedder:
             texts.append(text)
         embeddings = self.create_embeddings(texts)
         self.save_embeddings(chunks, embeddings)
+
+        print(f"\nℹ️ Embeddings abgeschlossen. Erstellte Emebddings: {len(embeddings)}")
     
     def embed_query(self, query: str) -> list:
         if self.model is None:

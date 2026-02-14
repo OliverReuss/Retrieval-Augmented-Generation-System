@@ -1,3 +1,4 @@
+"""
 from datasets import Dataset
 from datetime import datetime
 from generation import Generator
@@ -7,7 +8,7 @@ from ragas.embeddings import LangchainEmbeddingsWrapper
 from ragas.llms import LangchainLLMWrapper
 from ragas.metrics import (context_entity_recall, context_precision, context_recall, answer_correctness, answer_relevancy, answer_similarity, faithfulness)
 from ragas.metrics._summarization import SummarizationScore
-from retrieval import RetrievalManager
+from retrieval import Retriever
 from web_scraping import Web_Scraper, load_scraped_data
 import config
 import json
@@ -25,6 +26,9 @@ class Evaluator:
         self.webscraping_stats = None
         self.llm = None
         self.embeddings = None
+
+        # Automatisch starten
+        self.process()
     
     def setup_ragas_llm(self):
         """
@@ -551,3 +555,4 @@ if __name__ == "__main__":
     # Die Evaluation starten
     evaluator = EvaluationManager()
     results = evaluator.run_evaluation()
+"""

@@ -22,6 +22,9 @@ class Chunker:
             # Länge in Zeichen messen
             length_function=len,
         )
+
+        # Automatisch starten
+        self.process()
     
     def create_chunks(self) -> list[dict]:
         data = load_documents()
@@ -55,21 +58,25 @@ class Chunker:
                 # Chunk zur Liste hinzufügen
                 self.chunks.append(chunk)
                 chunk_id = chunk_id + 1
-        
-        print(f"Chunking abgeschlossen: {len(self.chunks)} Chunks erstellt")
+
         return self.chunks
 
     def save_chunks(self) -> None:
-        os.makedirs(os.path.dirname(self.output_path))
+        dir_name = os.path.dirname(self.output_path)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
         with open(self.output_path, 'w', encoding='utf-8') as file:
             json.dump(self.chunks, file, ensure_ascii=False, indent=2)
     
     def process(self) -> None:
         if os.path.exists(self.output_path):
             return
+        
+        print("\nℹ️ Starte Chunking")
+
         self.create_chunks()
         self.save_chunks()
-        print(self.get_statistics())
+        print(f"\nℹ️ Chunking abgeschlossen\n{self.get_statistics()}")
     
     def get_statistics(self) -> dict:     
         # Berechne verschiedene Statistiken

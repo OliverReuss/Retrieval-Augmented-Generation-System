@@ -17,10 +17,16 @@ class Web_Scraper:
         self.download_delay = config.WEB_SCRAPING_DOWNLOAD_DELAY
         self.proxy = getattr(config, 'PROXY', None)
         self.scraped_data = []
+
+        # Automatisch starten
+        self.process()
         
     def process(self) -> None:
-        os.makedirs(os.path.dirname(self.output_path))
+        if os.path.exists(self.output_path):
+            return
         
+        print("ℹ️ Starte Web Scraping")
+    
         process_settings = {
             'ROBOTSTXT_OBEY': True,
             'DOWNLOAD_DELAY': self.download_delay,
@@ -46,9 +52,12 @@ class Web_Scraper:
 
         process.start()
         self.save_data()
-        print(self.get_statistics())
+        print(f"\nℹ️ Web Scraping abgeschlossen\n{self.get_statistics()}")
     
     def save_data(self) -> None:
+        dir_name = os.path.dirname(self.output_path)
+        if dir_name:
+            os.makedirs(dir_name, exist_ok=True)
         with open(self.output_path, 'w', encoding='utf-8') as file:
             json.dump(self.scraped_data, file, ensure_ascii=False, indent=2)
     
@@ -77,16 +86,19 @@ class Web_Scraper:
         average_text_length = sum(text_lengths) / len(text_lengths)
         
         statistics = {
-            'webscraping_elements_total': total_elements,
-            'webscraping_elements_with_text': elements_with_text,
-            'webscraping_extraction_success_rate': round(extraction_success_rate, 4),
-            'webscraping_duplicate_rate_by_text': round(duplicate_rate, 4),
-            'webscraping_average_text_length': round(average_text_length, 2)
+            'web_scraping_elements_total': total_elements,
+            'web_scraping_elements_with_text': elements_with_text,
+            'web_scraping_extraction_success_rate': round(extraction_success_rate, 4),
+            'web_scraping_duplicate_rate_by_text': round(duplicate_rate, 4),
+            'web_scraping_average_text_length': round(average_text_length, 2)
         }
         return statistics
 
 class Spider(scrapy.Spider):
-    
+
+    # Scrapy benötigt Name
+    name = "spider"
+
     def __init__(self, start_url, excluded_terms: list[str], scraped_data: list, proxy=None, *args, **kwargs) -> None:
         super(Spider, self).__init__(*args, **kwargs)
         self.start_url = start_url
@@ -122,7 +134,7 @@ class Spider(scrapy.Spider):
                 break
         
         if should_exclude:
-            self.logger.info(f"URL ausgeschlossen: {current_url}")
+            print(f"\nWeb Scraping | URL ausgeschlossen: {current_url}")
             return
         
         # Text mittels CSS-Selektoren aus Hauptinhalt extrahieren
@@ -191,7 +203,7 @@ class Spider(scrapy.Spider):
         }
         
         self.scraped_data.append(page_data)
-        self.logger.info(f"Seite verarbeitet: {current_url}")
+        print(f"\nWeb Scraping | Seite verarbeitet: {current_url}")
         
         # Links auf Seite suchen und verarbeiten
         links = self.link_extractor.extract_links(response)

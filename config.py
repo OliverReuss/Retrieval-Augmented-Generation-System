@@ -12,9 +12,9 @@ os.environ['http_proxy'] = PROXY
 os.environ['https_proxy'] = PROXY
 os.environ['CURL_CA_BUNDLE'] = CERTIFICATE
 os.environ['REQUESTS_CA_BUNDLE'] = CERTIFICATE
+os.environ['SSL_CERT_FILE'] = CERTIFICATE
 os.environ['HF_HUB_DISABLE_SSL_VERIFICATION'] = '1'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-os.environ['SSL_CERT_FILE'] = CERTIFICATE
 
 # Verzeichnisse
 DATA_DIRECTORY = "data"
@@ -22,9 +22,9 @@ MODELS_DIRECTORY = "models"
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
-WEB_SCRAPING_MAX_DEPTH = 2
+WEB_SCRAPING_MAX_DEPTH = 1
 WEB_SCRAPING_EXCLUDED_TERMS = ["nordwest", "bw", "bayern", "bremen", "hessen", "nordost", "plus", "niedersachsen", "rps", "rh", "gp", "fk", "fm", "pp", "magazin", "datenschutzerklaerung", "karriere"]
-WEB_SCRAPING_DOWNLOAD_DELAY = 1.0
+WEB_SCRAPING_DOWNLOAD_DELAY = 0.0
 WEB_SCRAPING_OUTPUT_PATH = "data/documents.json"
 
 # Chunking
@@ -33,7 +33,7 @@ CHUNKING_CHUNK_OVERLAP = 100
 CHUNKING_OUTPUT_PATH = "data/chunks.json"
 
 # Embedding
-EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large" # "paraphrase-multilingual-mpnet-base-v2"
+EMBEDDING_MODEL_NAME = "paraphrase-multilingual-mpnet-base-v2" # "intfloat/multilingual-e5-large"
 EMBEDDING_BATCH_SIZE = 32
 EMBEDDING_MODEL_PATH = "models"
 
