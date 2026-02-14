@@ -31,11 +31,12 @@ class Web_Scraper:
             'ROBOTSTXT_OBEY': True,
             'DOWNLOAD_DELAY': self.download_delay,
             'USER_AGENT': 'RAG-Bot/1.0',
-            'LOG_LEVEL': 'INFO',
+            'LOG_LEVEL': 'WARNING',
             'DEPTH_LIMIT': self.max_depth,
             'COOKIES_ENABLED': False,
             'RETRY_TIMES': 3,
             'RETRY_HTTP_CODES': [500, 502, 503, 504, 408, 429],
+            'STATS_DUMP': False
         }
         
         # Crawler-Prozess erstellen
@@ -52,7 +53,7 @@ class Web_Scraper:
 
         process.start()
         self.save_data()
-        print(f"\nℹ️ Web Scraping abgeschlossen\n{self.get_statistics()}")
+        print(f"\nℹ️ Web Scraping abgeschlossen. Verarbeitete Seiten: {len(self.scraped_data)}.")
     
     def save_data(self) -> None:
         dir_name = os.path.dirname(self.output_path)
@@ -134,7 +135,7 @@ class Spider(scrapy.Spider):
                 break
         
         if should_exclude:
-            print(f"\nWeb Scraping | URL ausgeschlossen: {current_url}")
+            print(f"Web Scraping | URL ausgeschlossen: {current_url}")
             return
         
         # Text mittels CSS-Selektoren aus Hauptinhalt extrahieren
@@ -203,7 +204,7 @@ class Spider(scrapy.Spider):
         }
         
         self.scraped_data.append(page_data)
-        print(f"\nWeb Scraping | Seite verarbeitet: {current_url}")
+        print(f"Web Scraping | Seite verarbeitet: {current_url}")
         
         # Links auf Seite suchen und verarbeiten
         links = self.link_extractor.extract_links(response)

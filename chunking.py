@@ -76,7 +76,7 @@ class Chunker:
 
         self.create_chunks()
         self.save_chunks()
-        print(f"\nℹ️ Chunking abgeschlossen\n{self.get_statistics()}")
+        print(f"\nℹ️ Chunking abgeschlossen. Erstellte Chunks: {len(self.chunks)}.")
     
     def get_statistics(self) -> dict:     
         # Berechne verschiedene Statistiken

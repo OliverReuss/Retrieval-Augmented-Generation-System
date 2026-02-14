@@ -4,30 +4,6 @@ import chromadb
 import config
 import os
 
-"""
-import ssl
-# SSL-Kontext global deaktivieren
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
-
-# requests und urllib3 SSL deaktivieren
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-# httpx SSL deaktivieren (wird von huggingface_hub verwendet)
-import httpx
-# Monkey-patch für httpx um SSL zu deaktivieren
-_original_httpx_client_init = httpx.Client.__init__
-def _patched_httpx_client_init(self, *args, **kwargs):
-    kwargs['verify'] = False
-    _original_httpx_client_init(self, *args, **kwargs)
-httpx.Client.__init__ = _patched_httpx_client_init
-"""
-
 class Embedder:
     
     def __init__(self) -> None:
@@ -48,7 +24,7 @@ class Embedder:
     
     def load_model(self) -> SentenceTransformer:
         if self.model is None:
-            local_model_path = f"models/{self.model_name}"
+            local_model_path = f"models/{self.model_name.replace('/', '-')}"
             if os.path.exists(local_model_path):
                 self.model = SentenceTransformer(local_model_path)
             else:
@@ -67,7 +43,7 @@ class Embedder:
             # Aktueller Batch
             batch = texts[i:i + self.batch_size]
             batch_num = (i // self.batch_size) + 1
-            print(f"\nEmebdding | Batch {batch_num}/{total_batches}...")
+            print(f"Emebdding | Batch {batch_num}/{total_batches}...")
             
             # Embeddings für Batch erstellen
             batch_embeddings = self.model.encode(
@@ -149,7 +125,7 @@ class Embedder:
         embeddings = self.create_embeddings(texts)
         self.save_embeddings(chunks, embeddings)
 
-        print(f"\nℹ️ Embeddings abgeschlossen. Erstellte Emebddings: {len(embeddings)}")
+        print(f"\nℹ️ Embeddings abgeschlossen. Erstellte Emebddings: {len(embeddings)}.")
     
     def embed_query(self, query: str) -> list:
         if self.model is None:

@@ -1,5 +1,4 @@
 from requests.adapters import HTTPAdapter
-from retrieval import Retriever
 from urllib3.util.retry import Retry
 import config
 import requests
@@ -12,7 +11,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class Generator:
 
-    def __init__(self) -> None:
+    def __init__(self, retriever) -> None:
         self.api_url = config.GENERATION_API_URL
         self.api_key = config.GENERATION_API_KEY
         self.model_name = config.GENERATION_MODEL_NAME
@@ -23,7 +22,7 @@ class Generator:
         self.seed = config.GENERATION_SEED
         self.system_prompt = config.GENERATION_SYSTEM_PROMPT
         self.timeout = config.GENERATION_TIMEOUT
-        self.retrieval_manager = Retriever()
+        self.retriever = retriever
         
         # Session mit Retry-Strategie erstellen
         self.session = self.create_retry_session()
@@ -104,15 +103,15 @@ class Generator:
             # Antwort generieren (Format {"choices": [{"message": {"content": "..."}}]})
             response_text = data['choices'][0]['message']['content'].strip()
             # Antwort bereinigen
-            cleaned_response = response_text.replace("*", "").replace("#", "").strip()
+            cleaned_response = response_text.replace("*", "").replace("#", "").replace("<think>", "").replace("</think>", "").strip()
             return cleaned_response
         except Exception as e:
             return f"Fehler bei der Anfrage an das LLMe: {e}"
     
     def generate(self, query: str) -> dict:
-        search_results = self.retrieval_manager.search(query)
-        context = self.retrieval_manager.format_context(search_results)
-        sources = self.retrieval_manager.get_sources(search_results)
+        search_results = self.retriever.search(query)
+        context = self.retriever.format_context(search_results)
+        sources = self.retriever.get_sources(search_results)
         prompt = self.create_prompt(query, context)
         answer = self.call_llm(prompt)
         result = {

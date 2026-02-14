@@ -1,9 +1,12 @@
 from dotenv import load_dotenv
 load_dotenv()
+import logging
 import os
 
-# Proxy, Zertifikat und Warnungen
+# Verzeichnisse, Proxy, Zertifikat, Infos und Warnungen
 # In den VSC-Einstellungen: @id:http.proxy -> http://proxy.your-company.com:8080 @id:http.proxyStrictSSL -> optional auf true
+DATA_DIRECTORY = "data"
+MODELS_DIRECTORY = "models"
 PROXY = "http://proxy.your-company.com:8080"
 CERTIFICATE = "certificate.crt"
 os.environ['HTTP_PROXY'] = PROXY
@@ -15,10 +18,16 @@ os.environ['REQUESTS_CA_BUNDLE'] = CERTIFICATE
 os.environ['SSL_CERT_FILE'] = CERTIFICATE
 os.environ['HF_HUB_DISABLE_SSL_VERIFICATION'] = '1'
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-
-# Verzeichnisse
-DATA_DIRECTORY = "data"
-MODELS_DIRECTORY = "models"
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["TQDM_DISABLE"] = "1"
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["SCRAPY_LOG_LEVEL"] = "WARNING"
+logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
+logging.getLogger("scrapy").setLevel(logging.WARNING)
+logging.getLogger("py.warnings").setLevel(logging.ERROR)
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
@@ -33,7 +42,7 @@ CHUNKING_CHUNK_OVERLAP = 100
 CHUNKING_OUTPUT_PATH = "data/chunks.json"
 
 # Embedding
-EMBEDDING_MODEL_NAME = "paraphrase-multilingual-mpnet-base-v2" # "intfloat/multilingual-e5-large"
+EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large" # "paraphrase-multilingual-mpnet-base-v2"
 EMBEDDING_BATCH_SIZE = 32
 EMBEDDING_MODEL_PATH = "models"
 

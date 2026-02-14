@@ -9,11 +9,11 @@ web_scraper = Web_Scraper()
 chunker = Chunker()
 embedder = Embedder()
 retriever = Retriever()
-generator = Generator()
+generator = Generator(retriever)
 # evaluator = Evaluator()
 
 while True:
     query = input("\n➡️ Frage eingeben: ")
     search_results = retriever.search(query)
     answer = generator.generate(query)
-    print(answer)
+    print(f"\n{answer['answer']}")
