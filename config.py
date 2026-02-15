@@ -86,5 +86,6 @@ GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Frag
     3. Markiere wichtige Punkte deutlich"""
 
 # Evaluation
+EVALUATION_EVALUATE = True
 EVALUATION_TEST_CASES_PATH = "data/test_cases.json"
 EVALUATION_OUTPUT_PATH = "data/evaluation_results.json"

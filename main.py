@@ -3,14 +3,19 @@ from chunking import Chunker
 from embedding import Embedder
 from retrieval import Retriever
 from generation import Generator
-# from evaluation import Evaluator
+from evaluation import Evaluator
 
 web_scraper = Web_Scraper()
+print("A")
 chunker = Chunker()
+print("B")
 embedder = Embedder()
+print("C")
 retriever = Retriever()
+print("D")
 generator = Generator(retriever)
-# evaluator = Evaluator()
+print("E")
+evaluator = Evaluator(web_scraper, chunker, embedder, retriever, generator)
 
 while True:
     query = input("\n➡️ Frage eingeben: ")
