@@ -6,8 +6,8 @@ from generation import Generator
 from evaluation import Evaluator
 
 web_scraper = Web_Scraper()
-"""
 chunker = Chunker()
+"""
 embedder = Embedder()
 retriever = Retriever()
 generator = Generator(retriever)

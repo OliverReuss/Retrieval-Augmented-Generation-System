@@ -21,6 +21,8 @@ class Chunker:
             separators=["\n\n", "\n", ". ", " ", ""],
             # Länge in Zeichen messen
             length_function=len,
+            # Trennzeichen am Ende des vorherigen Chunks behalten
+            keep_separator='end',
         )
 
         # Automatisch starten
@@ -34,7 +36,8 @@ class Chunker:
         # Alle Dokumente verarbeiten
         for document in data:
             url = document.get('url', '')
-            title = document.get('title', '')
+            page_title = document.get('page_title', '')
+            section_header = document.get('section_header', '')
             text = document.get('text', '')
             
             # Überspringen, wenn Text leer
@@ -49,7 +52,8 @@ class Chunker:
                 chunk = {
                     'chunk_id': chunk_id,
                     'url': url,
-                    'title': title,
+                    'page_title': page_title,
+                    'section_header': section_header,
                     'text': chunk_text,
                     'chunk_index': i,
                     'total_chunks_in_document': len(text_chunks)

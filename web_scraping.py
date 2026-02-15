@@ -240,6 +240,7 @@ class Spider(scrapy.Spider):
         
         current_header = ""
         current_texts = []
+        seen_texts = set()  # Set um bereits gesehene Texte zu tracken
         
         for element in elements:
             # Element-Namen ermitteln
@@ -281,9 +282,24 @@ class Spider(scrapy.Spider):
                 
                 text_content = ' '.join(element.xpath('.//text()').getall())
                 text_content = self.clean_text(text_content)
-                # Mindestlänge
-                if text_content and len(text_content) > 10:  
-                    current_texts.append(text_content)
+                
+                # Mindestlänge und Duplikat-Prüfung
+                if text_content and len(text_content) > 10:
+                    # Normalisierter Text für Duplikat-Erkennung
+                    normalized_text = text_content.lower().strip()
+                    
+                    # Nur hinzufügen wenn nicht bereits gesehen
+                    if normalized_text not in seen_texts:
+                        # Prüfen ob der Text nicht als Substring in bereits gesehenen Texten enthalten ist
+                        is_substring = False
+                        for seen in seen_texts:
+                            if normalized_text in seen or seen in normalized_text:
+                                is_substring = True
+                                break
+                        
+                        if not is_substring:
+                            current_texts.append(text_content)
+                            seen_texts.add(normalized_text)
         
         # Letzte Sektion speichern
         if current_texts:
