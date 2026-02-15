@@ -52,10 +52,10 @@ class Web_Scraper:
         )
 
         process.start()
-        self.save_data()
+        self.save_documents()
         print(f"\nℹ️ Web Scraping abgeschlossen. Verarbeitete Seiten: {len(self.scraped_data)}.")
     
-    def save_data(self) -> None:
+    def save_documents(self) -> None:
         dir_name = os.path.dirname(self.output_path)
         if dir_name:
             os.makedirs(dir_name, exist_ok=True)
@@ -63,6 +63,10 @@ class Web_Scraper:
             json.dump(self.scraped_data, file, ensure_ascii=False, indent=2)
     
     def get_statistics(self) -> dict:
+        # Daten laden, falls nicht im Speicher
+        if not self.scraped_data and os.path.exists(self.output_path):
+            self.scraped_data = load_documents()
+        
         total_elements = len(self.scraped_data)
         elements_with_text = 0
         text_lengths = []
@@ -89,8 +93,8 @@ class Web_Scraper:
         statistics = {
             'web_scraping_elements_total': total_elements,
             'web_scraping_elements_with_text': elements_with_text,
-            'web_scraping_extraction_success_rate': round(extraction_success_rate, 4),
-            'web_scraping_duplicate_rate_by_text': round(duplicate_rate, 4),
+            'web_scraping_extraction_success_rate': round(extraction_success_rate, 2),
+            'web_scraping_duplicate_rate_by_text': round(duplicate_rate, 2),
             'web_scraping_average_text_length': round(average_text_length, 2)
         }
         return statistics

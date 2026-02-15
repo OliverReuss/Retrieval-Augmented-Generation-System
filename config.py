@@ -28,6 +28,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
 logging.getLogger("scrapy").setLevel(logging.WARNING)
 logging.getLogger("py.warnings").setLevel(logging.ERROR)
+logging.getLogger("ragas").setLevel(logging.ERROR)
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
@@ -87,5 +88,6 @@ GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Frag
 
 # Evaluation
 EVALUATION_EVALUATE = True
+EVALUATION_MODEL_NAME = "gpt-4o"
 EVALUATION_TEST_CASES_PATH = "data/test_cases.json"
 EVALUATION_OUTPUT_PATH = "data/evaluation_results.json"

@@ -3,6 +3,7 @@ from sentence_transformers import CrossEncoder
 import chromadb
 import config
 import re
+import time
 
 class Retriever:
 
@@ -12,6 +13,7 @@ class Retriever:
         self.top_k = config.RETRIEVAL_TOP_K
         self.reranking_top_k = config.RETRIEVAL_RERANKING_TOP_K
         self.stop_words_path = config.RETRIEVAL_STOP_WORDS_PATH
+        self.stats_path = config.EVALUATION_OUTPUT_PATH
         self.cross_encoder_model_name = config.RETRIEVAL_CROSS_ENCODER_MODEL
         self.use_reranking = config.RETRIEVAL_USE_RERANKING
         self.chroma_client = None
@@ -19,6 +21,12 @@ class Retriever:
         self.embedder = Embedder()
         self.cross_encoder = None
         self.stop_words = None
+        # Statistiken
+        self.query_count = 0
+        self.total_chunks_retrieved = 0
+        self.retrieval_times_ms = []
+        self.reranking_times_ms = []
+        self.similarity_scores = []
     
     def connect_to_db(self) -> chromadb.Collection:
         if self.collection is not None:
@@ -90,6 +98,9 @@ class Retriever:
         if self.collection is None:
             self.connect_to_db()
         
+        # Zeitmessung starten
+        start_time = time.time()
+
         clean_query = self.sanitize_query(query)
         processed_query = self.remove_stop_words(clean_query)
         query_embedding = self.embedder.embed_query(processed_query)
@@ -104,6 +115,7 @@ class Retriever:
             ids = results['ids'][0]
             
             for i in range(len(documents)):
+                similarity = 1 - distances[i]
                 result = {
                     'id': ids[i],
                     'text': documents[i],
@@ -111,15 +123,29 @@ class Retriever:
                     'title': metadatas[i].get('title', ''),
                     'distance': distances[i],
                     # Ähnlichkeit = 1 - Distanz bei Cosinus
-                    'similarity': 1 - distances[i]
+                    'similarity': similarity
                 }
                 search_results.append(result)
+
+                # Similarity-Score für Statistik speichern
+                self.similarity_scores.append(similarity)
+        
+        # Retrieval-Zeit messen (vor Reranking)
+        retrieval_time_ms = (time.time() - start_time) * 1000
+        self.retrieval_times_ms.append(retrieval_time_ms)
+
+        # Statistik aktualisieren
+        self.query_count += 1
+        self.total_chunks_retrieved += len(search_results)
         
         if self.use_reranking:
             search_results = self.rerank_results(query, search_results)
         return search_results
     
     def rerank_results(self, query: str, results: list[dict]) -> list[dict]:
+        # Zeitmessung starten
+        start_time = time.time()
+        
         if self.cross_encoder is None:
             self.load_cross_encoder()
         
@@ -139,8 +165,57 @@ class Retriever:
         
         # Nur top_k Ergenisse zurückgeben
         reranked_results = results[:self.reranking_top_k]
+
+        # Reranking-Zeit messen
+        reranking_time_ms = (time.time() - start_time) * 1000
+        self.reranking_times_ms.append(reranking_time_ms)
+
         return reranked_results
     
+    def get_statistics(self) -> dict:
+        # Durchschnittliche Anzahl Chunks pro Query
+        avg_chunks_per_query = 0.0
+        avg_chunks_per_query = self.total_chunks_retrieved / self.query_count
+        
+        # Durchschnittliche Retrieval-Zeit
+        avg_retrieval_time_ms = 0.0
+        if self.retrieval_times_ms:
+            avg_retrieval_time_ms = sum(self.retrieval_times_ms) / len(self.retrieval_times_ms)
+        
+        # Durchschnittliche Reranking-Zeit
+        avg_reranking_time_ms = 0.0
+        if self.reranking_times_ms:
+            avg_reranking_time_ms = sum(self.reranking_times_ms) / len(self.reranking_times_ms)
+        
+        # Similarity-Score Statistiken
+        avg_similarity = 0.0
+        min_similarity = 0.0
+        max_similarity = 0.0
+        
+        if self.similarity_scores:
+            avg_similarity = sum(self.similarity_scores) / len(self.similarity_scores)
+            min_similarity = min(self.similarity_scores)
+            max_similarity = max(self.similarity_scores)
+        
+        stats = {
+            'retrieval_avg_chunks_per_query': round(avg_chunks_per_query, 2),
+            'retrieval_avg_time_ms': round(avg_retrieval_time_ms, 2),
+            'retrieval_avg_similarity': round(avg_similarity, 2),
+            'retrieval_min_similarity': round(min_similarity, 2),
+            'retrieval_max_similarity': round(max_similarity, 2),
+            'retrieval_reranking_enabled': self.use_reranking,
+            'retrieval_avg_reranking_time_ms': round(avg_reranking_time_ms, 2),
+        }
+        
+        return stats
+    
+    def reset_statistics(self) -> None:
+        self.query_count = 0
+        self.total_chunks_retrieved = 0
+        self.retrieval_times_ms = []
+        self.reranking_times_ms = []
+        self.similarity_scores = []
+
     def format_context(self, results: list[dict]) -> str:
         context_parts = []
         

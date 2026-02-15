@@ -18,6 +18,9 @@ class Embedder:
         self.model = None
         self.db_client = None
         self.collection = None
+        # Statistiken
+        self.chunks_embedded = 0
+        self.embedding_dimension = 0
 
         # Automatisch starten
         self.process()
@@ -34,7 +37,7 @@ class Embedder:
                 self.model.save(local_model_path)
         return self.model
     
-    def create_embeddings(self, texts: list[str]) -> list[list]:    
+    def create_embeddings(self, texts: list[str]) -> list[list]:        
         # Embeddings in Batches erstellen (schneller)
         all_embeddings = []
         total_batches = (len(texts) + self.batch_size - 1) // self.batch_size
@@ -57,6 +60,12 @@ class Embedder:
             for embedding in batch_embeddings:
                 all_embeddings.append(embedding.tolist())
         
+        self.chunks_embedded = len(all_embeddings)
+        
+        # Embedding-Dimension ermitteln (aus erstem Embedding)
+        if all_embeddings:
+            self.embedding_dimension = len(all_embeddings[0])
+        
         return all_embeddings
     
     def setup_db(self) -> chromadb.Collection:
@@ -67,6 +76,33 @@ class Embedder:
         self.collection = self.db_client.get_or_create_collection(name=self.collection_name, metadata={"hnsw:M": self.hnsw_m,"hnsw:space": self.hnsw_space})
         return self.collection
     
+    def get_statistics(self) -> dict:
+        # Collection laden, falls nicht verbunden
+        if self.collection is None:
+            self.setup_db()
+        
+        # Anzahl Embeddings aus Datenbank holen
+        total_embeddings = 0
+        if self.collection is not None:
+            total_embeddings = self.collection.count()
+        
+        # Falls im aktuellen Lauf erstellt, diese Werte nutzen
+        if self.chunks_embedded > 0:
+            total_embeddings = self.chunks_embedded
+        
+        # Embedding-Dimension ermitteln (falls nicht bekannt)
+        if self.embedding_dimension == 0 and self.collection is not None:
+            # Ein Embedding aus der Datenbank holen
+            sample = self.collection.peek(limit=1)
+            if sample and sample.get('embeddings') is not None and len(sample['embeddings']) > 0:
+                self.embedding_dimension = len(sample['embeddings'][0])
+        
+        statistics = {
+            'embedding_total_embeddings': total_embeddings,
+            'embedding_dimension': self.embedding_dimension
+        }
+        return statistics
+
     def save_embeddings(self, chunks: list[dict], embeddings: list[list]) -> None:
         if self.collection is None:
             self.setup_db()
@@ -109,7 +145,7 @@ class Embedder:
                 documents=batch_documents,
                 metadatas=batch_metadatas
             )
-    
+
     def process(self) -> None:
         if os.path.exists(self.db_path):
             return

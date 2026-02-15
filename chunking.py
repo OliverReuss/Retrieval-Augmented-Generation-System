@@ -79,7 +79,10 @@ class Chunker:
         print(f"\nℹ️ Chunking abgeschlossen. Erstellte Chunks: {len(self.chunks)}.")
     
     def get_statistics(self) -> dict:     
-        # Berechne verschiedene Statistiken
+         # Chunks laden, falls nicht im Speicher
+        if not self.chunks and os.path.exists(self.output_path):
+            self.chunks = load_chunks()
+        
         total_chunks = len(self.chunks)
         
         # Gesamtlänge
@@ -94,19 +97,16 @@ class Chunker:
         # Minimale und maximale Länge
         min_length = min(chunk_lengths)
         max_length = max(chunk_lengths)
-        
-        # Eindeutige URLs
-        unique_urls = set()
-        for chunk in self.chunks:
-            url = chunk.get('url', '')
-            unique_urls.add(url)
+
+        # Überlappungsrate
+        overlap_percentage = (self.chunk_overlap / self.chunk_size) * 100
         
         statistics = {
-            'chunking_sources_total': unique_urls,
             'chunking_chunks_total': total_chunks,
-            'chunking_average_chunk_length': avg_length,
-            'chunking_min_chunk_length': min_length,
-            'chunking_max_chunk_length': max_length,
+            'chunking_average_chunk_length': round(avg_length, 2),
+            'chunking_min_chunk_length': round(min_length, 2),
+            'chunking_max_chunk_length': round(max_length, 2),
+            'chunking_overlap_percentage': round(overlap_percentage, 2)
         }
         return statistics
 

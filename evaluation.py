@@ -15,6 +15,7 @@ class Evaluator:
     def __init__(self, web_scraper, chunker, embedder, retriever, generator) -> None:
         self.test_cases_path = config.EVALUATION_TEST_CASES_PATH
         self.output_path = config.EVALUATION_OUTPUT_PATH
+        self.model_name = config.EVALUATION_MODEL_NAME
         self.web_scraper = web_scraper
         self.chunker = chunker
         self.embedder = embedder
@@ -36,7 +37,8 @@ class Evaluator:
             http_client=None,
             http_async_client=None,
             timeout=60,
-            model="gpt-4.1"
+            model=self.model_name,
+            n=3,
         )
         self.llm = LangchainLLMWrapper(base_llm)
         
@@ -135,7 +137,11 @@ class Evaluator:
             # Metriken zum Ergebnis hinzufügen
             for metric_name, value in ragas_scores.items():
                 if value is not None:
-                    metrics[metric_name] = float(value) if not isinstance(value, (int, float)) else value
+                    # NaN-Werte durch 0 ersetzen
+                    if isinstance(value, float) and value != value:  # NaN check
+                        metrics[metric_name] = 0.0
+                    else:
+                        metrics[metric_name] = float(value) if not isinstance(value, (int, float)) else value
             
             result['metrics'] = metrics
         
@@ -233,21 +239,39 @@ class Evaluator:
             'GENERATION_FREQUENCY_PENALTY': config.GENERATION_FREQUENCY_PENALTY,
             'GENERATION_SEED': config.GENERATION_SEED,
             'GENERATION_TIMEOUT': config.GENERATION_TIMEOUT,
-            'GENERATION_SYSTEM_PROMPT': config.GENERATION_SYSTEM_PROMPT
+            'GENERATION_SYSTEM_PROMPT': config.GENERATION_SYSTEM_PROMPT,
+
+            'EVALUATION_MODEL_NAME': config.EVALUATION_MODEL_NAME
         }
 
         return parameters
     
+    def collect_statistics(self) -> dict:
+        statistics = {}
+        
+        web_stats = self.web_scraper.get_statistics()
+        statistics.update(web_stats)
+
+        chunk_stats = self.chunker.get_statistics()
+        statistics.update(chunk_stats)
+    
+        embed_stats = self.embedder.get_statistics()
+        statistics.update(embed_stats)
+    
+        retrieval_stats = self.retriever.get_statistics()
+        statistics.update(retrieval_stats)
+        self.retriever.reset_statistics()
+    
+        generation_stats = self.generator.get_statistics()
+        statistics.update(generation_stats)
+        self.generator.reset_statistics()
+
+        return statistics
+
     def process(self) -> dict:
         print("\nℹ️ Starte Evaluation")
         
         test_cases = self.load_test_cases()
-
-        # web_scrpaing_stats = self.web_scraper.get_statistics()
-        # chunking_stats = self.chunker.get_statistics()
-        #emebdding_stats = self.embedder.get_statistics()
-        #retrieval_stats = self.retriever.get_statistics()
-        #generation_stats = self.generator.get_statisitcs()
         
         results = []
         
@@ -259,17 +283,16 @@ class Evaluator:
         # RAGAS Evaluation für alle Testfälle ausführen
         results = self.calculate_metrics(results)
 
+        # Statistiken sammeln
+        statistics = self.collect_statistics()
+
         averages = self.calculate_averages(results)
         config_params = self.get_config_parameters()
         
         final_results = {
             'evaluation_timestamp': datetime.now().isoformat(),
             'configuration': config_params,
-            #'web_scrpaing_stats': web_scrpaing_stats,
-            #'chunking_stats': chunking_stats,
-            #'emebdding_stats': emebdding_stats,
-            #'retrieval_stats': retrieval_stats,
-            #'generation_stats': generation_stats,
+            'statistics': statistics,
             'metric_averages': averages,
             'test_results': results
         }
@@ -278,7 +301,7 @@ class Evaluator:
         print(f"\nℹ️ Evaluation. Verarbeitete Testfälle: {len(final_results['test_results'])}.")
         return final_results
     
-    def save_results(self, results: dict) -> None:
+    def save_results(self, results: dict) -> None:      
         output_dir = os.path.dirname(self.output_path)
         if output_dir and not os.path.exists(output_dir):
             os.makedirs(output_dir)
