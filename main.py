@@ -7,7 +7,6 @@ from evaluation import Evaluator
 
 web_scraper = Web_Scraper()
 chunker = Chunker()
-"""
 embedder = Embedder()
 retriever = Retriever()
 generator = Generator(retriever)
@@ -18,4 +17,3 @@ while True:
     search_results = retriever.search(query)
     answer = generator.generate(query)
     print(f"\n{answer['answer']}")
-"""

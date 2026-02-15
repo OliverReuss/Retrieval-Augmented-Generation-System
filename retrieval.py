@@ -121,6 +121,7 @@ class Retriever:
                     'text': documents[i],
                     'url': metadatas[i].get('url', ''),
                     'title': metadatas[i].get('title', ''),
+                    'section_header': metadatas[i].get('section_header', ''),  # Neu hinzugefügt
                     'distance': distances[i],
                     # Ähnlichkeit = 1 - Distanz bei Cosinus
                     'similarity': similarity

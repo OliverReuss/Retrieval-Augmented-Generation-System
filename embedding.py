@@ -118,7 +118,8 @@ class Embedder:
             documents.append(text)
             metadata = {
                 'url': chunk.get('url', ''),
-                'title': chunk.get('title', ''),
+                'title': chunk.get('page_title', ''),
+                'section_header': chunk.get('section_header', ''),
                 'chunk_index': chunk.get('chunk_index', 0),
                 'total_chunks': chunk.get('total_chunks_in_document', 1)
             }

@@ -52,7 +52,7 @@ class Web_Scraper:
             proxy=self.proxy
         )
 
-        process.start()
+        process.start(install_signal_handlers=False)
         self.save_documents()
         print(f"\nℹ️ Web Scraping abgeschlossen. Verarbeitete Dokumente: {len(self.scraped_data)}.")
     
@@ -159,7 +159,7 @@ class Spider(scrapy.Spider):
                 break
         
         if should_exclude:
-            print(f"Web Scraping | URL ausgeschlossen: {current_url}")
+            print(f"Web Scraping | Seite ausgeschlossen: {current_url}")
             return
         
         # Seitentitel extrahieren
@@ -183,7 +183,7 @@ class Spider(scrapy.Spider):
                 }
                 self.scraped_data.append(document)
         
-        print(f"Web Scraping | Seite verarbeitet: {current_url} ({len(sections)} Sektionen)")
+        print(f"Web Scraping | Seite verarbeitet: {current_url}")
         
         # Links auf Seite suchen und verarbeiten
         links = self.link_extractor.extract_links(response)
