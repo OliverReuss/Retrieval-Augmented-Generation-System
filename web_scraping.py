@@ -1,6 +1,7 @@
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 from urllib.parse import urlparse
+from parsel import Selector
 import config
 import json
 import os
@@ -53,7 +54,7 @@ class Web_Scraper:
 
         process.start()
         self.save_documents()
-        print(f"\nℹ️ Web Scraping abgeschlossen. Verarbeitete Seiten: {len(self.scraped_data)}.")
+        print(f"\nℹ️ Web Scraping abgeschlossen. Verarbeitete Dokumente: {len(self.scraped_data)}.")
     
     def save_documents(self) -> None:
         dir_name = os.path.dirname(self.output_path)
@@ -71,26 +72,34 @@ class Web_Scraper:
         elements_with_text = 0
         text_lengths = []
         all_texts = []
+        all_urls = []
         
         # Alle Dokumente durchlaufen
         for item in self.scraped_data:
             text = item.get('text', '')
+            url = item.get('url', '')
+            if url:
+                all_urls.append(url)
             if text and len(text.strip()) > 0:
                 elements_with_text = elements_with_text + 1
                 text_lengths.append(len(text))
                 all_texts.append(text)
         
         # Erfolgsrate
-        extraction_success_rate = elements_with_text / total_elements
+        extraction_success_rate = elements_with_text / total_elements if total_elements > 0 else 0
         
         # Duplikatrate
         unique_texts = set(all_texts)
-        duplicate_rate = 1 - (len(unique_texts) / len(all_texts))
+        duplicate_rate = 1 - (len(unique_texts) / len(all_texts)) if all_texts else 0
         
         # Durchschnittliche Textlänge
-        average_text_length = sum(text_lengths) / len(text_lengths)
+        average_text_length = sum(text_lengths) / len(text_lengths) if text_lengths else 0
         
+        # Einzigartige URLs
+        unique_pages = len(set(all_urls))
+
         statistics = {
+            'web_scraping_unique_pages': unique_pages,
             'web_scraping_elements_total': total_elements,
             'web_scraping_elements_with_text': elements_with_text,
             'web_scraping_extraction_success_rate': round(extraction_success_rate, 2),
@@ -103,7 +112,7 @@ class Spider(scrapy.Spider):
 
     # Scrapy benötigt Name
     name = "spider"
-
+    
     def __init__(self, start_url, excluded_terms: list[str], scraped_data: list, proxy=None, *args, **kwargs) -> None:
         super(Spider, self).__init__(*args, **kwargs)
         self.start_url = start_url
@@ -115,6 +124,17 @@ class Spider(scrapy.Spider):
         self.proxy = proxy
         # Link Extractor extrahiert Links auf Seite
         self.link_extractor = LinkExtractor(allow_domains=['aok.de'], deny_extensions=['pdf', 'jpg', 'png', 'gif', 'css', 'js'])
+        # HTML-Elemente für Überschriften und Content
+        self.header_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        self.content_tags = ['p', 'div', 'li', 'span', 'td']
+        # Selektoren die ausgeschlossen werden (Navigation, Footer etc.)
+        self.excludes_selectors = [
+            'nav', 'header', 'footer', 'aside',
+            '.navigation', '.nav', '.menu', '.sidebar',
+            '.footer', '.header', '.cookie-banner', '.breadcrumb',
+            '#nav', '#navigation', '#footer', '#header',
+            'script', 'style', 'noscript'
+        ]
     
     def start_requests(self):
         # Überschreibt Standard-Methode für Proxy-Nutzung
@@ -130,7 +150,7 @@ class Spider(scrapy.Spider):
         if self.allowed_domain not in current_url:
             return
         
-        # Auf ausgeschlossenen Begeriff prüfen
+        # Auf ausgeschlossenen Begriff prüfen
         url_lower = current_url.lower()
         should_exclude = False
         for term in self.excluded_terms:
@@ -142,73 +162,28 @@ class Spider(scrapy.Spider):
             print(f"Web Scraping | URL ausgeschlossen: {current_url}")
             return
         
-        # Text mittels CSS-Selektoren aus Hauptinhalt extrahieren
-        
-        # Selektoren die Inhalt auswählen
-        main_content_selectors = [
-            'main ::text',
-            'article ::text',
-            '.content ::text',
-            '#content ::text',
-            '.main-content ::text',
-            '#main-content ::text',
-            '.article-content ::text',
-        ]
-        
-        # Selektoren die ausgeschlossen werden (Navigation, Footer etc.)
-        exclude_selectors = [
-            'nav',
-            'header',
-            'footer',
-            '.navigation',
-            '.nav',
-            '.menu',
-            '.sidebar',
-            '.footer',
-            '.header',
-            '#nav',
-            '#navigation',
-            '#footer',
-            '#header',
-            '.cookie-banner',
-            '.breadcrumb',
-        ]
-        
-        extracted_text = ""
-        
-        # Selektoren versuchen
-        for selector in main_content_selectors:
-            texts = response.css(selector).getall()
-            if texts:
-                extracted_text = ' '.join(texts)
-                break
-        
-        # Body nutzen, falls keine Inhalt gefunden
-        if not extracted_text:
-            body_selector = response.css('body')
-            if body_selector:
-                # Unerwünschte Selektoren entfernen
-                for exclude in exclude_selectors:
-                    body_selector.css(exclude).remove()
-                texts = response.css('body ::text').getall()
-                extracted_text = ' '.join(texts)
-        
-        cleaned_text = self.clean_text(extracted_text)
-        
-        title = response.css('title::text').get()
-        if title:
-            title = title.strip()
+        # Seitentitel extrahieren
+        page_title = response.css('title::text').get()
+        if page_title:
+            page_title = page_title.strip()
         else:
-            title = ""
-
-        page_data = {
-            'url': current_url,
-            'title': title,
-            'text': cleaned_text
-        }
+            page_title = ""
         
-        self.scraped_data.append(page_data)
-        print(f"Web Scraping | Seite verarbeitet: {current_url}")
+        # Strukturierte Extraktion durchführen
+        sections = self.extract_structured_content(response)
+        
+        # Jede Sektion als eigenes Dokument speichern
+        for idx, section in enumerate(sections):
+            if section['text'].strip():  # Nur nicht-leere Sektionen
+                document = {
+                    'url': current_url,
+                    'page_title': page_title,
+                    'section_header': section['header'],
+                    'text': section['text'],
+                }
+                self.scraped_data.append(document)
+        
+        print(f"Web Scraping | Seite verarbeitet: {current_url} ({len(sections)} Sektionen)")
         
         # Links auf Seite suchen und verarbeiten
         links = self.link_extractor.extract_links(response)
@@ -235,17 +210,149 @@ class Spider(scrapy.Spider):
                 else:
                     yield response.follow(link_url, callback=self.parse)
     
+    def extract_structured_content(self, response) -> list[dict]:
+        sections = []
+        
+        # Hauptinhalt finden
+        main_content = None
+        for selector in ['main', 'article', '.content', '#content', '.main-content']:
+            main_content = response.css(selector).get()
+            if main_content:
+                break
+        
+        # Falls kein Hauptinhalt, Body verwenden
+        if not main_content:
+            main_content = response.css('body').get()
+        
+        if not main_content:
+            return sections
+        
+        # Parsel Selector für Hauptinhalt erstellen
+        content_selector = Selector(text=main_content)
+        
+        # Ausgeschlossene Elemente mit XPath entfernen
+        exclude_xpath = ' | '.join([f'.//{sel}' for sel in self.excludes_selectors if not sel.startswith('.') and not sel.startswith('#')])
+        
+        # Alle relevanten Elemente finden
+        all_tags = self.header_tags + self.content_tags
+        xpath_query = ' | '.join([f'.//{tag}' for tag in all_tags])
+        elements = content_selector.xpath(xpath_query)
+        
+        current_header = ""
+        current_texts = []
+        
+        for element in elements:
+            # Element-Namen ermitteln
+            tag_name = element.xpath('name()').get()
+            if not tag_name:
+                continue
+            tag_name = tag_name.lower()
+            
+            # Prüfen ob Element ausgeschlossen
+            if self.is_excluded_element(element):
+                continue
+            
+            # Wenn Überschrift gefunden
+            if tag_name in self.header_tags:
+                # Vorherige Sektion speichern
+                if current_texts:
+                    combined_text = ' '.join(current_texts)
+                    cleaned_text = self.clean_text(combined_text)
+                    cleaned_text = self.remove_json_ld(cleaned_text)
+                    if cleaned_text:
+                        sections.append({
+                            'header': current_header,
+                            'text': cleaned_text
+                        })
+                
+                # Neue Sektion starten
+                header_text = ' '.join(element.xpath('.//text()').getall())
+                current_header = self.clean_text(header_text)
+                current_texts = []
+            
+            # Content-Elemente sammeln
+            elif tag_name in self.content_tags:
+                # Nur direkte Text-Inhalte (keine verschachtelten Divs)
+                if tag_name == 'div':
+                    # Prüfen ob div weitere divs enthält
+                    nested_divs = element.xpath('.//div')
+                    if nested_divs:
+                        continue
+                
+                text_content = ' '.join(element.xpath('.//text()').getall())
+                text_content = self.clean_text(text_content)
+                # Mindestlänge
+                if text_content and len(text_content) > 10:  
+                    current_texts.append(text_content)
+        
+        # Letzte Sektion speichern
+        if current_texts:
+            combined_text = ' '.join(current_texts)
+            cleaned_text = self.clean_text(combined_text)
+            cleaned_text = self.remove_json_ld(cleaned_text)
+            if cleaned_text:
+                sections.append({
+                    'header': current_header,
+                    'text': cleaned_text
+                })
+        
+        # Falls keine strukturierten Sektion, Fallback auf gesamten Text
+        if not sections:
+            all_text = ' '.join(content_selector.xpath('.//text()').getall())
+            cleaned_text = self.clean_text(all_text)
+            cleaned_text = self.remove_json_ld(cleaned_text)
+            if cleaned_text:
+                sections.append({
+                    'header': '',
+                    'text': cleaned_text
+                })
+        
+        return sections
+    
+    def is_excluded_element(self, element) -> bool:
+        # Prüfe Vorfahren-Elemente
+        for selector in self.excludes_selectors:
+            if selector.startswith('.'):
+                # Klassen-Selector
+                class_name = selector[1:]
+                ancestors_with_class = element.xpath(f'ancestor::*[contains(@class, "{class_name}")]')
+                if ancestors_with_class:
+                    return True
+            elif selector.startswith('#'):
+                # ID-Selector
+                id_name = selector[1:]
+                ancestors_with_id = element.xpath(f'ancestor::*[@id="{id_name}"]')
+                if ancestors_with_id:
+                    return True
+            else:
+                # Tag-Selector
+                ancestors_with_tag = element.xpath(f'ancestor::{selector}')
+                if ancestors_with_tag:
+                    return True
+        return False
+    
     def clean_text(self, text: str) -> str:
         if not text:
             return ""
         # Mehrfache Leerzeichen entfernen
         cleaned = re.sub(r'\s+', ' ', text)
-        # Leerezichen am Anfang und Ende entfernen
+        # Leerzeichen am Anfang und Ende entfernen
         cleaned = cleaned.strip()
         return cleaned
+    
+    def remove_json_ld(self, text: str) -> str:
+        if not text:
+            return ""
+        # JSON-LD Patterns entfernen
+        pattern = r'\{["\']@context["\']:\s*["\']https?://schema\.org/?["\'][^{}]*(?:\{[^{}]*\}[^{}]*)*\}'
+        cleaned = re.sub(pattern, '', text)
+        # Copytight Pattern entfernen
+        cleaned = re.sub(r'©\s*iStock\s*/\s*[\w\s]+', '', cleaned)
+        # Leerzeichen entfernen
+        cleaned = re.sub(r'\s+', ' ', cleaned)
+        return cleaned.strip()
 
 def load_documents() -> list[dict]:
-    file_path = config.WEB_SCRAPING_OUTPUT_PATH
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(config.WEB_SCRAPING_OUTPUT_PATH, 'r', encoding='utf-8') as file:
         data = json.load(file)
     return data
