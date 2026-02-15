@@ -2,6 +2,7 @@ from embedding import Embedder
 from sentence_transformers import CrossEncoder
 import chromadb
 import config
+import os
 import re
 import time
 
@@ -13,8 +14,9 @@ class Retriever:
         self.top_k = config.RETRIEVAL_TOP_K
         self.reranking_top_k = config.RETRIEVAL_RERANKING_TOP_K
         self.stop_words_path = config.RETRIEVAL_STOP_WORDS_PATH
+        self.model_path = config.MODELS_DIRECTORY
         self.stats_path = config.EVALUATION_OUTPUT_PATH
-        self.cross_encoder_model_name = config.RETRIEVAL_CROSS_ENCODER_MODEL
+        self.cross_encoder_model_name = config.RETRIEVAL_CROSS_ENCODER_MODEL_NAME
         self.use_reranking = config.RETRIEVAL_USE_RERANKING
         self.chroma_client = None
         self.collection = None
@@ -49,7 +51,16 @@ class Retriever:
     def load_cross_encoder(self) -> CrossEncoder:
         if self.cross_encoder is not None:
             return self.cross_encoder
-        self.cross_encoder = CrossEncoder(self.cross_encoder_model_name)
+        local_model_path = f"{self.model_path}/{self.cross_encoder_model_name.replace('/', '-')}"
+        
+        if os.path.exists(local_model_path):
+            # Modell lokal laden
+            self.cross_encoder = CrossEncoder(local_model_path)
+        else:
+            # Modell herunterladen und speichern
+            self.cross_encoder = CrossEncoder(self.cross_encoder_model_name)
+            self.cross_encoder.save(local_model_path)
+        
         return self.cross_encoder
     
     def sanitize_query(self, query: str) -> str:

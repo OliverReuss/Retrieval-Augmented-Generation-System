@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 import logging
+import ssl
 import os
 
 # Verzeichnisse, Proxy, Zertifikat, Infos und Warnungen
@@ -9,26 +10,29 @@ DATA_DIRECTORY = "data"
 MODELS_DIRECTORY = "models"
 PROXY = "http://proxy.your-company.com:8080"
 CERTIFICATE = "certificate.crt"
-os.environ['HTTP_PROXY'] = PROXY
-os.environ['HTTPS_PROXY'] = PROXY
-os.environ['http_proxy'] = PROXY
-os.environ['https_proxy'] = PROXY
-os.environ['CURL_CA_BUNDLE'] = CERTIFICATE
-os.environ['REQUESTS_CA_BUNDLE'] = CERTIFICATE
-os.environ['SSL_CERT_FILE'] = CERTIFICATE
-os.environ['HF_HUB_DISABLE_SSL_VERIFICATION'] = '1'
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+os.environ["HTTP_PROXY"] = PROXY
+os.environ["HTTPS_PROXY"] = PROXY
+os.environ["http_proxy"] = PROXY
+os.environ["https_proxy"] = PROXY
+os.environ["CURL_CA_BUNDLE"] = CERTIFICATE
+os.environ["REQUESTS_CA_BUNDLE"] = CERTIFICATE
+os.environ["SSL_CERT_FILE"] = CERTIFICATE
+os.environ["HF_HUB_DISABLE_SSL_VERIFICATION"] = "1"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 os.environ["TQDM_DISABLE"] = "1"
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
-os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["HF_HUB_OFFLINE"] = "0"
 os.environ["SCRAPY_LOG_LEVEL"] = "WARNING"
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+os.environ["HF_HUB_DISABLE_XET"] = "1"
 logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
 logging.getLogger("scrapy").setLevel(logging.WARNING)
 logging.getLogger("py.warnings").setLevel(logging.ERROR)
 logging.getLogger("ragas").setLevel(logging.ERROR)
+ssl._create_default_https_context = ssl._create_unverified_context
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
@@ -45,7 +49,6 @@ CHUNKING_OUTPUT_PATH = "data/chunks.json"
 # Embedding
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large" # "paraphrase-multilingual-mpnet-base-v2"
 EMBEDDING_BATCH_SIZE = 32
-EMBEDDING_MODEL_PATH = "models"
 
 # Retrieval
 RETRIEVAL_DB_PATH = "data/database"
@@ -54,8 +57,8 @@ RETRIEVAL_TOP_K = 10
 RETRIEVAL_HNSW_SPACE = "cosine"
 RETRIEVAL_HNSW_M = 32
 RETRIEVAL_STOP_WORDS_PATH = "data/stop_words.txt"
-RETRIEVAL_USE_RERANKING = False
-RETRIEVAL_CROSS_ENCODER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+RETRIEVAL_USE_RERANKING = True
+RETRIEVAL_CROSS_ENCODER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 RETRIEVAL_RERANKING_TOP_K = 5
 
 # Generation
