@@ -8,7 +8,6 @@ from ragas.metrics import (context_entity_recall, context_precision, context_rec
 from ragas.metrics._summarization import SummarizationScore
 import config
 import json
-import numpy as np
 import os
 
 # retrieval
