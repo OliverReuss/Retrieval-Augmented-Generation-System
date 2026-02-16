@@ -46,7 +46,7 @@ class Embedder:
             # Aktueller Batch
             batch = texts[i:i + self.batch_size]
             batch_num = (i // self.batch_size) + 1
-            print(f"Emebdding | Batch {batch_num}/{total_batches}...")
+            print(f"Emebdding | Batch {batch_num}/{total_batches}")
             
             # Embeddings für Batch erstellen
             batch_embeddings = self.model.encode(
@@ -151,7 +151,7 @@ class Embedder:
         if os.path.exists(self.db_path):
             return
         
-        print("\nℹ️ Starte Emebdding")
+        print("\nℹ️ Starte Embedding")
         
         chunks = load_chunks()
         self.load_model()
@@ -162,7 +162,7 @@ class Embedder:
         embeddings = self.create_embeddings(texts)
         self.save_embeddings(chunks, embeddings)
 
-        print(f"\nℹ️ Embeddings abgeschlossen. Erstellte Emebddings: {len(embeddings)}.")
+        print(f"\nℹ️ Embedding abgeschlossen. Erstellte Emebddings: {len(embeddings)}.")
     
     def embed_query(self, query: str) -> list:
         if self.model is None:

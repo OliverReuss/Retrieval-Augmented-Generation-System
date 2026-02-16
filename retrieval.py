@@ -34,7 +34,7 @@ class Retriever:
         if self.collection is not None:
             return self.collection
         self.chroma_client = chromadb.PersistentClient(path=self.db_path)
-        self.collection = self.chroma_client.get_collection(name=self.collection_name)
+        self.collection = self.chroma_client.get_or_create_collection(name=self.collection_name)
         return self.collection
     
     def load_stop_words(self) -> list[str]:
@@ -187,7 +187,7 @@ class Retriever:
     def get_statistics(self) -> dict:
         # Durchschnittliche Anzahl Chunks pro Query
         avg_chunks_per_query = 0.0
-        avg_chunks_per_query = self.total_chunks_retrieved / self.query_count
+        avg_chunks_per_query = self.total_chunks_retrieved / self.query_count if self.query_count > 0 else 0.0
         
         # Durchschnittliche Retrieval-Zeit
         avg_retrieval_time_ms = 0.0

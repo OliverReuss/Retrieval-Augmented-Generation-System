@@ -26,7 +26,7 @@ class Web_Scraper:
         if os.path.exists(self.output_path):
             return
         
-        print("ℹ️ Starte Web Scraping")
+        print("\nℹ️ Starte Web Scraping")
     
         process_settings = {
             'ROBOTSTXT_OBEY': True,
@@ -123,7 +123,7 @@ class Spider(scrapy.Spider):
         self.scraped_data = scraped_data
         self.proxy = proxy
         # Link Extractor extrahiert Links auf Seite
-        self.link_extractor = LinkExtractor(allow_domains=['aok.de'], deny_extensions=['pdf', 'jpg', 'png', 'gif', 'css', 'js'])
+        self.link_extractor = LinkExtractor(allow_domains=[self.allowed_domain], deny_extensions=['pdf', 'jpg', 'png', 'gif', 'css', 'js'])
         # HTML-Elemente für Überschriften und Content
         self.header_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         self.content_tags = ['p', 'div', 'li', 'span', 'td']

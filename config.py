@@ -1,38 +1,27 @@
 from dotenv import load_dotenv
 load_dotenv()
-import logging
-import ssl
 import os
 
-# Verzeichnisse, Proxy, Zertifikat, Infos und Warnungen
-# In den VSC-Einstellungen: @id:http.proxy -> http://proxy.your-company.com:8080 @id:http.proxyStrictSSL -> optional auf true
+# Verzeichnisse, Proxy, Zertifikat
 DATA_DIRECTORY = "data"
 MODELS_DIRECTORY = "models"
 PROXY = "http://proxy.your-company.com:8080"
 CERTIFICATE = "certificate.crt"
+
+# Proxy
 os.environ["HTTP_PROXY"] = PROXY
 os.environ["HTTPS_PROXY"] = PROXY
 os.environ["http_proxy"] = PROXY
 os.environ["https_proxy"] = PROXY
+
+# SSL-Zertifikat
 os.environ["CURL_CA_BUNDLE"] = CERTIFICATE
 os.environ["REQUESTS_CA_BUNDLE"] = CERTIFICATE
 os.environ["SSL_CERT_FILE"] = CERTIFICATE
-os.environ["HF_HUB_DISABLE_SSL_VERIFICATION"] = "1"
-os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+
+# Konsolen-Output unterdrücken
 os.environ["TQDM_DISABLE"] = "1"
-os.environ["ANONYMIZED_TELEMETRY"] = "False"
-os.environ["HF_HUB_OFFLINE"] = "0"
-os.environ["SCRAPY_LOG_LEVEL"] = "WARNING"
-os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
-os.environ["HF_HUB_DISABLE_XET"] = "1"
-logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logging.getLogger("huggingface_hub").setLevel(logging.WARNING)
-logging.getLogger("scrapy").setLevel(logging.WARNING)
-logging.getLogger("py.warnings").setLevel(logging.ERROR)
-logging.getLogger("ragas").setLevel(logging.ERROR)
-ssl._create_default_https_context = ssl._create_unverified_context
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
