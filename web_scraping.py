@@ -102,9 +102,9 @@ class Web_Scraper:
             'web_scraping_unique_pages': unique_pages,
             'web_scraping_elements_total': total_elements,
             'web_scraping_elements_with_text': elements_with_text,
-            'web_scraping_extraction_success_rate': round(extraction_success_rate, 2),
-            'web_scraping_duplicate_rate_by_text': round(duplicate_rate, 2),
-            'web_scraping_average_text_length': round(average_text_length, 2)
+            'web_scraping_extraction_success_rate': round(extraction_success_rate, 4),
+            'web_scraping_duplicate_rate_by_text': round(duplicate_rate, 4),
+            'web_scraping_average_text_length': round(average_text_length, 4)
         }
         return statistics
 

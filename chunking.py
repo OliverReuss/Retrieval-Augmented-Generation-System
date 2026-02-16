@@ -107,10 +107,10 @@ class Chunker:
         
         statistics = {
             'chunking_chunks_total': total_chunks,
-            'chunking_average_chunk_length': round(avg_length, 2),
-            'chunking_min_chunk_length': round(min_length, 2),
-            'chunking_max_chunk_length': round(max_length, 2),
-            'chunking_overlap_percentage': round(overlap_percentage, 2)
+            'chunking_average_chunk_length': round(avg_length, 4),
+            'chunking_min_chunk_length': round(min_length, 4),
+            'chunking_max_chunk_length': round(max_length, 4),
+            'chunking_overlap_percentage': round(overlap_percentage, 4)
         }
         return statistics
 

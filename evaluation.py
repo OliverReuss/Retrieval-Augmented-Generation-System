@@ -8,7 +8,23 @@ from ragas.metrics import (context_entity_recall, context_precision, context_rec
 from ragas.metrics._summarization import SummarizationScore
 import config
 import json
+import numpy as np
 import os
+
+# retrieval
+    # context_entity_recall: werden bestimmte Begriffe in der truth vorkommen im context gefunden?
+    # context_precision: wie relevant sind die gefundenen Informationen im context, um truth abzudecken?
+    # context_recall: wie vollständig sind die gefundenen Informationen im context, um truth abzudecken?
+
+# generation
+    # answer_correctness: Kombination aus faktischer Übereinstimmung und semantischer Ähnlichkeit zwischen response/truth
+    # answer_relevancy: beantwortet die response den prompt?
+    # answer_similarity: sematische Nähe der embeddings von response/truth
+    # summary_score: wie gut fasst die response den context zusammen?
+    # faithfulness: basiert die response auf dem context oder gibt es Halluzinationen?
+    # ece: misst Calibration (Übereinstimmung zwischen Confidence und Accuracy)
+    # brier: bewertet Gesamtgenauigkeit der Wahrscheinlichkeitsvorhersagen, einschließlich Calibration und Discrimination
+    # discrimination: misst Streuung der Wahrscheinlichkeiten, die das Modell den Vorhersagen zuordnet
 
 class Evaluator:
 
@@ -63,6 +79,18 @@ class Evaluator:
         
         response = self.generator.generate(prompt)
 
+        # Ergebnisse runden
+        rounded_search_results = []
+        for sr in response['search_results']:
+            rounded_sr = sr.copy()
+            if 'distance' in rounded_sr:
+                rounded_sr['distance'] = round(rounded_sr['distance'], 4)
+            if 'similarity' in rounded_sr:
+                rounded_sr['similarity'] = round(rounded_sr['similarity'], 4)
+            if 'rerank_score' in rounded_sr:
+                rounded_sr['rerank_score'] = round(rounded_sr['rerank_score'], 4)
+            rounded_search_results.append(rounded_sr)
+
         result = {
             'index': index,
             'type': test_type,
@@ -71,7 +99,7 @@ class Evaluator:
             'source': source,
             'context': response['context'],
             'sources': response['sources'],
-            'search_results': response['search_results'],
+            'search_results': rounded_search_results,  # Gerundete Version
             'response': response['answer'],
             'metrics': {}
         }
@@ -92,7 +120,7 @@ class Evaluator:
         dataset = Dataset.from_dict(data)
         
         # Summarization Score erstellen
-        summarization_score = SummarizationScore()
+        summary_score = SummarizationScore()
         
         try:
             # RAGAS Evaluation ausführen
@@ -106,7 +134,7 @@ class Evaluator:
                     context_precision,
                     context_recall,
                     faithfulness,
-                    summarization_score,
+                    summary_score,
                 ],
                 llm=self.llm,
                 embeddings=self.embeddings,
@@ -141,47 +169,61 @@ class Evaluator:
                     if isinstance(value, float) and value != value:  # NaN check
                         metrics[metric_name] = 0.0
                     else:
-                        metrics[metric_name] = float(value) if not isinstance(value, (int, float)) else value
+                        # Auf 4 Nachkommastellen runden
+                        metrics[metric_name] = round(float(value), 4)
             
             result['metrics'] = metrics
         
-        # Nicht-RAGAS Metriken berechnen
-        self.calculate_additional_metrics(results)
         return results
     
-    def calculate_additional_metrics(self, results: list[dict]) -> None:
+    def calculate_calibration_metrics(self, results: list[dict]) -> dict:
+        confidences = []
+        accuracies = []
+        
         for result in results:
             metrics = result.get('metrics', {})
+            answer_similarity = metrics.get('answer_similarity', 0.5)
+            faithfulness_score = metrics.get('faithfulness', 0.5)
             
-            # Summarization Score
-            context = result.get('context', '')
-            response = result.get('response', '')
+            # Proxy-Konfidenz
+            conf = (answer_similarity + faithfulness_score) / 2 if (answer_similarity and faithfulness_score) else 0.5
+            confidences.append(conf)
             
-            if context and response:
-                # Wie viele Wörter aus Kontext sind in Antwort?
-                context_words = set(context.lower().split())
-                response_words = set(response.lower().split())
-                common_words = context_words.intersection(response_words)
-                
-                if len(context_words) > 0:
-                    summarization_score = len(common_words) / len(context_words)
-                else:
-                    summarization_score = 0.0
-                
-                metrics['summarization_score'] = round(summarization_score, 4)
-            else:
-                metrics['summarization_score'] = 0.0
+            # Binäre Accuracy
+            acc = 1.0 if answer_similarity > 0.7 else 0.0
+            accuracies.append(acc)
+        
+        if not confidences:
+            return {'ece': 0.0, 'brier': 0.0, 'discrimination': 0.0}
+        
+        confidences = np.array(confidences)
+        accuracies = np.array(accuracies)
+        
+        # Batch ECE mit Binning
+        n_bins = 10
+        bin_boundaries = np.linspace(0, 1, n_bins + 1)
+        ece = 0.0
+        
+        for i in range(n_bins):
+            in_bin = (confidences > bin_boundaries[i]) & (confidences <= bin_boundaries[i + 1])
+            prop_in_bin = in_bin.mean()
             
-            # Platzhalter
-            # ECE Score (Expected Calibration Error)
-            metrics['ece_score'] = 0.0
-            # Brier Score
-            metrics['brier_score'] = 0.0
-            # Discrimination Score
-            metrics['discrimination'] = 0.0
-            
-            # Speichern
-            result['metrics'] = metrics
+            if prop_in_bin > 0:
+                avg_confidence_in_bin = confidences[in_bin].mean()
+                avg_accuracy_in_bin = accuracies[in_bin].mean()
+                ece += prop_in_bin * abs(avg_accuracy_in_bin - avg_confidence_in_bin)
+        
+        # Batch Brier Score
+        brier = np.mean((confidences - accuracies) ** 2)
+        
+        # Batch Discrimination (Varianz der Konfidenzwerte)
+        discrimination = np.std(confidences)
+        
+        return {
+            'ece': round(float(ece), 4),
+            'brier': round(float(brier), 4),
+            'discrimination': round(float(discrimination), 4)
+        }
     
     def calculate_averages(self, results: list[dict]) -> dict:
 
@@ -282,11 +324,13 @@ class Evaluator:
         
         # RAGAS Evaluation für alle Testfälle ausführen
         results = self.calculate_metrics(results)
-
+        # Batch Calibration Metriken berechnen (ECE und Brier Score für alle Testfälle)
+        batch_calibration = self.calculate_calibration_metrics(results)
         # Statistiken sammeln
         statistics = self.collect_statistics()
-
         averages = self.calculate_averages(results)
+        # Batch Calibration Metriken zu averages hinzufügen
+        averages.update(batch_calibration)
         config_params = self.get_config_parameters()
         
         final_results = {
