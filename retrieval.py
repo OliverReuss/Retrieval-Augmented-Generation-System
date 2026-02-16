@@ -17,7 +17,6 @@ class Retriever:
         self.model_path = config.MODELS_DIRECTORY
         self.stats_path = config.EVALUATION_OUTPUT_PATH
         self.cross_encoder_model_name = config.RETRIEVAL_CROSS_ENCODER_MODEL_NAME
-        self.use_reranking = config.RETRIEVAL_USE_RERANKING
         self.chroma_client = None
         self.collection = None
         self.embedder = Embedder()
@@ -149,9 +148,7 @@ class Retriever:
         # Statistik aktualisieren
         self.query_count += 1
         self.total_chunks_retrieved += len(search_results)
-        
-        if self.use_reranking:
-            search_results = self.rerank_results(query, search_results)
+        search_results = self.rerank_results(query, search_results)
         return search_results
     
     def rerank_results(self, query: str, results: list[dict]) -> list[dict]:
@@ -215,8 +212,7 @@ class Retriever:
             'retrieval_avg_similarity': round(avg_similarity, 4),
             'retrieval_min_similarity': round(min_similarity, 4),
             'retrieval_max_similarity': round(max_similarity, 4),
-            'retrieval_reranking_enabled': self.use_reranking,
-            'retrieval_avg_reranking_time_ms': round(avg_reranking_time_ms, 4),
+            'retrieval_avg_reranking_time_ms': round(avg_reranking_time_ms, 4)
         }
         
         return stats

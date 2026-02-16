@@ -2,6 +2,10 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 
+"""
+2026-02-16 12:28:24 [ragas.prompt.pydantic_prompt] WARNING: LLM returned 1 generations instead of requested 3. Proceeding with 1 generations.
+"""
+
 # Verzeichnisse, Proxy, Zertifikat
 DATA_DIRECTORY = "data"
 MODELS_DIRECTORY = "models"
@@ -46,7 +50,6 @@ RETRIEVAL_TOP_K = 10
 RETRIEVAL_HNSW_SPACE = "cosine"
 RETRIEVAL_HNSW_M = 32
 RETRIEVAL_STOP_WORDS_PATH = "data/stop_words.txt"
-RETRIEVAL_USE_RERANKING = True
 RETRIEVAL_CROSS_ENCODER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 RETRIEVAL_RERANKING_TOP_K = 5
 

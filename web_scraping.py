@@ -136,7 +136,7 @@ class Spider(scrapy.Spider):
             'script', 'style', 'noscript'
         ]
     
-    def start_requests(self):
+    async def start(self):
         # Überschreibt Standard-Methode für Proxy-Nutzung
         if self.proxy:
             yield scrapy.Request(self.start_url, callback=self.parse, meta={'proxy': self.proxy})

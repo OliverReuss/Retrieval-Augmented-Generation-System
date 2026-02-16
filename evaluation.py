@@ -79,12 +79,9 @@ class Evaluator:
         rounded_search_results = []
         for sr in response['search_results']:
             rounded_sr = sr.copy()
-            if 'distance' in rounded_sr:
-                rounded_sr['distance'] = round(rounded_sr['distance'], 4)
-            if 'similarity' in rounded_sr:
-                rounded_sr['similarity'] = round(rounded_sr['similarity'], 4)
-            if 'rerank_score' in rounded_sr:
-                rounded_sr['rerank_score'] = round(rounded_sr['rerank_score'], 4)
+            rounded_sr['distance'] = round(rounded_sr['distance'], 4)
+            rounded_sr['similarity'] = round(rounded_sr['similarity'], 4)
+            rounded_sr['rerank_score'] = round(rounded_sr['rerank_score'], 4)
             rounded_search_results.append(rounded_sr)
 
         result = {
@@ -216,7 +213,6 @@ class Evaluator:
             'RETRIEVAL_TOP_K': config.RETRIEVAL_TOP_K,
             'RETRIEVAL_HNSW_SPACE': config.RETRIEVAL_HNSW_SPACE,
             'RETRIEVAL_HNSW_M': config.RETRIEVAL_HNSW_M,
-            'RETRIEVAL_USE_RERANKING': config.RETRIEVAL_USE_RERANKING,
             'RETRIEVAL_CROSS_ENCODER_MODEL_NAME': config.RETRIEVAL_CROSS_ENCODER_MODEL_NAME,
             'RETRIEVAL_RERANKING_TOP_K': config.RETRIEVAL_RERANKING_TOP_K,
             
