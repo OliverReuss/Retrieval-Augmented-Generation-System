@@ -27,13 +27,13 @@ class Embedder:
     
     def load_model(self) -> SentenceTransformer:
         if self.model is None:
-            local_model_path = f"{self.model_path}/{self.model_name.replace('/', '-')}"
+            safe_model_name = self.model_name.replace('/', '_')
+            local_model_path = os.path.join(self.model_path, safe_model_name)
             if os.path.exists(local_model_path):
                 self.model = SentenceTransformer(local_model_path)
             else:
-                # Modell herunterladen
-                self.model = SentenceTransformer(self.model_name)
-                # Modell lokal speichern
+                self.model = SentenceTransformer(self.model_name, trust_remote_code=True)
+                os.makedirs(local_model_path, exist_ok=True)
                 self.model.save(local_model_path)
         return self.model
     

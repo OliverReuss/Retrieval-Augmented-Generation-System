@@ -24,12 +24,13 @@ os.environ["SSL_CERT_FILE"] = CERTIFICATE
 os.environ["TQDM_DISABLE"] = "1"
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["HF_HUB_DISABLE_XET"] = "1"
 logging.getLogger("ragas.prompt.pydantic_prompt").setLevel(logging.ERROR)
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
-WEB_SCRAPING_MAX_DEPTH = 1
-WEB_SCRAPING_EXCLUDED_TERMS = ["nordwest", "bw", "bayern", "bremen", "hessen", "nordost", "plus", "niedersachsen", "rps", "rh", "gp", "fk", "fm", "pp", "magazin", "datenschutzerklaerung", "karriere"]
+WEB_SCRAPING_MAX_DEPTH = 5
+WEB_SCRAPING_EXCLUDED_TERMS = ["nordwest", "bw", "bayern", "bremen", "hessen", "nordost", "plus", "niedersachsen", "rps", "rh", "fm", "pp", "magazin", "datenschutzerklaerung", "karriere"]
 WEB_SCRAPING_DOWNLOAD_DELAY = 0.0
 WEB_SCRAPING_OUTPUT_PATH = "data/documents.json"
 
@@ -39,7 +40,7 @@ CHUNKING_CHUNK_OVERLAP = 100
 CHUNKING_OUTPUT_PATH = "data/chunks.json"
 
 # Embedding
-EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large" # "paraphrase-multilingual-mpnet-base-v2"
+EMBEDDING_MODEL_NAME = "snowflake/snowflake-arctic-embed-m-v1.5"
 EMBEDDING_BATCH_SIZE = 32
 
 # Retrieval
@@ -49,13 +50,13 @@ RETRIEVAL_TOP_K = 10
 RETRIEVAL_HNSW_SPACE = "cosine"
 RETRIEVAL_HNSW_M = 32
 RETRIEVAL_STOP_WORDS_PATH = "data/stop_words.txt"
-RETRIEVAL_CROSS_ENCODER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+RETRIEVAL_CROSS_ENCODER_MODEL_NAME = "mixedbread-ai/mxbai-rerank-base-v1"
 RETRIEVAL_RERANKING_TOP_K = 5
 
 # Generation
 GENERATION_API_URL = "https://api.your-company.com/v1/chat/completions" # "https://openrouter.ai/api/v1/chat/completions"
 GENERATION_API_KEY = os.getenv("CHATBOT_API_KEY")
-GENERATION_MODEL_NAME = "Qwen3-30B-A3B-Q6_K.gguf:latest" # "qwen/qwen3-30b-a3b:free"
+GENERATION_MODEL_NAME = "Qwen3-30B-A3B-Q6_K.gguf:latest" # "mistralai/mistral-small-3.1-24b-instruct:free"
 GENERATION_TEMPERATURE = 0.1
 GENERATION_MAX_TOKENS = 800
 GENERATION_TOP_P = 0.9

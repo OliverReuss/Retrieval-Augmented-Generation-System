@@ -48,18 +48,15 @@ class Retriever:
         return self.stop_words
     
     def load_cross_encoder(self) -> CrossEncoder:
-        if self.cross_encoder is not None:
-            return self.cross_encoder
-        local_model_path = f"{self.model_path}/{self.cross_encoder_model_name.replace('/', '-')}"
-        
-        if os.path.exists(local_model_path):
-            # Modell lokal laden
-            self.cross_encoder = CrossEncoder(local_model_path)
-        else:
-            # Modell herunterladen und speichern
-            self.cross_encoder = CrossEncoder(self.cross_encoder_model_name)
-            self.cross_encoder.save(local_model_path)
-        
+        if self.cross_encoder is None:
+            safe_model_name = self.cross_encoder_model_name.replace('/', '_')
+            local_model_path = os.path.join(self.model_path, safe_model_name)
+            if os.path.exists(local_model_path):
+                self.cross_encoder = CrossEncoder(local_model_path)
+            else:
+                self.cross_encoder = CrossEncoder(self.cross_encoder_model_name, trust_remote_code=True)
+                os.makedirs(local_model_path, exist_ok=True)
+                self.cross_encoder.save(local_model_path)
         return self.cross_encoder
     
     def sanitize_query(self, query: str) -> str:
