@@ -22,9 +22,6 @@ import os
     # answer_similarity: sematische Nähe der embeddings von response/truth
     # summary_score: wie gut fasst die response den context zusammen?
     # faithfulness: basiert die response auf dem context oder gibt es Halluzinationen?
-    # ece: misst Calibration (Übereinstimmung zwischen Confidence und Accuracy)
-    # brier: bewertet Gesamtgenauigkeit der Wahrscheinlichkeitsvorhersagen, einschließlich Calibration und Discrimination
-    # discrimination: misst Streuung der Wahrscheinlichkeiten, die das Modell den Vorhersagen zuordnet
 
 class Evaluator:
 
@@ -176,55 +173,6 @@ class Evaluator:
         
         return results
     
-    def calculate_calibration_metrics(self, results: list[dict]) -> dict:
-        confidences = []
-        accuracies = []
-        
-        for result in results:
-            metrics = result.get('metrics', {})
-            answer_similarity = metrics.get('answer_similarity', 0.5)
-            faithfulness_score = metrics.get('faithfulness', 0.5)
-            
-            # Proxy-Konfidenz
-            conf = (answer_similarity + faithfulness_score) / 2 if (answer_similarity and faithfulness_score) else 0.5
-            confidences.append(conf)
-            
-            # Binäre Accuracy
-            acc = 1.0 if answer_similarity > 0.7 else 0.0
-            accuracies.append(acc)
-        
-        if not confidences:
-            return {'ece': 0.0, 'brier': 0.0, 'discrimination': 0.0}
-        
-        confidences = np.array(confidences)
-        accuracies = np.array(accuracies)
-        
-        # Batch ECE mit Binning
-        n_bins = 10
-        bin_boundaries = np.linspace(0, 1, n_bins + 1)
-        ece = 0.0
-        
-        for i in range(n_bins):
-            in_bin = (confidences > bin_boundaries[i]) & (confidences <= bin_boundaries[i + 1])
-            prop_in_bin = in_bin.mean()
-            
-            if prop_in_bin > 0:
-                avg_confidence_in_bin = confidences[in_bin].mean()
-                avg_accuracy_in_bin = accuracies[in_bin].mean()
-                ece += prop_in_bin * abs(avg_accuracy_in_bin - avg_confidence_in_bin)
-        
-        # Batch Brier Score
-        brier = np.mean((confidences - accuracies) ** 2)
-        
-        # Batch Discrimination (Varianz der Konfidenzwerte)
-        discrimination = np.std(confidences)
-        
-        return {
-            'ece': round(float(ece), 4),
-            'brier': round(float(brier), 4),
-            'discrimination': round(float(discrimination), 4)
-        }
-    
     def calculate_averages(self, results: list[dict]) -> dict:
 
         # Alle Metrik-Namen sammeln
@@ -324,13 +272,11 @@ class Evaluator:
         
         # RAGAS Evaluation für alle Testfälle ausführen
         results = self.calculate_metrics(results)
-        # Batch Calibration Metriken berechnen (ECE und Brier Score für alle Testfälle)
-        batch_calibration = self.calculate_calibration_metrics(results)
         # Statistiken sammeln
         statistics = self.collect_statistics()
+        # Durchschnitte berechnen
         averages = self.calculate_averages(results)
-        # Batch Calibration Metriken zu averages hinzufügen
-        averages.update(batch_calibration)
+        # Konfiguration speichern
         config_params = self.get_config_parameters()
         
         final_results = {
