@@ -1,10 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 import os
-
-"""
-2026-02-16 12:28:24 [ragas.prompt.pydantic_prompt] WARNING: LLM returned 1 generations instead of requested 3. Proceeding with 1 generations.
-"""
+import logging
 
 # Verzeichnisse, Proxy, Zertifikat
 DATA_DIRECTORY = "data"
@@ -26,6 +23,8 @@ os.environ["SSL_CERT_FILE"] = CERTIFICATE
 # Konsolen-Output unterdrücken
 os.environ["TQDM_DISABLE"] = "1"
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+logging.getLogger("ragas.prompt.pydantic_prompt").setLevel(logging.ERROR)
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"

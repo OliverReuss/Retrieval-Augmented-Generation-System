@@ -50,7 +50,7 @@ class Evaluator:
             http_async_client=None,
             timeout=60,
             model=self.model_name,
-            n=3,
+            n=1,
         )
         self.llm = LangchainLLMWrapper(base_llm)
         
