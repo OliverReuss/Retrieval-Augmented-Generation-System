@@ -13,7 +13,6 @@ class Retriever:
         self.collection_name = config.RETRIEVAL_COLLECTION_NAME
         self.top_k = config.RETRIEVAL_TOP_K
         self.reranking_top_k = config.RETRIEVAL_RERANKING_TOP_K
-        self.stop_words_path = config.RETRIEVAL_STOP_WORDS_PATH
         self.model_path = config.MODELS_DIRECTORY
         self.stats_path = config.EVALUATION_OUTPUT_PATH
         self.cross_encoder_model = config.RETRIEVAL_CROSS_ENCODER_MODEL
@@ -35,17 +34,6 @@ class Retriever:
         self.chroma_client = chromadb.PersistentClient(path=self.db_path)
         self.collection = self.chroma_client.get_or_create_collection(name=self.collection_name)
         return self.collection
-    
-    def load_stop_words(self) -> list[str]:
-        self.stop_words = []
-        with open(self.stop_words_path, 'r', encoding='utf-8') as file:
-            # Jede Zeile ein Wort
-            for line in file:
-                word = line.strip().lower()
-                # Leere Zeilen überspringen
-                if word:
-                    self.stop_words.append(word)
-        return self.stop_words
     
     def load_cross_encoder(self) -> CrossEncoder:
         if self.cross_encoder is None:
@@ -80,27 +68,6 @@ class Retriever:
             cleaned_query = re.sub(pattern, '', cleaned_query, flags=re.IGNORECASE)
         return cleaned_query
     
-    def remove_stop_words(self, query: str) -> str:
-        if self.stop_words is None:
-            self.load_stop_words()
-        
-        # Anfrage in Wörter aufteilen
-        words = query.split()
-        
-        # Wörter filtern, die keine Stop-Words sind
-        filtered_words = []
-        for word in words:
-            word_lower = word.lower()
-            # Satzzeichen entfernen
-            word_clean = re.sub(r'[^\w\s]', '', word_lower)
-            # Prüfen ob Wort Stop-Word ist
-            if word_clean not in self.stop_words:
-                filtered_words.append(word)
-
-        # Gefilterte Wörter zusammenfügen
-        filtered_query = ' '.join(filtered_words)
-        return filtered_query
-    
     def search(self, query: str) -> list[dict]:
         if self.collection is None:
             self.connect_to_db()
@@ -109,8 +76,7 @@ class Retriever:
         start_time = time.time()
 
         clean_query = self.sanitize_query(query)
-        processed_query = self.remove_stop_words(clean_query)
-        query_embedding = self.embedder.embed_query(processed_query)
+        query_embedding = self.embedder.embed_query(clean_query)
         results = self.collection.query(query_embeddings=[query_embedding], n_results=self.top_k, include=['documents', 'metadatas', 'distances'])
         search_results = []
         

@@ -49,7 +49,6 @@ RETRIEVAL_COLLECTION_NAME = "documents_collection"
 RETRIEVAL_TOP_K = 10
 RETRIEVAL_HNSW_SPACE = "cosine"
 RETRIEVAL_HNSW_M = 32
-RETRIEVAL_STOP_WORDS_PATH = "data/stop_words.txt"
 RETRIEVAL_CROSS_ENCODER_MODEL = "mixedbread-ai/mxbai-rerank-base-v1"
 RETRIEVAL_RERANKING_TOP_K = 5
 
