@@ -10,7 +10,7 @@ class Generator:
     def __init__(self, retriever) -> None:
         self.api_url = config.GENERATION_API_URL
         self.api_key = config.GENERATION_API_KEY
-        self.model_name = config.GENERATION_MODEL_NAME
+        self.model = config.GENERATION_MODEL
         self.temperature = config.GENERATION_TEMPERATURE
         self.max_tokens = config.GENERATION_MAX_TOKENS
         self.top_p = config.GENERATION_TOP_P
@@ -87,7 +87,7 @@ class Generator:
         
         # Request-Body im OpenAI-Format (von anderen LLMs auch genutzt)
         payload = {
-            'model': self.model_name,
+            'model': self.model,
             'messages': [
                 {
                     'role': 'system',

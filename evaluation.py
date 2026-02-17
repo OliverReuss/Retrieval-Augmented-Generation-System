@@ -27,7 +27,8 @@ class Evaluator:
     def __init__(self, web_scraper, chunker, embedder, retriever, generator) -> None:
         self.test_cases_path = config.EVALUATION_TEST_CASES_PATH
         self.output_path = config.EVALUATION_OUTPUT_PATH
-        self.model_name = config.EVALUATION_MODEL_NAME
+        self.model = config.EVALUATION_MODEL
+        self.embedding_model = config.EVALUATION_EMBEDDING_MODEL
         self.web_scraper = web_scraper
         self.chunker = chunker
         self.embedder = embedder
@@ -49,7 +50,8 @@ class Evaluator:
             http_client=None,
             http_async_client=None,
             timeout=60,
-            model=self.model_name,
+            model=self.model,
+            temperature=0.0,
             n=1,
         )
         self.llm = LangchainLLMWrapper(base_llm)
@@ -58,7 +60,8 @@ class Evaluator:
         base_embeddings = OpenAIEmbeddings(
             http_client=None,
             http_async_client=None,
-            timeout=60
+            timeout=60,
+            model=self.embedding_model
         )
         self.embeddings = LangchainEmbeddingsWrapper(base_embeddings)
     
@@ -207,17 +210,17 @@ class Evaluator:
             'CHUNKING_CHUNK_SIZE': config.CHUNKING_CHUNK_SIZE,
             'CHUNKING_CHUNK_OVERLAP': config.CHUNKING_CHUNK_OVERLAP,
             
-            'EMBEDDING_MODEL_NAME': config.EMBEDDING_MODEL_NAME,
+            'EMBEDDING_MODEL': config.EMBEDDING_MODEL,
             'EMBEDDING_BATCH_SIZE': config.EMBEDDING_BATCH_SIZE,
             
             'RETRIEVAL_TOP_K': config.RETRIEVAL_TOP_K,
             'RETRIEVAL_HNSW_SPACE': config.RETRIEVAL_HNSW_SPACE,
             'RETRIEVAL_HNSW_M': config.RETRIEVAL_HNSW_M,
-            'RETRIEVAL_CROSS_ENCODER_MODEL_NAME': config.RETRIEVAL_CROSS_ENCODER_MODEL_NAME,
+            'RETRIEVAL_CROSS_ENCODER_MODEL': config.RETRIEVAL_CROSS_ENCODER_MODEL,
             'RETRIEVAL_RERANKING_TOP_K': config.RETRIEVAL_RERANKING_TOP_K,
             
             'GENERATION_API_URL': config.GENERATION_API_URL,
-            'GENERATION_MODEL_NAME': config.GENERATION_MODEL_NAME,
+            'GENERATION_MODEL': config.GENERATION_MODEL,
             'GENERATION_TEMPERATURE': config.GENERATION_TEMPERATURE,
             'GENERATION_MAX_TOKENS': config.GENERATION_MAX_TOKENS,
             'GENERATION_TOP_P': config.GENERATION_TOP_P,
@@ -226,7 +229,8 @@ class Evaluator:
             'GENERATION_TIMEOUT': config.GENERATION_TIMEOUT,
             'GENERATION_SYSTEM_PROMPT': config.GENERATION_SYSTEM_PROMPT,
 
-            'EVALUATION_MODEL_NAME': config.EVALUATION_MODEL_NAME
+            'EVALUATION_MODEL': config.EVALUATION_MODEL,
+            'EVALUATION_EMBEDDING_MODEL': config.EVALUATION_EMBEDDING_MODEL
         }
 
         return parameters

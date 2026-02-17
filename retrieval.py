@@ -16,7 +16,7 @@ class Retriever:
         self.stop_words_path = config.RETRIEVAL_STOP_WORDS_PATH
         self.model_path = config.MODELS_DIRECTORY
         self.stats_path = config.EVALUATION_OUTPUT_PATH
-        self.cross_encoder_model_name = config.RETRIEVAL_CROSS_ENCODER_MODEL_NAME
+        self.cross_encoder_model = config.RETRIEVAL_CROSS_ENCODER_MODEL
         self.chroma_client = None
         self.collection = None
         self.embedder = Embedder()
@@ -49,12 +49,12 @@ class Retriever:
     
     def load_cross_encoder(self) -> CrossEncoder:
         if self.cross_encoder is None:
-            safe_model_name = self.cross_encoder_model_name.replace('/', '_')
+            safe_model_name = self.cross_encoder_model.replace('/', '_')
             local_model_path = os.path.join(self.model_path, safe_model_name)
             if os.path.exists(local_model_path):
                 self.cross_encoder = CrossEncoder(local_model_path)
             else:
-                self.cross_encoder = CrossEncoder(self.cross_encoder_model_name, trust_remote_code=True)
+                self.cross_encoder = CrossEncoder(self.cross_encoder_model, trust_remote_code=True)
                 os.makedirs(local_model_path, exist_ok=True)
                 self.cross_encoder.save(local_model_path)
         return self.cross_encoder

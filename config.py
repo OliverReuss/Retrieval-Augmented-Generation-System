@@ -40,7 +40,7 @@ CHUNKING_CHUNK_OVERLAP = 100
 CHUNKING_OUTPUT_PATH = "data/chunks.json"
 
 # Embedding
-EMBEDDING_MODEL_NAME = "snowflake/snowflake-arctic-embed-m-v1.5"
+EMBEDDING_MODEL = "snowflake/snowflake-arctic-embed-m-v1.5"
 EMBEDDING_BATCH_SIZE = 32
 
 # Retrieval
@@ -50,13 +50,13 @@ RETRIEVAL_TOP_K = 10
 RETRIEVAL_HNSW_SPACE = "cosine"
 RETRIEVAL_HNSW_M = 32
 RETRIEVAL_STOP_WORDS_PATH = "data/stop_words.txt"
-RETRIEVAL_CROSS_ENCODER_MODEL_NAME = "mixedbread-ai/mxbai-rerank-base-v1"
+RETRIEVAL_CROSS_ENCODER_MODEL = "mixedbread-ai/mxbai-rerank-base-v1"
 RETRIEVAL_RERANKING_TOP_K = 5
 
 # Generation
 GENERATION_API_URL = "https://api.your-company.com/v1/chat/completions" # "https://openrouter.ai/api/v1/chat/completions"
 GENERATION_API_KEY = os.getenv("CHATBOT_API_KEY")
-GENERATION_MODEL_NAME = "Qwen3-30B-A3B-Q6_K.gguf:latest" # "mistralai/mistral-small-3.1-24b-instruct:free"
+GENERATION_MODEL = "Qwen3-30B-A3B-Q6_K.gguf:latest" # "mistralai/mistral-small-3.1-24b-instruct:free"
 GENERATION_TEMPERATURE = 0.1
 GENERATION_MAX_TOKENS = 800
 GENERATION_TOP_P = 0.9
@@ -83,6 +83,7 @@ GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Frag
 
 # Evaluation
 EVALUATION_EVALUATE = True
-EVALUATION_MODEL_NAME = "gpt-4o"
+EVALUATION_MODEL = "gpt-4o-mini"
+EVALUATION_EMBEDDING_MODEL = "text-embedding-3-large"
 EVALUATION_TEST_CASES_PATH = "data/test_cases.json"
 EVALUATION_OUTPUT_PATH = "data/evaluation_results.json"

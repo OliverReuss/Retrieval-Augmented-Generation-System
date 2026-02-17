@@ -7,7 +7,7 @@ import os
 class Embedder:
     
     def __init__(self) -> None:
-        self.model_name = config.EMBEDDING_MODEL_NAME
+        self.embedding_model = config.EMBEDDING_MODEL
         self.batch_size = config.EMBEDDING_BATCH_SIZE
         self.model_path = config.MODELS_DIRECTORY
         self.db_path = config.RETRIEVAL_DB_PATH
@@ -27,12 +27,12 @@ class Embedder:
     
     def load_model(self) -> SentenceTransformer:
         if self.model is None:
-            safe_model_name = self.model_name.replace('/', '_')
+            safe_model_name = self.embedding_model.replace('/', '_')
             local_model_path = os.path.join(self.model_path, safe_model_name)
             if os.path.exists(local_model_path):
                 self.model = SentenceTransformer(local_model_path)
             else:
-                self.model = SentenceTransformer(self.model_name, trust_remote_code=True)
+                self.model = SentenceTransformer(self.embedding_model, trust_remote_code=True)
                 os.makedirs(local_model_path, exist_ok=True)
                 self.model.save(local_model_path)
         return self.model

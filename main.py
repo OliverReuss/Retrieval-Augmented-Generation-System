@@ -10,7 +10,7 @@ chunker = Chunker()
 embedder = Embedder()
 retriever = Retriever()
 generator = Generator(retriever)
-# evaluator = Evaluator(web_scraper, chunker, embedder, retriever, generator)
+evaluator = Evaluator(web_scraper, chunker, embedder, retriever, generator)
 
 while True:
     query = input("\n➡️ Frage eingeben: ")
