@@ -30,7 +30,7 @@ class Generator:
         # Session mit Retry-Strategie erstellen
         self.session = self.create_retry_session()
         # Tokenizer für Token-Zählung
-        self.tokenizer = tiktoken.encoding_for_model(self.model)
+        self.tokenizer = tiktoken.get_encoding("cl100k_base")
     
     def count_tokens(self, text: str) -> int:
         return len(self.tokenizer.encode(text))
@@ -128,7 +128,7 @@ class Generator:
                 output_tokens = data['usage'].get('completion_tokens', self.count_tokens(cleaned_response))
                 input_tokens = data['usage'].get('prompt_tokens', input_tokens)
             else:
-                                self.tokenizer = tiktoken.encoding_for_model(self.model) = self.count_tokens(cleaned_response)
+                output_tokens = self.count_tokens(cleaned_response)
             
             # Statistiken aktualisieren
             self.generation_count += 1

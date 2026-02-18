@@ -80,7 +80,7 @@ class Retriever:
         
         # Ergebnisse durchalufen
         if results and 'documents' in results and results['documents']:
-            documents = results['documents'][0]  # Erste (und einzige) Query
+            documents = results['documents'][0]
             metadatas = results['metadatas'][0]
             distances = results['distances'][0]
             ids = results['ids'][0]
@@ -92,7 +92,7 @@ class Retriever:
                     'text': documents[i],
                     'url': metadatas[i].get('url', ''),
                     'title': metadatas[i].get('title', ''),
-                    'section_header': metadatas[i].get('section_header', ''),  # Neu hinzugefügt
+                    'section_header': metadatas[i].get('section_header', ''),
                     'distance': distances[i],
                     # Ähnlichkeit = 1 - Distanz bei Cosinus
                     'similarity': similarity
