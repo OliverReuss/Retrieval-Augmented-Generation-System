@@ -22,8 +22,6 @@ class Retriever:
         self.cross_encoder = None
         self.stop_words = None
         # Statistiken
-        self.query_count = 0
-        self.total_chunks_retrieved = 0
         self.retrieval_times_ms = []
         self.reranking_times_ms = []
         self.similarity_scores = []
@@ -109,8 +107,6 @@ class Retriever:
         self.retrieval_times_ms.append(retrieval_time_ms)
 
         # Statistik aktualisieren
-        self.query_count += 1
-        self.total_chunks_retrieved += len(search_results)
         search_results = self.rerank_results(query, search_results)
         return search_results
     
@@ -144,11 +140,7 @@ class Retriever:
 
         return reranked_results
     
-    def get_statistics(self) -> dict:
-        # Durchschnittliche Anzahl Chunks pro Query
-        avg_chunks_per_query = 0.0
-        avg_chunks_per_query = self.total_chunks_retrieved / self.query_count if self.query_count > 0 else 0.0
-        
+    def get_statistics(self) -> dict:       
         # Durchschnittliche Retrieval-Zeit
         avg_retrieval_time_ms = 0.0
         if self.retrieval_times_ms:
@@ -170,7 +162,6 @@ class Retriever:
             max_similarity = max(self.similarity_scores)
         
         stats = {
-            'retrieval_avg_chunks_per_query': round(avg_chunks_per_query, 4),
             'retrieval_avg_time_ms': round(avg_retrieval_time_ms, 4),
             'retrieval_avg_similarity': round(avg_similarity, 4),
             'retrieval_min_similarity': round(min_similarity, 4),
@@ -181,8 +172,6 @@ class Retriever:
         return stats
     
     def reset_statistics(self) -> None:
-        self.query_count = 0
-        self.total_chunks_retrieved = 0
         self.retrieval_times_ms = []
         self.reranking_times_ms = []
         self.similarity_scores = []

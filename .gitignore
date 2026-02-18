@@ -1,8 +1,6 @@
 __pycache__/
 .venv/
-/data/*
-!/data/stop_words.txt
-!/data/test_cases.json
+data/
 models/
 .env
 *.crt

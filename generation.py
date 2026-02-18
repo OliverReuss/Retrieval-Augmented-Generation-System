@@ -33,7 +33,7 @@ class Generator:
 
         # Tokenizer für Token-Zählung
         try:
-            self.tokenizer = tiktoken.encoding_for_model("gpt-4")
+            self.tokenizer = tiktoken.encoding_for_model(self.model)
         except:
             self.tokenizer = None
     
@@ -136,7 +136,7 @@ class Generator:
                 output_tokens = data['usage'].get('completion_tokens', self.count_tokens(cleaned_response))
                 input_tokens = data['usage'].get('prompt_tokens', input_tokens)
             else:
-                output_tokens = self.count_tokens(cleaned_response)
+                                self.tokenizer = tiktoken.encoding_for_model(self.model) = self.count_tokens(cleaned_response)
             
             # Statistiken aktualisieren
             self.generation_count += 1
