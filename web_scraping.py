@@ -69,7 +69,6 @@ class Web_Scraper:
             self.scraped_data = load_documents()
         
         total_elements = len(self.scraped_data)
-        elements_with_text = 0
         text_lengths = []
         all_texts = []
         all_urls = []
@@ -81,12 +80,8 @@ class Web_Scraper:
             if url:
                 all_urls.append(url)
             if text and len(text.strip()) > 0:
-                elements_with_text = elements_with_text + 1
                 text_lengths.append(len(text))
                 all_texts.append(text)
-        
-        # Erfolgsrate
-        extraction_success_rate = elements_with_text / total_elements if total_elements > 0 else 0
         
         # Duplikatrate
         unique_texts = set(all_texts)
@@ -101,8 +96,6 @@ class Web_Scraper:
         statistics = {
             'web_scraping_unique_pages': unique_pages,
             'web_scraping_elements_total': total_elements,
-            'web_scraping_elements_with_text': elements_with_text,
-            'web_scraping_extraction_success_rate': round(extraction_success_rate, 4),
             'web_scraping_duplicate_rate_by_text': round(duplicate_rate, 4),
             'web_scraping_average_text_length': round(average_text_length, 4)
         }

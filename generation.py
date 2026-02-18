@@ -27,21 +27,13 @@ class Generator:
         self.response_lengths = []
         self.api_errors = 0
         self.retries = 0
-        
         # Session mit Retry-Strategie erstellen
         self.session = self.create_retry_session()
-
         # Tokenizer für Token-Zählung
-        try:
-            self.tokenizer = tiktoken.encoding_for_model(self.model)
-        except:
-            self.tokenizer = None
+        self.tokenizer = tiktoken.encoding_for_model(self.model)
     
     def count_tokens(self, text: str) -> int:
-        if self.tokenizer:
-            return len(self.tokenizer.encode(text))
-        else:
-            return len(text) // 4
+        return len(self.tokenizer.encode(text))
 
     def create_retry_session(self) -> requests.Session:
         session = requests.Session()

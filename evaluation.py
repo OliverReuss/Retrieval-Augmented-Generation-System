@@ -202,7 +202,7 @@ class Evaluator:
     
     def get_config_parameters(self) -> dict:
         parameters = {
-            'web_scraping_start_url': config.WEB_SCRAPING_START_URL,
+            'WEB_SCRAPING_START_URL': config.WEB_SCRAPING_START_URL,
             'WEB_SCRAPING_MAX_DEPTH': config.WEB_SCRAPING_MAX_DEPTH,
             'WEB_SCRAPING_EXCLUDED_TERMS': config.WEB_SCRAPING_EXCLUDED_TERMS,
             'WEB_SCRAPING_DOWNLOAD_DELAY': config.WEB_SCRAPING_DOWNLOAD_DELAY,
