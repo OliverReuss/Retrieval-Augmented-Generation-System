@@ -98,9 +98,8 @@ class Chunker:
         # Durchschnittliche Chunk-Länge
         avg_length = (sum(chunk_lengths) / total_chunks)
         
-        # Minimale und maximale Länge
+        # Minimale Länge
         min_length = min(chunk_lengths)
-        max_length = max(chunk_lengths)
 
         # Überlappungsrate
         overlap_percentage = (self.chunk_overlap / self.chunk_size) * 100
@@ -109,7 +108,6 @@ class Chunker:
             'chunking_chunks_total': total_chunks,
             'chunking_average_chunk_length': round(avg_length, 4),
             'chunking_min_chunk_length': round(min_length, 4),
-            'chunking_max_chunk_length': round(max_length, 4),
             'chunking_overlap_percentage': round(overlap_percentage, 4)
         }
         return statistics

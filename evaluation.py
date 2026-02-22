@@ -11,16 +11,16 @@ import json
 import os
 
 # retrieval
-    # context_entity_recall: werden bestimmte Begriffe in der truth vorkommen im context gefunden?
-    # context_precision: wie relevant sind die gefundenen Informationen im context, um truth abzudecken?
-    # context_recall: wie vollständig sind die gefundenen Informationen im context, um truth abzudecken?
+    # context_entity_recall: Misst den Anteil der Begriffe aus der Ground Truth, die im abgerufenen Kontext gefunden wurden.
+    # context_precision: Bewertet, ob die relevanten Informationen im Kontext möglichst weit oben in der Gewichtung stehen (Signal-Rausch-Verhältnis der Rankings).
+    # context_recall: Analysiert, ob der abgerufene Kontext alle zur Beantwortung der Ground Truth notwendigen Informationen enthält.
 
 # generation
-    # answer_correctness: Kombination aus faktischer Übereinstimmung und semantischer Ähnlichkeit zwischen response/truth
-    # answer_relevancy: beantwortet die response den prompt?
-    # answer_similarity: sematische Nähe der embeddings von response/truth
-    # summary_score: wie gut fasst die response den context zusammen?
-    # faithfulness: basiert die response auf dem context oder gibt es Halluzinationen?
+    # answer_correctness: Eine gewichtete Kombination aus der faktischen Übereinstimmung und der semantischen Ähnlichkeit zur Ground Truth.
+    # answer_relevancy: Bewertet, wie treffend die Antwort auf die ursprüngliche Frage eingeht.
+    # answer_similarity: Misst die rein semantische Nähe zwischen der generierten Antwort und der Ground Truth mittels Kosinus-Ähnlichkeit.
+    # summary_score: Misst wie präzise und vollständig die Informationen des Kontextes in der Antwort zusammengefasst wurden.
+    # faithfulness: Misst die Treue zum Kontext. Jede Antwort wird darauf geprüft, ob sie direkt auf den abgerufenen Informationen basiert.
 
 class Evaluator:
 
@@ -40,8 +40,7 @@ class Evaluator:
         self.embeddings = None
 
         # Automatisch starten
-        if config.EVALUATION_EVALUATE:
-            self.process()
+        self.process()
     
     def setup_ragas_llm(self) -> None:
         # LLM mit LangchainLLMWrapper erstellen

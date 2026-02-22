@@ -81,7 +81,6 @@ GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Frag
     3. Markiere wichtige Punkte deutlich"""
 
 # Evaluation
-EVALUATION_EVALUATE = True
 EVALUATION_MODEL = "gpt-4o-mini"
 EVALUATION_EMBEDDING_MODEL = "text-embedding-3-large"
 EVALUATION_TEST_CASES_PATH = "test_cases.json"

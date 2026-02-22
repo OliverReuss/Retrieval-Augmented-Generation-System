@@ -19,7 +19,6 @@ class Embedder:
         self.db_client = None
         self.collection = None
         # Statistiken
-        self.chunks_embedded = 0
         self.embedding_dimension = 0
 
         # Automatisch starten
@@ -54,13 +53,13 @@ class Embedder:
                 batch_size=self.batch_size,
                 show_progress_bar=False,
                 # Gibt NumPy-Array zurück
-                convert_to_numpy=True
+                convert_to_numpy=True,
+                # Normaliserung für Cosine-Similarity
+                normalize_embeddings=True
             )
             
             for embedding in batch_embeddings:
                 all_embeddings.append(embedding.tolist())
-        
-        self.chunks_embedded = len(all_embeddings)
         
         # Embedding-Dimension ermitteln (aus erstem Embedding)
         if all_embeddings:
@@ -81,15 +80,6 @@ class Embedder:
         if self.collection is None:
             self.setup_db()
         
-        # Anzahl Embeddings aus Datenbank holen
-        total_embeddings = 0
-        if self.collection is not None:
-            total_embeddings = self.collection.count()
-        
-        # Falls im aktuellen Lauf erstellt, diese Werte nutzen
-        if self.chunks_embedded > 0:
-            total_embeddings = self.chunks_embedded
-        
         # Embedding-Dimension ermitteln (falls nicht bekannt)
         if self.embedding_dimension == 0 and self.collection is not None:
             # Ein Embedding aus der Datenbank holen
@@ -98,7 +88,6 @@ class Embedder:
                 self.embedding_dimension = len(sample['embeddings'][0])
         
         statistics = {
-            'embedding_total_embeddings': total_embeddings,
             'embedding_dimension': self.embedding_dimension
         }
         return statistics
