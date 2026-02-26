@@ -7,7 +7,8 @@ import logging
 DATA_DIRECTORY = "data"
 MODELS_DIRECTORY = "models"
 PROXY = "http://proxy.your-company.com:8080"
-CERTIFICATE = "certificate.crt"
+# CERTIFICATE = "certificate.crt"
+CERTIFICATE = r"./cert/cacert.pem"
 
 # Proxy
 os.environ["HTTP_PROXY"] = PROXY
@@ -29,7 +30,7 @@ logging.getLogger("ragas.prompt.pydantic_prompt").setLevel(logging.ERROR)
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
-WEB_SCRAPING_MAX_DEPTH = 5
+WEB_SCRAPING_MAX_DEPTH = 1
 WEB_SCRAPING_EXCLUDED_TERMS = ["nordwest", "bw", "bayern", "bremen", "hessen", "nordost", "plus", "niedersachsen", "rps", "rh", "fm", "pp", "magazin", "datenschutzerklaerung", "karriere"]
 WEB_SCRAPING_DOWNLOAD_DELAY = 0.0
 WEB_SCRAPING_OUTPUT_PATH = "data/documents.json"
@@ -55,7 +56,7 @@ RETRIEVAL_RERANKING_TOP_K = 5
 # Generation
 GENERATION_API_URL = "https://api.your-company.com/v1/chat/completions" # "https://openrouter.ai/api/v1/chat/completions"
 GENERATION_API_KEY = os.getenv("CHATBOT_API_KEY")
-GENERATION_MODEL = "Qwen3-30B-A3B-Q6_K.gguf:latest" # "mistralai/mistral-small-3.1-24b-instruct:free"
+GENERATION_MODEL =  "Qwen/Qwen2.5-VL-72B-Instruct" # "Qwen3-30B-A3B-Q6_K.gguf:latest" # "mistralai/mistral-small-3.1-24b-instruct:free"
 GENERATION_TEMPERATURE = 0.1
 GENERATION_MAX_TOKENS = 800
 GENERATION_TOP_P = 0.9
