@@ -8,7 +8,7 @@ import os
 import re
 import scrapy
 
-class Web_Scraper:
+class WebScraper:
 
     def __init__(self) -> None:
         self.start_url = config.WEB_SCRAPING_START_URL
@@ -116,12 +116,12 @@ class Spider(scrapy.Spider):
         self.scraped_data = scraped_data
         self.proxy = proxy
         # Link Extractor extrahiert Links auf Seite
-        self.link_extractor = LinkExtractor(allow_domains=[self.allowed_domain], deny_extensions=['pdf', 'jpg', 'png', 'gif', 'css', 'js'])
+        self.link_extractor = LinkExtractor(allow_domains=[self.allowed_domain], deny_extensions=['pdf', 'jpg', 'png', 'gif', 'css', 'js', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'])
         # HTML-Elemente für Überschriften und Content
         self.header_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         self.content_tags = ['p', 'div', 'li', 'span', 'td']
         # Selektoren die ausgeschlossen werden (Navigation, Footer etc.)
-        self.excludes_selectors = [
+        self.excluded_selectors = [
             'nav', 'header', 'footer', 'aside',
             '.navigation', '.nav', '.menu', '.sidebar',
             '.footer', '.header', '.cookie-banner', '.breadcrumb',
@@ -224,7 +224,7 @@ class Spider(scrapy.Spider):
         content_selector = Selector(text=main_content)
         
         # Ausgeschlossene Elemente mit XPath entfernen
-        exclude_xpath = ' | '.join([f'.//{sel}' for sel in self.excludes_selectors if not sel.startswith('.') and not sel.startswith('#')])
+        exclude_xpath = ' | '.join([f'.//{sel}' for sel in self.excluded_selectors if not sel.startswith('.') and not sel.startswith('#')])
         
         # Alle relevanten Elemente finden
         all_tags = self.header_tags + self.content_tags
@@ -320,7 +320,7 @@ class Spider(scrapy.Spider):
     
     def is_excluded_element(self, element) -> bool:
         # Prüfe Vorfahren-Elemente
-        for selector in self.excludes_selectors:
+        for selector in self.excluded_selectors:
             if selector.startswith('.'):
                 # Klassen-Selector
                 class_name = selector[1:]

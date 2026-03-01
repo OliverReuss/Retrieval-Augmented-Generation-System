@@ -1,11 +1,11 @@
-from web_scraping import Web_Scraper
+from web_scraping import WebScraper
 from chunking import Chunker
 from embedding import Embedder
 from retrieval import Retriever
 from generation import Generator
 from evaluation import Evaluator
 
-web_scraper = Web_Scraper()
+web_scraper = WebScraper()
 chunker = Chunker()
 embedder = Embedder()
 retriever = Retriever()

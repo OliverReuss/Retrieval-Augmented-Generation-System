@@ -18,7 +18,7 @@ class Chunker:
             chunk_size=self.chunk_size,
             chunk_overlap=self.chunk_overlap,
             # Trennzeichen (möglichst an diesen Stellen Trennen)
-            separators=["\n\n", "\n", ". ", " ", ""],
+            separators=["\n\n", "\n", ". ", "? ", "! ", " ", ""],
             # Länge in Zeichen messen
             length_function=len,
             # Trennzeichen am Ende des vorherigen Chunks behalten
