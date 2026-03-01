@@ -26,7 +26,6 @@ class Evaluator:
 
     def __init__(self, web_scraper, chunker, embedder, retriever, generator) -> None:
         self.test_cases_path = config.EVALUATION_TEST_CASES_PATH
-        self.output_path = config.EVALUATION_OUTPUT_PATH
         self.model = config.EVALUATION_MODEL
         self.embedding_model = config.EVALUATION_EMBEDDING_MODEL
         self.web_scraper = web_scraper
@@ -81,7 +80,6 @@ class Evaluator:
         rounded_search_results = []
         for sr in response['search_results']:
             rounded_sr = sr.copy()
-            rounded_sr['distance'] = round(rounded_sr['distance'], 4)
             rounded_sr['similarity'] = round(rounded_sr['similarity'], 4)
             rounded_sr['rerank_score'] = round(rounded_sr['rerank_score'], 4)
             rounded_search_results.append(rounded_sr)
@@ -101,14 +99,15 @@ class Evaluator:
         
         return result
     
-    def evaluate_ragas(self, prompt: str, response: str, context: str, truth: str, test_type: str) -> dict:
+    def evaluate_ragas(self, prompt: str, response: str, context: list[str], truth: str, test_type: str) -> dict:
         data = {
             "question": [prompt],
             "answer": [response],
-            "retrieved_contexts": [context] if isinstance(context, list) else [[context]],
+            "contexts": [context],
+            "retrieved_contexts": [context],
+            "reference_contexts": [context],
             "ground_truths": [[truth]],
-            "reference": [truth],
-            "reference_contexts": [context] if isinstance(context, list) else [[context]]
+            "reference": [truth]
         }
         
         # Dict zu Dataset umwandeln
@@ -124,7 +123,9 @@ class Evaluator:
         
         if test_type == "generation: summary":
             metrics_to_run = retrieval_metrics + generation_metrics + [summary_score]
-        elif test_type in ["robustness: not in context", "robustness: ambiguous"]:
+        elif test_type == "robustness: not in context":
+            metrics_to_run = [answer_correctness, answer_similarity]
+        elif test_type == "robustness: ambiguous":
             metrics_to_run = [answer_correctness, answer_relevancy, answer_similarity]
         else:
             metrics_to_run = retrieval_metrics + generation_metrics
@@ -286,8 +287,7 @@ class Evaluator:
 
         # Zeitstempel für eindeutige Dateinamen hinzufügen
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        base_name, ext = os.path.splitext(self.output_path)
-        self.output_path = f"{base_name}_{timestamp}{ext}"
+        self.output_path = f"evalation_results_{timestamp}"
         
         final_results = {
             'evaluation_timestamp': timestamp,
@@ -302,8 +302,5 @@ class Evaluator:
         return final_results
     
     def save_results(self, results: dict) -> None:      
-        output_dir = os.path.dirname(self.output_path)
-        if output_dir and not os.path.exists(output_dir):
-            os.makedirs(output_dir)
         with open(self.output_path, 'w', encoding='utf-8') as file:
             json.dump(results, file, ensure_ascii=False, indent=2)

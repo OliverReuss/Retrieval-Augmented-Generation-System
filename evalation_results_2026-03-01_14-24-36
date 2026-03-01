@@ -1,0 +1,155 @@
+{
+  "evaluation_timestamp": "2026-03-01_14-24-36",
+  "configuration": {
+    "WEB_SCRAPING_START_URL": "https://www.example.com/",
+    "WEB_SCRAPING_MAX_DEPTH": 5,
+    "WEB_SCRAPING_EXCLUDED_TERMS": [
+      "nordwest",
+      "bw",
+      "bayern",
+      "bremen",
+      "hessen",
+      "nordost",
+      "plus",
+      "niedersachsen",
+      "rps",
+      "rh",
+      "fm",
+      "pp",
+      "magazin",
+      "datenschutzerklaerung",
+      "karriere"
+    ],
+    "WEB_SCRAPING_DOWNLOAD_DELAY": 0.0,
+    "CHUNKING_CHUNK_SIZE": 1200,
+    "CHUNKING_CHUNK_OVERLAP": 200,
+    "EMBEDDING_MODEL": "BAAI/bge-m3",
+    "EMBEDDING_BATCH_SIZE": 32,
+    "RETRIEVAL_TOP_K": 10,
+    "RETRIEVAL_HNSW_SPACE": "cosine",
+    "RETRIEVAL_HNSW_M": 32,
+    "RETRIEVAL_CROSS_ENCODER_MODEL": "BAAI/bge-reranker-v2-m3",
+    "RETRIEVAL_RERANKING_TOP_K": 5,
+    "GENERATION_API_URL": "https://api.your-company.com/v1/chat/completions",
+    "GENERATION_MODEL": "Qwen/Qwen2.5-VL-72B-Instruct",
+    "GENERATION_TEMPERATURE": 0.1,
+    "GENERATION_MAX_TOKENS": 800,
+    "GENERATION_TOP_P": 0.9,
+    "GENERATION_FREQUENCY_PENALTY": 0.1,
+    "GENERATION_SEED": 1,
+    "GENERATION_TIMEOUT": 60,
+    "GENERATION_SYSTEM_PROMPT": "Du bist ein Experte für die Beantwortung von Fragen basierend auf bereitgestellten Dokumenten. \n\n    AUFGABE: Beantworte die Nutzerfrage präzise und vollständig unter Verwendung AUSSCHLIESSLICH der bereitgestellten Kontextinformationen.\n\n    REGELN:\n    - Nutze nur Informationen aus dem bereitgestellten Kontext\n    - Nutze relevante Textpassagen wörtlich, wenn möglich\n    - Strukturiere deine Antwort logisch und übersichtlich\n    - Erkläre komplexe Sachverhalte verständlich\n    - Bei unvollständigen Informationen im Kontext: ergänze mit \"Weitere Details sind im bereitgestellten Kontext nicht verfügbar\"\n    - Bei fehlenden Informationen: \"Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor\"\n    - Bei unzurecheichendem oder widersprüchlichem Input: stelle spezifische Rückfragen, um die benötigten Informationen zu erhalten\n\n    ANTWORTFORMAT:\n    1. Beginne direkt mit der Antwort\n    2. Verwende Absätze für bessere Lesbarkeit\n    3. Markiere wichtige Punkte deutlich",
+    "EVALUATION_MODEL": "gpt-4o-mini",
+    "EVALUATION_EMBEDDING_MODEL": "text-embedding-3-large"
+  },
+  "statistics": {
+    "web_scraping_unique_pages": 2270,
+    "web_scraping_elements_total": 11535,
+    "web_scraping_duplicate_rate": 0.2539,
+    "web_scraping_average_text_length": 684.3964,
+    "chunking_chunks_total": 14901,
+    "chunking_average_chunk_length": 555.6671,
+    "chunking_min_chunk_length": 4,
+    "chunking_overlap_percentage": 16.6667,
+    "embedding_dimension": 1024,
+    "retrieval_avg_time_ms": 5313.8819,
+    "retrieval_avg_similarity": 0.7178,
+    "retrieval_min_similarity": 0.6977,
+    "retrieval_max_similarity": 0.7203,
+    "retrieval_avg_reranking_time": 6463.2397,
+    "generation_avg_length": 710.0,
+    "generation_avg_time": 6969.8906,
+    "generation_avg_input_tokens": 989.0,
+    "generation_avg_output_tokens": 210.0,
+    "generation_api_errors": 0
+  },
+  "metric_averages": {
+    "answer_similarity": 0.6944,
+    "answer_correctness": 0.4043,
+    "context_entity_recall": 0.6667,
+    "context_precision": 1.0,
+    "answer_relevancy": 1.0,
+    "context_recall": 1.0,
+    "faithfulness": 1.0
+  },
+  "test_results": [
+    {
+      "index": 0,
+      "type": "retrieval: exact match",
+      "prompt": "An wen richtet sich der Familiencoach Krebs?",
+      "truth": "Online-Selbsthilfe-Programm der AOK für Angehörige von Krebspatienten; entwickelt mit dem Universitätsklinikum Leipzig und dem Krebsinformationsdienst (DKFZ); kostenlos für alle Interessierten.",
+      "source": "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/",
+      "context": [
+        "[Quelle 1] Familiencoach Krebs | AOK\nDer Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet und Hilfe bei der gemeinsamen Bewältigung einer Krebserkrankung bietet. Denn eine Krebserkrankung ist eine belastende Situation für Patienten wie auch enge Familienangehörige und Freunde. Laut Studien entwickeln bis zu 40 Prozent der Angehörigen Symptome von Depressionen und Angst. Neben der Unterstützung des an Krebs erkrankten nahestehenden Menschen müssen Angehörige das eigene Familien- und Arbeitsleben organisieren. Das kann zu Beziehungsproblemen, Ängsten und Sorgen führen. Gleichzeitig sind schwierige Entscheidungen rund um die Behandlung zu treffen. Um Unterstützung bei der Bewältigung dieser Herausforderungen zu bieten, hat die AOK den Familiencoach Krebs in Zusammenarbeit mit Experten des Universitätsklinikums Leipzig und des Krebsinformationsdienstes des Deutschen Krebsforschungszentrums entwickelt. Er steht allen Interessierten kostenlos zur Verfügung. Familiencoach Krebs starten",
+        "[Quelle 2] QISA-Band E2: Krebsfrüherkennung (Version 2.1) | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+        "[Quelle 3] Krankenhaus | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+        "[Quelle 4] Häusliche Krankenpflege (HKP) | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+        "[Quelle 5] DMP Brustkrebs | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen."
+      ],
+      "sources": [
+        "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/",
+        "https://www.aok.de/gp/qisa/baende/band-e2-krebsfrueherkennung",
+        "https://www.aok.de/gp/krankenhaus",
+        "https://www.aok.de/gp/entlassmanagement/verordnungen-antraege/hkp",
+        "https://www.aok.de/gp/dmp/brustkrebs"
+      ],
+      "search_results": [
+        {
+          "id": "13516",
+          "text": "Der Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet und Hilfe bei der gemeinsamen Bewältigung einer Krebserkrankung bietet. Denn eine Krebserkrankung ist eine belastende Situation für Patienten wie auch enge Familienangehörige und Freunde. Laut Studien entwickeln bis zu 40 Prozent der Angehörigen Symptome von Depressionen und Angst. Neben der Unterstützung des an Krebs erkrankten nahestehenden Menschen müssen Angehörige das eigene Familien- und Arbeitsleben organisieren. Das kann zu Beziehungsproblemen, Ängsten und Sorgen führen. Gleichzeitig sind schwierige Entscheidungen rund um die Behandlung zu treffen. Um Unterstützung bei der Bewältigung dieser Herausforderungen zu bieten, hat die AOK den Familiencoach Krebs in Zusammenarbeit mit Experten des Universitätsklinikums Leipzig und des Krebsinformationsdienstes des Deutschen Krebsforschungszentrums entwickelt. Er steht allen Interessierten kostenlos zur Verfügung. Familiencoach Krebs starten",
+          "url": "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/",
+          "title": "Familiencoach Krebs | AOK",
+          "section_header": "An wen richtet sich der Familiencoach Krebs?",
+          "similarity": 0.7186,
+          "rerank_score": 0.9998
+        },
+        {
+          "id": "1968",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/qisa/baende/band-e2-krebsfrueherkennung",
+          "title": "QISA-Band E2: Krebsfrüherkennung (Version 2.1) | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        },
+        {
+          "id": "2295",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/krankenhaus",
+          "title": "Krankenhaus | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        },
+        {
+          "id": "3342",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/entlassmanagement/verordnungen-antraege/hkp",
+          "title": "Häusliche Krankenpflege (HKP) | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        },
+        {
+          "id": "3695",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/dmp/brustkrebs",
+          "title": "DMP Brustkrebs | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        }
+      ],
+      "response": "Der Familiencoach Krebs richtet sich an Angehörige von Krebspatienten. \n\nDies wird in mehreren Quellen bestätigt:\n\n- [Quelle 1] beschreibt den Familiencoach Krebs als ein Online-Selbsthilfe-Programm, das sich explizit an Angehörige von Krebspatienten richtet.\n  \n- [Quelle 2] sowie [Quelle 3], [Quelle 4] und [Quelle 5] wiederholen ebenfalls, dass das Programm für Angehörige von Krebspatienten entwickelt wurde, um ihnen bei der gemeinsamen Bewältigung einer Krebserkrankung zu unterstützen.\n\nEs ist wichtig zu betonen, dass das Programm darauf abzielt, Angehörige vor Überlastung zu schützen und ihnen dabei hilft, die Herausforderungen zu meistern, die mit der Betreuung eines Krebspatienten verbunden sind.",
+      "metrics": {
+        "context_entity_recall": 0.6667,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_correctness": 0.4043,
+        "answer_relevancy": 1.0,
+        "answer_similarity": 0.6944,
+        "faithfulness": 1.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,615 @@
+{
+  "evaluation_timestamp": "2026-03-01_14-14-08",
+  "configuration": {
+    "WEB_SCRAPING_START_URL": "https://www.example.com/",
+    "WEB_SCRAPING_MAX_DEPTH": 5,
+    "WEB_SCRAPING_EXCLUDED_TERMS": [
+      "nordwest",
+      "bw",
+      "bayern",
+      "bremen",
+      "hessen",
+      "nordost",
+      "plus",
+      "niedersachsen",
+      "rps",
+      "rh",
+      "fm",
+      "pp",
+      "magazin",
+      "datenschutzerklaerung",
+      "karriere"
+    ],
+    "WEB_SCRAPING_DOWNLOAD_DELAY": 0.0,
+    "CHUNKING_CHUNK_SIZE": 1200,
+    "CHUNKING_CHUNK_OVERLAP": 200,
+    "EMBEDDING_MODEL": "BAAI/bge-m3",
+    "EMBEDDING_BATCH_SIZE": 32,
+    "RETRIEVAL_TOP_K": 10,
+    "RETRIEVAL_HNSW_SPACE": "cosine",
+    "RETRIEVAL_HNSW_M": 32,
+    "RETRIEVAL_CROSS_ENCODER_MODEL": "BAAI/bge-reranker-v2-m3",
+    "RETRIEVAL_RERANKING_TOP_K": 5,
+    "GENERATION_API_URL": "https://api.your-company.com/v1/chat/completions",
+    "GENERATION_MODEL": "Qwen/Qwen2.5-VL-72B-Instruct",
+    "GENERATION_TEMPERATURE": 0.1,
+    "GENERATION_MAX_TOKENS": 800,
+    "GENERATION_TOP_P": 0.9,
+    "GENERATION_FREQUENCY_PENALTY": 0.1,
+    "GENERATION_SEED": 1,
+    "GENERATION_TIMEOUT": 60,
+    "GENERATION_SYSTEM_PROMPT": "Du bist ein Experte für die Beantwortung von Fragen basierend auf bereitgestellten Dokumenten. \n\n    AUFGABE: Beantworte die Nutzerfrage präzise und vollständig unter Verwendung AUSSCHLIESSLICH der bereitgestellten Kontextinformationen.\n\n    REGELN:\n    - Nutze nur Informationen aus dem bereitgestellten Kontext\n    - Nutze relevante Textpassagen wörtlich, wenn möglich\n    - Strukturiere deine Antwort logisch und übersichtlich\n    - Erkläre komplexe Sachverhalte verständlich\n    - Bei unvollständigen Informationen im Kontext: ergänze mit \"Weitere Details sind im bereitgestellten Kontext nicht verfügbar\"\n    - Bei fehlenden Informationen: \"Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor\"\n    - Bei unzurecheichendem oder widersprüchlichem Input: stelle spezifische Rückfragen, um die benötigten Informationen zu erhalten\n\n    ANTWORTFORMAT:\n    1. Beginne direkt mit der Antwort\n    2. Verwende Absätze für bessere Lesbarkeit\n    3. Markiere wichtige Punkte deutlich",
+    "EVALUATION_MODEL": "gpt-4o-mini",
+    "EVALUATION_EMBEDDING_MODEL": "text-embedding-3-large"
+  },
+  "statistics": {
+    "web_scraping_unique_pages": 2270,
+    "web_scraping_elements_total": 11535,
+    "web_scraping_duplicate_rate": 0.2539,
+    "web_scraping_average_text_length": 684.3964,
+    "chunking_chunks_total": 14901,
+    "chunking_average_chunk_length": 555.6671,
+    "chunking_min_chunk_length": 4,
+    "chunking_overlap_percentage": 16.6667,
+    "embedding_dimension": 1024,
+    "retrieval_avg_time_ms": 843.7866,
+    "retrieval_avg_similarity": 0.6527,
+    "retrieval_min_similarity": 0.5773,
+    "retrieval_max_similarity": 0.7657,
+    "retrieval_avg_reranking_time": 2068.6019,
+    "generation_avg_length": 1276.2857,
+    "generation_avg_time": 11301.422,
+    "generation_avg_input_tokens": 1169.8571,
+    "generation_avg_output_tokens": 366.2857,
+    "generation_api_errors": 0
+  },
+  "metric_averages": {
+    "answer_correctness": 0.4286,
+    "context_precision": 0.8333,
+    "answer_similarity": 0.6663,
+    "context_entity_recall": 0.3433,
+    "answer_relevancy": 0.5614,
+    "context_recall": 0.9445,
+    "summary_score": 0.477,
+    "faithfulness": 0.8289
+  },
+  "test_results": [
+    {
+      "index": 0,
+      "type": "retrieval: exact match",
+      "prompt": "An wen richtet sich der Familiencoach Krebs?",
+      "truth": "Online-Selbsthilfe-Programm der AOK für Angehörige von Krebspatienten; entwickelt mit dem Universitätsklinikum Leipzig und dem Krebsinformationsdienst (DKFZ); kostenlos für alle Interessierten.",
+      "source": "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/",
+      "context": [
+        "[Quelle 1] Familiencoach Krebs | AOK\nDer Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet und Hilfe bei der gemeinsamen Bewältigung einer Krebserkrankung bietet. Denn eine Krebserkrankung ist eine belastende Situation für Patienten wie auch enge Familienangehörige und Freunde. Laut Studien entwickeln bis zu 40 Prozent der Angehörigen Symptome von Depressionen und Angst. Neben der Unterstützung des an Krebs erkrankten nahestehenden Menschen müssen Angehörige das eigene Familien- und Arbeitsleben organisieren. Das kann zu Beziehungsproblemen, Ängsten und Sorgen führen. Gleichzeitig sind schwierige Entscheidungen rund um die Behandlung zu treffen. Um Unterstützung bei der Bewältigung dieser Herausforderungen zu bieten, hat die AOK den Familiencoach Krebs in Zusammenarbeit mit Experten des Universitätsklinikums Leipzig und des Krebsinformationsdienstes des Deutschen Krebsforschungszentrums entwickelt. Er steht allen Interessierten kostenlos zur Verfügung. Familiencoach Krebs starten",
+        "[Quelle 2] QISA-Band E2: Krebsfrüherkennung (Version 2.1) | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+        "[Quelle 3] Krankenhaus | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+        "[Quelle 4] Häusliche Krankenpflege (HKP) | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+        "[Quelle 5] DMP Brustkrebs | AOK Gesundheitspartner\nDer kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen."
+      ],
+      "sources": [
+        "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/",
+        "https://www.aok.de/gp/qisa/baende/band-e2-krebsfrueherkennung",
+        "https://www.aok.de/gp/krankenhaus",
+        "https://www.aok.de/gp/entlassmanagement/verordnungen-antraege/hkp",
+        "https://www.aok.de/gp/dmp/brustkrebs"
+      ],
+      "search_results": [
+        {
+          "id": "13516",
+          "text": "Der Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet und Hilfe bei der gemeinsamen Bewältigung einer Krebserkrankung bietet. Denn eine Krebserkrankung ist eine belastende Situation für Patienten wie auch enge Familienangehörige und Freunde. Laut Studien entwickeln bis zu 40 Prozent der Angehörigen Symptome von Depressionen und Angst. Neben der Unterstützung des an Krebs erkrankten nahestehenden Menschen müssen Angehörige das eigene Familien- und Arbeitsleben organisieren. Das kann zu Beziehungsproblemen, Ängsten und Sorgen führen. Gleichzeitig sind schwierige Entscheidungen rund um die Behandlung zu treffen. Um Unterstützung bei der Bewältigung dieser Herausforderungen zu bieten, hat die AOK den Familiencoach Krebs in Zusammenarbeit mit Experten des Universitätsklinikums Leipzig und des Krebsinformationsdienstes des Deutschen Krebsforschungszentrums entwickelt. Er steht allen Interessierten kostenlos zur Verfügung. Familiencoach Krebs starten",
+          "url": "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/",
+          "title": "Familiencoach Krebs | AOK",
+          "section_header": "An wen richtet sich der Familiencoach Krebs?",
+          "similarity": 0.7186,
+          "rerank_score": 0.9998
+        },
+        {
+          "id": "1968",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/qisa/baende/band-e2-krebsfrueherkennung",
+          "title": "QISA-Band E2: Krebsfrüherkennung (Version 2.1) | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        },
+        {
+          "id": "2295",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/krankenhaus",
+          "title": "Krankenhaus | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        },
+        {
+          "id": "3342",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/entlassmanagement/verordnungen-antraege/hkp",
+          "title": "Häusliche Krankenpflege (HKP) | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        },
+        {
+          "id": "3695",
+          "text": "Der kostenlose Familiencoach Krebs ist ein Online-Selbsthilfe-Programm, das sich an Angehörige von Krebspatienten richtet. Er unterstützt bei der gemeinsamen Bewältigung einer Krebserkrankung. Ziel ist es, Angehörige vor Überlastung zu schützen.",
+          "url": "https://www.aok.de/gp/dmp/brustkrebs",
+          "title": "DMP Brustkrebs | AOK Gesundheitspartner",
+          "section_header": "Familiencoach Krebs",
+          "similarity": 0.7203,
+          "rerank_score": 0.9996
+        }
+      ],
+      "response": "Der Familiencoach Krebs richtet sich an Angehörige von Krebspatienten. \n\nDies wird in mehreren Quellen bestätigt:\n\n- [Quelle 1] beschreibt den Familiencoach Krebs als ein Online-Selbsthilfe-Programm, das sich explizit an Angehörige von Krebspatienten richtet.\n  \n- [Quelle 2] sowie [Quelle 3], [Quelle 4] und [Quelle 5] wiederholen ebenfalls, dass das Programm für Angehörige von Krebspatienten entwickelt wurde, um ihnen bei der gemeinsamen Bewältigung einer Krebserkrankung zu unterstützen.\n\nEs ist wichtig zu betonen, dass das Programm darauf abzielt, Angehörige vor Überlastung zu schützen und ihnen dabei hilft, die Herausforderungen zu meistern, die mit der Betreuung eines Krebspatienten verbunden sind.",
+      "metrics": {
+        "context_entity_recall": 0.6667,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_correctness": 0.4736,
+        "answer_relevancy": 1.0,
+        "answer_similarity": 0.6942,
+        "faithfulness": 1.0
+      }
+    },
+    {
+      "index": 1,
+      "type": "retrieval: synonym/paraphrase",
+      "prompt": "Was ist die digitale Krankenkarte?",
+      "truth": "Dient als Versicherungsnachweis für Ärzte und Krankenhäuser; Rückseite ist die Europäische Gesundheitskarte (EHIC); nur die aktuellste Karte ist gültig.",
+      "source": "https://www.example.com/versichertenservice/elektronische-gesundheitskarte-egk/",
+      "context": [
+        "[Quelle 1] Die elektronische Gesundheitskarte (eGK) | AOK\nWo ist die elektronische Gesundheitskarte gültig? Die elektronische Gesundheitskarte selbst können Sie uneingeschränkt in der ganzen Bundesrepublik Deutschland bei allen zugelassenen Leistungserbringern nutzen. Die auf der Rückseite aufgedruckte Europäische Krankenversicherungskarte (European Health Insurance Card – EHIC) wird im staatlichen Gesundheitssystem der Mitgliedstaaten der Europäischen Union und vielen weiteren europäischen Ländern anerkannt.",
+        "[Quelle 2] Die PIN zur elektronischen Gesundheitskarte (eGK) | AOK\nWarum wird vor Ausgabe einer PIN eine Identitätsprüfung vorgenommen? Ihre elektronische Gesundheitskarte ist nicht nur ein Versicherungsnachweis. Sie ist auch Ihr Schlüssel zu den digitalen Anwendungen im Gesundheitswesen. Mithilfe der auf der Karte vorhandenen Signaturen können Sie Ihre Identität auch virtuell bestätigen und Anwendungen der Telematikinfrastruktur nutzen.",
+        "[Quelle 3] Verordnung per E-Rezept | AOK\nElektronische Gesundheitskarte Die elektronische Gesundheitskarte enthält unter anderem Daten zur Person und zur Krankenversicherung. Mehr erfahren",
+        "[Quelle 4] Foto für Ihre Gesundheitskarte | AOK\nDie elektronische Gesundheitskarte enthält unter anderem Daten zur Person und zur Krankenversicherung.",
+        "[Quelle 5] Informationen zur eAU für Praxen und Ärzte | AOK Gesundheitspartner\nMit Arbeitsunfähigkeitsbescheinigungen (AU) bestätigen Ärzte oder Zahnärzte, dass ihr Patient aufgrund einer Erkrankung nicht arbeiten kann. Bis zum Start der digitalen AU erhielten Versicherte die Bescheinigung in mehrfacher Ausfertigung und übermittelten den „gelben Schein“ dann selbstständig an Arbeitgeber und Krankenkasse. Die digitale Krankschreibung wurde eingeführt, um das Meldeverfahren im Krankheitsfall für Ärzte, Patienten, Arbeitgeber und Krankenkassen zu vereinfachen. Mit dem Terminservice- und Versorgungsgesetz (TSVG) hat der Gesetzgeber im Mai 2019 die elektronische Weiterleitung der AU vom Arzt an die Krankenkasse geregelt. Mit dem Dritten Bürokratieentlastungsgesetz (BEG III) folgte im November 2019 die rechtliche Grundlage, um die elektronisch übermittelten AU-Zeiten von der Krankenkasse an den Arbeitgeber zu digitalisieren. Die für die eAU entscheidenden Bestimmungen des BEG III sind am 1. Januar 2022 in Kraft getreten. Am 18. Februar hat der Bundestag zudem entschieden, die Pilotphase für das elektronische Abrufverfahren der Arbeitsunfähigkeitsdaten bis 31. Dezember 2022 zu verlängern."
+      ],
+      "sources": [
+        "https://www.example.com/versichertenservice/elektronische-gesundheitskarte-egk/",
+        "https://www.example.com/versichertenservice/pin-zur-elektronischen-gesundheitskarte/",
+        "https://www.example.com/versichertenservice/e-rezept/",
+        "https://www.example.com/versichertenservice/foto-gesundheitskarte/",
+        "https://www.aok.de/gp/e-health/eau-elektronische-arbeitsunfaehigkeitsbescheinigung"
+      ],
+      "search_results": [
+        {
+          "id": "12317",
+          "text": "Wo ist die elektronische Gesundheitskarte gültig? Die elektronische Gesundheitskarte selbst können Sie uneingeschränkt in der ganzen Bundesrepublik Deutschland bei allen zugelassenen Leistungserbringern nutzen. Die auf der Rückseite aufgedruckte Europäische Krankenversicherungskarte (European Health Insurance Card – EHIC) wird im staatlichen Gesundheitssystem der Mitgliedstaaten der Europäischen Union und vielen weiteren europäischen Ländern anerkannt.",
+          "url": "https://www.example.com/versichertenservice/elektronische-gesundheitskarte-egk/",
+          "title": "Die elektronische Gesundheitskarte (eGK) | AOK",
+          "section_header": "Was mache ich mit alten, ungültigen elektronischen Gesundheitskarten?",
+          "similarity": 0.5876,
+          "rerank_score": 0.1341
+        },
+        {
+          "id": "13258",
+          "text": "Warum wird vor Ausgabe einer PIN eine Identitätsprüfung vorgenommen? Ihre elektronische Gesundheitskarte ist nicht nur ein Versicherungsnachweis. Sie ist auch Ihr Schlüssel zu den digitalen Anwendungen im Gesundheitswesen. Mithilfe der auf der Karte vorhandenen Signaturen können Sie Ihre Identität auch virtuell bestätigen und Anwendungen der Telematikinfrastruktur nutzen.",
+          "url": "https://www.example.com/versichertenservice/pin-zur-elektronischen-gesundheitskarte/",
+          "title": "Die PIN zur elektronischen Gesundheitskarte (eGK) | AOK",
+          "section_header": "Weitere Fragen zur PIN für die Gesundheitskarte",
+          "similarity": 0.5834,
+          "rerank_score": 0.0867
+        },
+        {
+          "id": "329",
+          "text": "Elektronische Gesundheitskarte Die elektronische Gesundheitskarte enthält unter anderem Daten zur Person und zur Krankenversicherung. Mehr erfahren",
+          "url": "https://www.example.com/versichertenservice/e-rezept/",
+          "title": "Verordnung per E-Rezept | AOK",
+          "section_header": "Nutzung der ePA mithilfe des Desktop Clients",
+          "similarity": 0.5773,
+          "rerank_score": 0.0608
+        },
+        {
+          "id": "11955",
+          "text": "Die elektronische Gesundheitskarte enthält unter anderem Daten zur Person und zur Krankenversicherung.",
+          "url": "https://www.example.com/versichertenservice/foto-gesundheitskarte/",
+          "title": "Foto für Ihre Gesundheitskarte | AOK",
+          "section_header": "Elektronische Gesundheitskarte",
+          "similarity": 0.627,
+          "rerank_score": 0.0498
+        },
+        {
+          "id": "4667",
+          "text": "Mit Arbeitsunfähigkeitsbescheinigungen (AU) bestätigen Ärzte oder Zahnärzte, dass ihr Patient aufgrund einer Erkrankung nicht arbeiten kann. Bis zum Start der digitalen AU erhielten Versicherte die Bescheinigung in mehrfacher Ausfertigung und übermittelten den „gelben Schein“ dann selbstständig an Arbeitgeber und Krankenkasse. Die digitale Krankschreibung wurde eingeführt, um das Meldeverfahren im Krankheitsfall für Ärzte, Patienten, Arbeitgeber und Krankenkassen zu vereinfachen. Mit dem Terminservice- und Versorgungsgesetz (TSVG) hat der Gesetzgeber im Mai 2019 die elektronische Weiterleitung der AU vom Arzt an die Krankenkasse geregelt. Mit dem Dritten Bürokratieentlastungsgesetz (BEG III) folgte im November 2019 die rechtliche Grundlage, um die elektronisch übermittelten AU-Zeiten von der Krankenkasse an den Arbeitgeber zu digitalisieren. Die für die eAU entscheidenden Bestimmungen des BEG III sind am 1. Januar 2022 in Kraft getreten. Am 18. Februar hat der Bundestag zudem entschieden, die Pilotphase für das elektronische Abrufverfahren der Arbeitsunfähigkeitsdaten bis 31. Dezember 2022 zu verlängern.",
+          "url": "https://www.aok.de/gp/e-health/eau-elektronische-arbeitsunfaehigkeitsbescheinigung",
+          "title": "Informationen zur eAU für Praxen und Ärzte | AOK Gesundheitspartner",
+          "section_header": "AU und eAU: Hintergrund",
+          "similarity": 0.5856,
+          "rerank_score": 0.0404
+        }
+      ],
+      "response": "Die digitale Krankenkarte, auch bekannt als elektronische Gesundheitskarte (eGK), ist ein Versicherungsnachweis, der in Deutschland von Krankenkassen ausgegeben wird. Sie dient nicht nur als Nachweis für die Krankenversicherung, sondern ermöglicht auch den Zugang zu digitalen Anwendungen im Gesundheitswesen.\n\nDie eGK enthält wichtige Daten zur Person und zur Krankenversicherung des Inhabers. Diese Daten können verwendet werden, um die Identität des Inhabers zu bestätigen und verschiedene Anwendungen der Telematikinfrastruktur zu nutzen. \n\nDie elektronische Gesundheitskarte ist in der gesamten Bundesrepublik Deutschland bei allen zugelassenen Leistungserbringern gültig. Darüber hinaus ist die auf der Rückseite aufgedruckte Europäische Krankenversicherungskarte (EHIC) im staatlichen Gesundheitssystem der Mitgliedstaaten der Europäischen Union und in vielen weiteren europäischen Ländern anerkannt.\n\nEs ist wichtig zu beachten, dass vor der Ausgabe einer PIN für die eGK eine Identitätsprüfung durchgeführt wird, um sicherzustellen, dass nur der rechtmäßige Inhaber Zugang zu den digitalen Funktionen hat. Weitere Details sind im bereitgestellten Kontext nicht verfügbar.",
+      "metrics": {
+        "context_entity_recall": 0.0,
+        "context_precision": 1.0,
+        "context_recall": 0.6667,
+        "answer_correctness": 0.3065,
+        "answer_relevancy": 0.8876,
+        "answer_similarity": 0.5947,
+        "faithfulness": 0.8
+      }
+    },
+    {
+      "index": 2,
+      "type": "retrieval: noise",
+      "prompt": "Ich habe mal gehört, dass die AOK die Kosten für ein Pflegebett übernimmt, oder?",
+      "truth": "Kostenübernahme durch Pflegekasse bei festgestelltem Pflegegrad und Pflege im Bett; inkludiert Zubehör (Aufrichthilfe, Seitengitter), Beratung, Reparatur und Logistik.",
+      "source": "https://www.example.com/pflegeleistungen/pflegebetten/",
+      "context": [
+        "[Quelle 1] Pflegebetten | AOK\nDie AOK-Pflegekasse übernimmt die Kosten für ein Pflegebett , wenn Pflegebedürftige einen festgestellten Pflegegrad haben und den größten Teil des Tages im Bett gepflegt werden. Die AOK-Pflegekasse übernimmt auch die Kosten für Zubehör wie Aufrichthilfen oder Seitengitter, wenn diese für die Pflege notwendig sind. Diese können auch einzeln beantragt werden, um das eigene Bett aufzurüsten und dadurch die Mobilität zu steigern. Die Kostenübernahme umfasst zudem Leistungen wie die Beratung durch Fachkräfte, notwendige Reparaturen sowie die Lieferung und Rückholung des Bettes.",
+        "[Quelle 2] Häusliche Krankenpflege | AOK\nDie AOK übernimmt einen Großteil der Kosten für die häusliche Krankenpflege. Voraussetzung ist, dass der Patient oder die Patientin selbst nicht in der Lage ist, die medizinischen Maßnahmen zu übernehmen. Zudem darf auch keine andere Person in dessen Haushalt leben, die die pflegerische und medizinische Versorgung durchführen könnte. Welche Leistungen der häuslichen Krankenpflege die AOK im Einzelnen übernimmt, hängt vom individuellen Krankheitsbild ab und von der Zielsetzung der Verordnung von häuslicher Krankenpflege. Grundsätzlich gilt: Sicherungspflege: Wenn die häusliche Krankenpflege den ärztlichen Behandlungserfolg sichert, übernehmen wir die Kosten für die Behandlungspflege, solange es medizinisch notwendig ist. Krankenhausvermeidungspflege: Wenn die häusliche Krankenpflege einen Krankenhausaufenthalt ersetzen, vermeiden oder verkürzen kann, übernehmen wir in der Regel bis zu vier Wochen die Kosten für die Behandlungspflege. Soweit es medizinisch erforderlich ist, zahlt die AOK zusätzlich die Grundpflege und die hauswirtschaftliche Versorgung.",
+        "[Quelle 3] Pflegehilfsmittel | AOK\nPflegebetten Pflegebetten können die Pflege erleichtern. Die AOK unterstützt die Finanzierung. Mehr erfahren",
+        "[Quelle 4] Palliativpflege und Hospiz | AOK\nPflegebetten Pflegebetten können die Pflege erleichtern. Die AOK unterstützt die Finanzierung. Mehr erfahren",
+        "[Quelle 5] Palliativpflege und Hospiz | AOK\nDie AOK kommt für die pflegerische und ärztliche Versorgung schwer kranker und sterbender Menschen auf. Sie trägt die erforderlichen Kosten der Betreuung auf der Palliativstation eines Krankenhauses oder in einem Hospiz. Auch die von ambulanten Hospizdiensten angebotene Sterbebegleitung zu Hause wird von der AOK über Fördermittel mitfinanziert, sodass die palliative Versorgung für die Versicherten kostenfrei ist. Wenden Sie sich bei Fragen vertrauensvoll an Ihre AOK vor Ort, einen Pflegestützpunkt oder einen Hospizdienst in Ihrer Nähe. Benötigen Menschen in ihrer letzten Lebensphase eine besonders aufwendige palliativpflegerische und palliativmedizinische Versorgung, übernimmt die AOK die Kosten für die spezialisierte ambulante Palliativversorgung (SAPV). Hier finden Sie einen Überblick zu sämtlichen Pflegeleistungen der AOK-Pflegeversicherung ."
+      ],
+      "sources": [
+        "https://www.example.com/pflegeleistungen/pflegebetten/",
+        "https://www.example.com/leistungen/medizinische-behandlung/haeusliche-krankenpflege/",
+        "https://www.example.com/pflegeleistungen/pflegehilfsmittel/",
+        "https://www.example.com/pflege-wohnformen/palliativpflege-hospiz/"
+      ],
+      "search_results": [
+        {
+          "id": "11201",
+          "text": "Die AOK-Pflegekasse übernimmt die Kosten für ein Pflegebett , wenn Pflegebedürftige einen festgestellten Pflegegrad haben und den größten Teil des Tages im Bett gepflegt werden. Die AOK-Pflegekasse übernimmt auch die Kosten für Zubehör wie Aufrichthilfen oder Seitengitter, wenn diese für die Pflege notwendig sind. Diese können auch einzeln beantragt werden, um das eigene Bett aufzurüsten und dadurch die Mobilität zu steigern. Die Kostenübernahme umfasst zudem Leistungen wie die Beratung durch Fachkräfte, notwendige Reparaturen sowie die Lieferung und Rückholung des Bettes.",
+          "url": "https://www.example.com/pflegeleistungen/pflegebetten/",
+          "title": "Pflegebetten | AOK",
+          "section_header": "Anspruch und Kostenübernahmen für ein Pflegebett",
+          "similarity": 0.7564,
+          "rerank_score": 0.9985
+        },
+        {
+          "id": "11135",
+          "text": "Die AOK übernimmt einen Großteil der Kosten für die häusliche Krankenpflege. Voraussetzung ist, dass der Patient oder die Patientin selbst nicht in der Lage ist, die medizinischen Maßnahmen zu übernehmen. Zudem darf auch keine andere Person in dessen Haushalt leben, die die pflegerische und medizinische Versorgung durchführen könnte. Welche Leistungen der häuslichen Krankenpflege die AOK im Einzelnen übernimmt, hängt vom individuellen Krankheitsbild ab und von der Zielsetzung der Verordnung von häuslicher Krankenpflege. Grundsätzlich gilt: Sicherungspflege: Wenn die häusliche Krankenpflege den ärztlichen Behandlungserfolg sichert, übernehmen wir die Kosten für die Behandlungspflege, solange es medizinisch notwendig ist. Krankenhausvermeidungspflege: Wenn die häusliche Krankenpflege einen Krankenhausaufenthalt ersetzen, vermeiden oder verkürzen kann, übernehmen wir in der Regel bis zu vier Wochen die Kosten für die Behandlungspflege. Soweit es medizinisch erforderlich ist, zahlt die AOK zusätzlich die Grundpflege und die hauswirtschaftliche Versorgung.",
+          "url": "https://www.example.com/leistungen/medizinische-behandlung/haeusliche-krankenpflege/",
+          "title": "Häusliche Krankenpflege | AOK",
+          "section_header": "Häusliche Krankenpflege: Das zahlt die AOK",
+          "similarity": 0.6917,
+          "rerank_score": 0.9471
+        },
+        {
+          "id": "11860",
+          "text": "Pflegebetten Pflegebetten können die Pflege erleichtern. Die AOK unterstützt die Finanzierung. Mehr erfahren",
+          "url": "https://www.example.com/pflegeleistungen/pflegehilfsmittel/",
+          "title": "Pflegehilfsmittel | AOK",
+          "section_header": "Hausnotruf",
+          "similarity": 0.7219,
+          "rerank_score": 0.9159
+        },
+        {
+          "id": "12213",
+          "text": "Pflegebetten Pflegebetten können die Pflege erleichtern. Die AOK unterstützt die Finanzierung. Mehr erfahren",
+          "url": "https://www.example.com/pflege-wohnformen/palliativpflege-hospiz/",
+          "title": "Palliativpflege und Hospiz | AOK",
+          "section_header": "Vollstationäre Pflege im Pflegeheim",
+          "similarity": 0.7219,
+          "rerank_score": 0.9159
+        },
+        {
+          "id": "12194",
+          "text": "Die AOK kommt für die pflegerische und ärztliche Versorgung schwer kranker und sterbender Menschen auf. Sie trägt die erforderlichen Kosten der Betreuung auf der Palliativstation eines Krankenhauses oder in einem Hospiz. Auch die von ambulanten Hospizdiensten angebotene Sterbebegleitung zu Hause wird von der AOK über Fördermittel mitfinanziert, sodass die palliative Versorgung für die Versicherten kostenfrei ist. Wenden Sie sich bei Fragen vertrauensvoll an Ihre AOK vor Ort, einen Pflegestützpunkt oder einen Hospizdienst in Ihrer Nähe. Benötigen Menschen in ihrer letzten Lebensphase eine besonders aufwendige palliativpflegerische und palliativmedizinische Versorgung, übernimmt die AOK die Kosten für die spezialisierte ambulante Palliativversorgung (SAPV). Hier finden Sie einen Überblick zu sämtlichen Pflegeleistungen der AOK-Pflegeversicherung .",
+          "url": "https://www.example.com/pflege-wohnformen/palliativpflege-hospiz/",
+          "title": "Palliativpflege und Hospiz | AOK",
+          "section_header": "AOK übernimmt die Kosten für die palliative Versorgung",
+          "similarity": 0.6873,
+          "rerank_score": 0.8934
+        }
+      ],
+      "response": "Ja, das stimmt. Die AOK-Pflegekasse übernimmt die Kosten für ein Pflegebett, wenn bestimmte Bedingungen erfüllt sind:\n\n- Der Pflegebedürftige muss einen festgestellten Pflegegrad haben.\n- Der größte Teil des Tages muss im Bett gepflegt werden.\n\nDiese Kostenübernahme umfasst mehr als nur das Bett selbst: \n\nDie AOK-Pflegekasse deckt auch die Kosten für notwendiges Zubehör ab, wie zum Beispiel Aufrichthilfen oder Seitengitter. Diese Elemente können auch separat beantragt werden, um das eigene Bett aufzurüsten und so die Mobilität zu verbessern.\n\nDarüber hinaus gehören zur Kostenübernahme weitere Leistungen:\n\n- Beratung durch Fachkräfte\n- Notwendige Reparaturen\n- Lieferung und Rückholung des Bettes\n\nEs ist wichtig zu beachten, dass diese Unterstützung speziell für diejenigen gedacht ist, die einen festgestellten Pflegegrad haben und deren tägliche Pflege im Bett stattfindet. Weitere Details sind im bereitgestellten Kontext nicht verfügbar.",
+      "metrics": {
+        "context_entity_recall": 0.25,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_correctness": 0.755,
+        "answer_relevancy": 0.7917,
+        "answer_similarity": 0.77,
+        "faithfulness": 0.8667
+      }
+    },
+    {
+      "index": 3,
+      "type": "generation: summary",
+      "prompt": "Fasse den Unterscheid zwischen Diabetes Typ 1 und Typ 2 zusammen.",
+      "truth": "Typ 1 ist Autoimmunerkrankung (kein Insulin), entwickelt sich rasch; Typ 2 ist Insulinresistenz, entwickelt sich langsam, häufigste Form; beide können Gefäße/Organe schädigen.",
+      "source": "https://www.example.com/chronische-erkrankungen/diabetes/",
+      "context": [
+        "[Quelle 1] Einschreibebedingungen für das DMP Diabetes mellitus Typ 1 | AOK Gesundheitspartner\nDie Diagnose eines Diabetes mellitus Typ 1 gilt als gestellt, wenn die folgenden Kriterien bei Aufnahme in das strukturierte Behandlungsprogramm erfüllt sind oder sich aus der Vorgeschichte der Patientin oder des Patienten bei der Manifestation der Erkrankung ergeben: 1. Nachweis typischer Symptome des Diabetes mellitus (zum Beispiel Polyurie, Polydipsie, ungewollter Gewichtsverlust) und/oder einer Ketonurie/Ketoazidose (als Hinweis auf einen absoluten Insulinmangel) und 2. Nüchtern-Glukose vorrangig im Plasma (I. P.) ≥ 7,0 mmol / l (≥ 126 mg / dl) oder Nicht-Nüchtern-Glukose I. P. ≥ 11,1 mmol / l (≥ 200 mg / dl). Die Unterscheidung zwischen Diabetes mellitus Typ 1 und Typ 2 erfolgt im strukturierten Behandlungsprogramm demnach anhand der Anamnese, des klinischen Bildes und der Laborparameter. Dies schließt bei Bedarf die Bestimmung der diabetesspezifischen Antikörper mit ein. Die Ärztin oder der Arzt soll in Abstimmung mit der Patientin oder mit dem Patienten prüfen, ob die Patientin oder der Patient im Hinblick auf die genannten Therapieziele von der Einschreibung profitieren kann.",
+        "[Quelle 2] Einschreibebedingungen für das DMP Diabetes mellitus Typ 2 | AOK Gesundheitspartner\nB. Glukokortikoide) durchgeführt werden, es sei denn, die Einnahme dieser Medikamente ist wegen einer chronischen Erkrankung langfristig erforderlich. Die Unterscheidung zwischen Diabetes mellitus Typ 1 und Typ 2 erfolgt anhand der Anamnese und des klinischen Bildes, ist so jedoch nicht immer möglich. In Zweifelsfällen (z. B. Verdacht auf LADA, Latent Autoimmune Diabetes in Adults) können weitere Untersuchungen (z. B. die Messung von Diabetesantikörpern, insbesondere GAD-Antikörper) erforderlich sein. Eine gleichzeitige Teilnahme am DMP Diabetes mellitus Typ 1 und Diabetes mellitus Typ 2 ist nicht möglich. Patientinnen mit Schwangerschaftsdiabetes werden nicht in dieses strukturierte Behandlungsprogramm aufgenommen.",
+        "[Quelle 3] Diabetes | AOK\nIn Deutschland leben rund neun Millionen Menschen mit Diabetes. Es gibt verschiedene Unterformen, die weitaus häufigste ist Diabetes mellitus Typ 2. Im Mittelpunkt aller Diabetesformen steht das Hormon Insulin. Das braucht der Körper, um den Zucker aus der Nahrung in die Körperzellen zu transportieren. Dort wird er in Energie umgewandelt. Ist kein Insulin vorhanden (wie bei Diabetes mellitus Typ 1) oder spricht der Körper nicht ausreichend darauf an (wie bei Typ 2), bleibt der Zucker im Blutkreislauf und schädigt auf Dauer die Gefäße. Dies kann schließlich zu schweren Folgeerkrankungen führen. Häufig werden die beiden Diabetesformen verwechselt. Die Unterscheidung ist aber wichtig für die Behandlung und den Umgang mit der Erkrankung.",
+        "[Quelle 4] Diabetes | AOK\nDiabetes mellitus Typ 2 – oft auch Altersdiabetes genannt – entwickelt sich langsam. Die Krankheitsanzeichen sind sehr unspezifisch und könnten auch andere Ursachen haben. Häufig wird er im Rahmen einer Routineuntersuchung beim Arzt festgestellt. Oft ist diese Diabetesform mit Übergewicht gekoppelt, mittlerweile gibt es zunehmend auch junge und sogar jugendliche Typ-2-Diabetiker. Anders bei Diabetes mellitus Typ 1: Hier können die Symptome bereits nach wenigen Tagen oder Wochen auftreten. Meist sind die Betroffenen eher schlank, meist sind sie auch jüngeren Alters. Grundsätzlich sind aber die Anzeichen, die auf Diabetes hindeuten können, bei beiden Erkrankungen ähnlich. Mögliche Symptome sind: starker Durst ständiger Harndrang Müdigkeit und schnelle Erschöpfung Erst später kommen andere Symptome hinzu wie zum Beispiel: schlechte Wundheilung verschlechtertes Sehen kribbelnde oder taube Füße und Beine",
+        "[Quelle 5] Neurodermitis | AOK\nDiabetes Diabetes mellitus Typ 1 und Typ 2: Was Sie über die Stoffwechselkrankheit wissen sollten. Mehr erfahren"
+      ],
+      "sources": [
+        "https://www.aok.de/gp/dmp/internistische-diagnosen/einschreibung/diabetes-typ-1",
+        "https://www.aok.de/gp/dmp/internistische-diagnosen/einschreibung/diabetes-typ-2",
+        "https://www.example.com/chronische-erkrankungen/diabetes/",
+        "https://www.example.com/chronische-erkrankungen/neurodermitis/"
+      ],
+      "search_results": [
+        {
+          "id": "3678",
+          "text": "Die Diagnose eines Diabetes mellitus Typ 1 gilt als gestellt, wenn die folgenden Kriterien bei Aufnahme in das strukturierte Behandlungsprogramm erfüllt sind oder sich aus der Vorgeschichte der Patientin oder des Patienten bei der Manifestation der Erkrankung ergeben: 1. Nachweis typischer Symptome des Diabetes mellitus (zum Beispiel Polyurie, Polydipsie, ungewollter Gewichtsverlust) und/oder einer Ketonurie/Ketoazidose (als Hinweis auf einen absoluten Insulinmangel) und 2. Nüchtern-Glukose vorrangig im Plasma (I. P.) ≥ 7,0 mmol / l (≥ 126 mg / dl) oder Nicht-Nüchtern-Glukose I. P. ≥ 11,1 mmol / l (≥ 200 mg / dl). Die Unterscheidung zwischen Diabetes mellitus Typ 1 und Typ 2 erfolgt im strukturierten Behandlungsprogramm demnach anhand der Anamnese, des klinischen Bildes und der Laborparameter. Dies schließt bei Bedarf die Bestimmung der diabetesspezifischen Antikörper mit ein. Die Ärztin oder der Arzt soll in Abstimmung mit der Patientin oder mit dem Patienten prüfen, ob die Patientin oder der Patient im Hinblick auf die genannten Therapieziele von der Einschreibung profitieren kann.",
+          "url": "https://www.aok.de/gp/dmp/internistische-diagnosen/einschreibung/diabetes-typ-1",
+          "title": "Einschreibebedingungen für das DMP Diabetes mellitus Typ 1 | AOK Gesundheitspartner",
+          "section_header": "Diagnosespezifische Einschreibekriterien",
+          "similarity": 0.6917,
+          "rerank_score": 0.9277
+        },
+        {
+          "id": "3672",
+          "text": "B. Glukokortikoide) durchgeführt werden, es sei denn, die Einnahme dieser Medikamente ist wegen einer chronischen Erkrankung langfristig erforderlich. Die Unterscheidung zwischen Diabetes mellitus Typ 1 und Typ 2 erfolgt anhand der Anamnese und des klinischen Bildes, ist so jedoch nicht immer möglich. In Zweifelsfällen (z. B. Verdacht auf LADA, Latent Autoimmune Diabetes in Adults) können weitere Untersuchungen (z. B. die Messung von Diabetesantikörpern, insbesondere GAD-Antikörper) erforderlich sein. Eine gleichzeitige Teilnahme am DMP Diabetes mellitus Typ 1 und Diabetes mellitus Typ 2 ist nicht möglich. Patientinnen mit Schwangerschaftsdiabetes werden nicht in dieses strukturierte Behandlungsprogramm aufgenommen.",
+          "url": "https://www.aok.de/gp/dmp/internistische-diagnosen/einschreibung/diabetes-typ-2",
+          "title": "Einschreibebedingungen für das DMP Diabetes mellitus Typ 2 | AOK Gesundheitspartner",
+          "section_header": "Diagnosespezifische Einschreibekriterien",
+          "similarity": 0.637,
+          "rerank_score": 0.759
+        },
+        {
+          "id": "991",
+          "text": "In Deutschland leben rund neun Millionen Menschen mit Diabetes. Es gibt verschiedene Unterformen, die weitaus häufigste ist Diabetes mellitus Typ 2. Im Mittelpunkt aller Diabetesformen steht das Hormon Insulin. Das braucht der Körper, um den Zucker aus der Nahrung in die Körperzellen zu transportieren. Dort wird er in Energie umgewandelt. Ist kein Insulin vorhanden (wie bei Diabetes mellitus Typ 1) oder spricht der Körper nicht ausreichend darauf an (wie bei Typ 2), bleibt der Zucker im Blutkreislauf und schädigt auf Dauer die Gefäße. Dies kann schließlich zu schweren Folgeerkrankungen führen. Häufig werden die beiden Diabetesformen verwechselt. Die Unterscheidung ist aber wichtig für die Behandlung und den Umgang mit der Erkrankung.",
+          "url": "https://www.example.com/chronische-erkrankungen/diabetes/",
+          "title": "Diabetes | AOK",
+          "section_header": "Was bedeutet Diabetes mellitus Typ 1 und Typ 2",
+          "similarity": 0.6522,
+          "rerank_score": 0.7361
+        },
+        {
+          "id": "992",
+          "text": "Diabetes mellitus Typ 2 – oft auch Altersdiabetes genannt – entwickelt sich langsam. Die Krankheitsanzeichen sind sehr unspezifisch und könnten auch andere Ursachen haben. Häufig wird er im Rahmen einer Routineuntersuchung beim Arzt festgestellt. Oft ist diese Diabetesform mit Übergewicht gekoppelt, mittlerweile gibt es zunehmend auch junge und sogar jugendliche Typ-2-Diabetiker. Anders bei Diabetes mellitus Typ 1: Hier können die Symptome bereits nach wenigen Tagen oder Wochen auftreten. Meist sind die Betroffenen eher schlank, meist sind sie auch jüngeren Alters. Grundsätzlich sind aber die Anzeichen, die auf Diabetes hindeuten können, bei beiden Erkrankungen ähnlich. Mögliche Symptome sind: starker Durst ständiger Harndrang Müdigkeit und schnelle Erschöpfung Erst später kommen andere Symptome hinzu wie zum Beispiel: schlechte Wundheilung verschlechtertes Sehen kribbelnde oder taube Füße und Beine",
+          "url": "https://www.example.com/chronische-erkrankungen/diabetes/",
+          "title": "Diabetes | AOK",
+          "section_header": "Häufige Beschwerden bei Diabetes",
+          "similarity": 0.6605,
+          "rerank_score": 0.6897
+        },
+        {
+          "id": "1071",
+          "text": "Diabetes Diabetes mellitus Typ 1 und Typ 2: Was Sie über die Stoffwechselkrankheit wissen sollten. Mehr erfahren",
+          "url": "https://www.example.com/chronische-erkrankungen/neurodermitis/",
+          "title": "Neurodermitis | AOK",
+          "section_header": "Asthma",
+          "similarity": 0.6864,
+          "rerank_score": 0.2171
+        }
+      ],
+      "response": "Der Unterschied zwischen Diabetes mellitus Typ 1 und Typ 2 liegt in der Art und Weise, wie der Körper Insulin produziert und verwendet:\n\nDiabetes mellitus Typ 1:\n- Insulinproduktion: Bei diesem Typ ist praktisch kein Insulin vorhanden, da die betreffenden Zellen im Bauchspeicheldrüsen zerstört wurden. Dies führt zu einem absoluten Insulinmangel.\n- Symptome: Die Symptome treten oft plötzlich auf, innerhalb weniger Tage oder Wochen. Betroffene Personen sind meist schlank und jünger.\n- Diagnose: Die Diagnose wird gestellt, wenn typische Symptome wie Polyurie, Polydipsie und ungewollter Gewichtsverlust sowie eine Ketonurie/Ketoazidose vorliegen. Zusätzlich muss die Nüchtern-Glukose ≥ 7,0 mmol / l (≥ 126 mg / dl) oder die Nicht-Nüchtern-Glukose ≥ 11,1 mmol / l (≥ 200 mg / dl) betragen.\n- Behandlung: Die Behandlung besteht in der Regel in der lebenslangen Insulinspritze.\n\nDiabetes mellitus Typ 2:\n- Insulinproduktion: Der Körper produziert entweder nicht genug Insulin oder die Zellen reagieren nicht mehr angemessen darauf (Insulinresistenz).\n- Symptome: Die Krankheitsanzeichen sind oft unspezifisch und treten langsam auf. Häufig wird die Erkrankung im Rahmen einer Routineuntersuchung festgestellt. Betroffene Personen sind oft übergewichtig.\n- Diagnose: Die Unterscheidung von Typ 1 kann anhand der Anamnese, des klinischen Bildes und gegebenenfalls weiterer Untersuchungen wie der Messung von Diabetesantikörpern erfolgen.\n- Behandlung: Die Behandlung kann mit Lebensstiländerungen beginnen, wie Ernährungsumstellung und Bewegung. In manchen Fällen ist eine medikamentöse Therapie notwendig.\n\nBeide Formen teilen ähnliche Symptome wie starken Durst, ständigen Harndrang, Müdigkeit und schnelle Erschöpfung. Spätere Symptome können schlechte Wundheilung, verschlechtertes Sehen und kribbelnde oder taube Füße und Beine sein.",
+      "metrics": {
+        "context_entity_recall": 0.1429,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_correctness": 0.7814,
+        "answer_relevancy": 0.7663,
+        "answer_similarity": 0.6814,
+        "faithfulness": 0.8333,
+        "summary_score": 0.477
+      }
+    },
+    {
+      "index": 4,
+      "type": "generation: transformation",
+      "prompt": "Ich rauche, sitze den ganzen Tag, ernähre mich von Junkfood und bin permanent gestresst. Was sollte ich tun, um Herz-Kreislauf-Erkrankungen vorzubeugen?",
+      "truth": "Maßnahmen: Rauchstopp, gesunde Ernährung (wenig Salz/Zucker), 5x pro Woche 30 Min. Bewegung, Stressvermeidung, regelmäßige Blutdruckkontrolle.",
+      "source": "https://www.example.com/krankheiten-behandlungen/herz-kreislauf-erkrankungen/",
+      "context": [
+        "[Quelle 1] Herz-Kreislauf-Erkankungen | AOK – Die Gesundheitskasse | AOK\nSie können selbst viel dafür tun, dass Ihr Herz und Ihre Gefäße fit bleiben. Denn ein Großteil der Risikofaktoren lassen sich durch eine gesunde Lebensweise vermeiden. Die wichtigsten Maßnahmen sind: Nicht rauchen beziehungsweise mit dem Rauchen aufhören: Rauchen schädigt die Blutgefäße, die Herzmuskulatur und erhöht den Blutdruck. Tabakkonsum trägt damit nachweislich zur Entstehung von Herz-Kreislauf-Erkrankungen bei. Ein Rauchstopp reduziert dieses Risiko maßgeblich. Wie Sie das umsetzen können, lernen Sie zum Beispiel in den AOK- Gesundheitskursen zur Suchtmittelprävention . Gesund ernähren: Eine ausgewogene und gesunde Ernährung mit viel Obst und Gemüse, Vollkornprodukten, ungesättigter statt gesättigter Fettsäure sowie wenig Zucker und Salz tut nicht nur Herz und Gefäßen gut. Auch Risikofaktoren wie Übergewicht, hohe Cholesterinwerte oder Diabetes mellitus Typ 2 lassen sich dadurch positiv beeinflussen. Praktische Anregungen bekommen Sie in den AOK-Gesundheitskursen für gesunde Ernährung . Viel bewegen: Regelmäßiger Sport und ausreichend Bewegung im Alltag steigern die Fitness und beugen Herz-Kreislauf-Erkrankungen vor.",
+        "[Quelle 2] Herz-Kreislauf-Erkankungen | AOK – Die Gesundheitskasse | AOK\nViel bewegen: Regelmäßiger Sport und ausreichend Bewegung im Alltag steigern die Fitness und beugen Herz-Kreislauf-Erkrankungen vor. Die Deutsche Herzstiftung empfiehlt, fünfmal die Woche für 30 Minuten moderat aktiv zu sein, sodass Sie leicht ins Schwitzen geraten. Das gelingt zum Beispiel durch zügiges Gehen oder Radfahren. Ebenso stärkt regelmäßiger Ausdauersport das Herz. Entdecken Sie dazu die AOK-Gesundheitskurse zur Bewegung . Stress vermeiden: Stress lässt den Blutdruck ansteigen und beschleunigt den Herzschlag. Geschieht das dauerhaft, kann es das Herz schädigen. Wer Stress reduziert oder ganz vermeidet, lebt also herzgesünder. Wie das gelingen kann, erfahren Sie in den AOK-Gesundheitskursen zur Stressbewältigung . Zudem sollten Sie regelmäßig Ihren Blutdruck und Ihre Blutwerte von Ihrem Hausarzt oder Ihrer Hausärztin überprüfen lassen. So können mögliche Abweichungen frühzeitig erkannt werden.",
+        "[Quelle 3] Warum 21 Minuten Bewegung den Unterschied machen | AOK\nGerade die Kombination von Vielsitzen und wenig Bewegung kann gesundheitschädigend sein. Studien zeigen, dass erhöhte Sitzzeiten von über sechs Stunden am Tag das Risiko für Krebs und Herz-Kreislauf-Erkrankungen steigern. Viele Menschen werden beim Überschlagen der Stunden, die sie täglich sitzen, wahrscheinlich auf diese Summe kommen. Das ist erstmal kein Grund zur Panik, aber sollte das Bewusstsein schärfen: Wie kann ich meine gesamte Sitzzeit, wenn möglich, reduzieren und lange Sitzzeiten unterbrechen? Diese Pausen gilt es dann mit Bewegung zu füllen. Langes Sitzen verändert nämlich den Stoffwechsel, was Erkrankungen wie Diabetes, Adipositas und Herzerkrankungen begünstigen kann. Doch nicht nur den Körper sondern auch die Psyche kann Vielsitzen beeinflussen. Wenn wir zum Beispiel in stressigen Phasen viele Aufgaben erledigen müssen, wird vom Gehirn zunächst der Körper aktiviert. Die Erledigung dieser Aufgaben erfolgt oft jedoch nur im Sitzen, der Körper steht somit zwar unter Spannung, ist also aktiviert, aber der körperliche Ausgleich fehlt. Dieser fehlende Ausgleich kann sich dann wiederum negativ auf die psychische Gesundheit auswirken.",
+        "[Quelle 4] Koronare Herzkrankheit | AOK\nSollten bei Ihnen Angina-pectoris-ähnliche Symptome akut auftreten, dann sollten Sie nicht zögern, sich bei Ihrem Arzt vorzustellen. Natürlich können sich auch andere, vergleichsweise „harmlose“ Erkrankungen hinter einer solchen Symptomatik verbergen. Aber es könnte sich dabei auch um ein Warnzeichen für einen bevorstehenden Herzinfarkt handeln. Übergewicht ist nicht nur ein Risikofaktor für Herz-Kreislauf-Erkrankungen, sondern geht auch mit einem erhöhten Risiko einher, an Diabetes oder an Krebs zu erkranken. Oftmals ist es nicht leicht, den individuell richtigen Weg zum Abnehmen zu finden. Essen Sie ausgewogenen und gesund. Eine Ernährungsberatung kann Sie dabei unterstützen. Gönnen Sie sich regelmäßige Ruhephasen und Entspannung. Nehmen Sie Ihre Medikamente entsprechend der ärztlichen Verordnung. Meiden Sie Alkohol. Rauchen stellt einen sehr wichtigen Risikofaktor für das Entstehen und Fortschreiten einer KHK dar. Bleiben oder werden Sie rauchfrei! Wenn bei Ihnen Begleiterkrankungen vorliegen, welche die Entwicklung einer KHK fördern, wie beispielsweise Diabetes, sollten diese auch im Hinblick auf die Risikoreduktion adäquat behandelt werden.",
+        "[Quelle 5] Herz-Kreislauf-Erkankungen | AOK – Die Gesundheitskasse | AOK\nHerz-Kreislauf-Erkrankungen wie Bluthochdruck können zunächst unbemerkt verlaufen oder mit unspezifischen Beschwerden auftreten, die Betroffene falsch einschätzen. Deshalb ist es wichtig, regelmäßig zur Vorsorge zu gehen und sich körperlich untersuchen sowie den Blutdruck und die Blutwerte checken zu lassen. Die AOK bieten Ihnen verschiedene Vorsorgeleistungen, die dabei helfen, Herz-Kreislauf-Erkrankungen frühzeitig zu erkennen und vorzubeugen. Gesundheitsvorsorge"
+      ],
+      "sources": [
+        "https://www.example.com/krankheiten-behandlungen/herz-kreislauf-erkrankungen/",
+        "https://www.example.com/thema/21-minuten/",
+        "https://www.example.com/chronische-erkrankungen/koronare-herzkrankheit/"
+      ],
+      "search_results": [
+        {
+          "id": "11735",
+          "text": "Sie können selbst viel dafür tun, dass Ihr Herz und Ihre Gefäße fit bleiben. Denn ein Großteil der Risikofaktoren lassen sich durch eine gesunde Lebensweise vermeiden. Die wichtigsten Maßnahmen sind: Nicht rauchen beziehungsweise mit dem Rauchen aufhören: Rauchen schädigt die Blutgefäße, die Herzmuskulatur und erhöht den Blutdruck. Tabakkonsum trägt damit nachweislich zur Entstehung von Herz-Kreislauf-Erkrankungen bei. Ein Rauchstopp reduziert dieses Risiko maßgeblich. Wie Sie das umsetzen können, lernen Sie zum Beispiel in den AOK- Gesundheitskursen zur Suchtmittelprävention . Gesund ernähren: Eine ausgewogene und gesunde Ernährung mit viel Obst und Gemüse, Vollkornprodukten, ungesättigter statt gesättigter Fettsäure sowie wenig Zucker und Salz tut nicht nur Herz und Gefäßen gut. Auch Risikofaktoren wie Übergewicht, hohe Cholesterinwerte oder Diabetes mellitus Typ 2 lassen sich dadurch positiv beeinflussen. Praktische Anregungen bekommen Sie in den AOK-Gesundheitskursen für gesunde Ernährung . Viel bewegen: Regelmäßiger Sport und ausreichend Bewegung im Alltag steigern die Fitness und beugen Herz-Kreislauf-Erkrankungen vor.",
+          "url": "https://www.example.com/krankheiten-behandlungen/herz-kreislauf-erkrankungen/",
+          "title": "Herz-Kreislauf-Erkankungen | AOK – Die Gesundheitskasse | AOK",
+          "section_header": "Vorbeugen",
+          "similarity": 0.7049,
+          "rerank_score": 0.9813
+        },
+        {
+          "id": "11736",
+          "text": "Viel bewegen: Regelmäßiger Sport und ausreichend Bewegung im Alltag steigern die Fitness und beugen Herz-Kreislauf-Erkrankungen vor. Die Deutsche Herzstiftung empfiehlt, fünfmal die Woche für 30 Minuten moderat aktiv zu sein, sodass Sie leicht ins Schwitzen geraten. Das gelingt zum Beispiel durch zügiges Gehen oder Radfahren. Ebenso stärkt regelmäßiger Ausdauersport das Herz. Entdecken Sie dazu die AOK-Gesundheitskurse zur Bewegung . Stress vermeiden: Stress lässt den Blutdruck ansteigen und beschleunigt den Herzschlag. Geschieht das dauerhaft, kann es das Herz schädigen. Wer Stress reduziert oder ganz vermeidet, lebt also herzgesünder. Wie das gelingen kann, erfahren Sie in den AOK-Gesundheitskursen zur Stressbewältigung . Zudem sollten Sie regelmäßig Ihren Blutdruck und Ihre Blutwerte von Ihrem Hausarzt oder Ihrer Hausärztin überprüfen lassen. So können mögliche Abweichungen frühzeitig erkannt werden.",
+          "url": "https://www.example.com/krankheiten-behandlungen/herz-kreislauf-erkrankungen/",
+          "title": "Herz-Kreislauf-Erkankungen | AOK – Die Gesundheitskasse | AOK",
+          "section_header": "Vorbeugen",
+          "similarity": 0.6436,
+          "rerank_score": 0.9713
+        },
+        {
+          "id": "822",
+          "text": "Gerade die Kombination von Vielsitzen und wenig Bewegung kann gesundheitschädigend sein. Studien zeigen, dass erhöhte Sitzzeiten von über sechs Stunden am Tag das Risiko für Krebs und Herz-Kreislauf-Erkrankungen steigern. Viele Menschen werden beim Überschlagen der Stunden, die sie täglich sitzen, wahrscheinlich auf diese Summe kommen. Das ist erstmal kein Grund zur Panik, aber sollte das Bewusstsein schärfen: Wie kann ich meine gesamte Sitzzeit, wenn möglich, reduzieren und lange Sitzzeiten unterbrechen? Diese Pausen gilt es dann mit Bewegung zu füllen. Langes Sitzen verändert nämlich den Stoffwechsel, was Erkrankungen wie Diabetes, Adipositas und Herzerkrankungen begünstigen kann. Doch nicht nur den Körper sondern auch die Psyche kann Vielsitzen beeinflussen. Wenn wir zum Beispiel in stressigen Phasen viele Aufgaben erledigen müssen, wird vom Gehirn zunächst der Körper aktiviert. Die Erledigung dieser Aufgaben erfolgt oft jedoch nur im Sitzen, der Körper steht somit zwar unter Spannung, ist also aktiviert, aber der körperliche Ausgleich fehlt. Dieser fehlende Ausgleich kann sich dann wiederum negativ auf die psychische Gesundheit auswirken.",
+          "url": "https://www.example.com/thema/21-minuten/",
+          "title": "Warum 21 Minuten Bewegung den Unterschied machen | AOK",
+          "section_header": "Welche Rolle spielt dabei das Thema Sitzen? Im TV-Spot der AOK fordern Gadgets Personen zum Aufstehen auf. „Sitzen ist das neue Rauchen“ heißt es sogar inzwischen. Wie schlimm ist Vielsitzen wirklich?",
+          "similarity": 0.6277,
+          "rerank_score": 0.9442
+        },
+        {
+          "id": "1084",
+          "text": "Sollten bei Ihnen Angina-pectoris-ähnliche Symptome akut auftreten, dann sollten Sie nicht zögern, sich bei Ihrem Arzt vorzustellen. Natürlich können sich auch andere, vergleichsweise „harmlose“ Erkrankungen hinter einer solchen Symptomatik verbergen. Aber es könnte sich dabei auch um ein Warnzeichen für einen bevorstehenden Herzinfarkt handeln. Übergewicht ist nicht nur ein Risikofaktor für Herz-Kreislauf-Erkrankungen, sondern geht auch mit einem erhöhten Risiko einher, an Diabetes oder an Krebs zu erkranken. Oftmals ist es nicht leicht, den individuell richtigen Weg zum Abnehmen zu finden. Essen Sie ausgewogenen und gesund. Eine Ernährungsberatung kann Sie dabei unterstützen. Gönnen Sie sich regelmäßige Ruhephasen und Entspannung. Nehmen Sie Ihre Medikamente entsprechend der ärztlichen Verordnung. Meiden Sie Alkohol. Rauchen stellt einen sehr wichtigen Risikofaktor für das Entstehen und Fortschreiten einer KHK dar. Bleiben oder werden Sie rauchfrei! Wenn bei Ihnen Begleiterkrankungen vorliegen, welche die Entwicklung einer KHK fördern, wie beispielsweise Diabetes, sollten diese auch im Hinblick auf die Risikoreduktion adäquat behandelt werden.",
+          "url": "https://www.example.com/chronische-erkrankungen/koronare-herzkrankheit/",
+          "title": "Koronare Herzkrankheit | AOK",
+          "section_header": "Was Sie selbst tun können",
+          "similarity": 0.5968,
+          "rerank_score": 0.827
+        },
+        {
+          "id": "11737",
+          "text": "Herz-Kreislauf-Erkrankungen wie Bluthochdruck können zunächst unbemerkt verlaufen oder mit unspezifischen Beschwerden auftreten, die Betroffene falsch einschätzen. Deshalb ist es wichtig, regelmäßig zur Vorsorge zu gehen und sich körperlich untersuchen sowie den Blutdruck und die Blutwerte checken zu lassen. Die AOK bieten Ihnen verschiedene Vorsorgeleistungen, die dabei helfen, Herz-Kreislauf-Erkrankungen frühzeitig zu erkennen und vorzubeugen. Gesundheitsvorsorge",
+          "url": "https://www.example.com/krankheiten-behandlungen/herz-kreislauf-erkrankungen/",
+          "title": "Herz-Kreislauf-Erkankungen | AOK – Die Gesundheitskasse | AOK",
+          "section_header": "Vorsorgeleistungen der AOK",
+          "similarity": 0.5821,
+          "rerank_score": 0.7364
+        }
+      ],
+      "response": "Um Herz-Kreislauf-Erkrankungen vorzubeugen, sollten Sie dringend einige Änderungen in Ihrem Lebensstil vornehmen. Hier sind die wichtigsten Schritte:\n\n1. Aufhören zu rauchen:\nRauchen schädigt die Blutgefäße, die Herzmuskulatur und erhöht den Blutdruck. Es trägt nachweislich zur Entstehung von Herz-Kreislauf-Erkrankungen bei. Ein Rauchstopp reduziert dieses Risiko maßgeblich. Es ist daher entscheidend, mit dem Rauchen aufzuhören. Wie Sie das umsetzen können, lernen Sie zum Beispiel in den AOK-Gesundheitskursen zur Suchtmittelprävention.\n\n2. Verbesserung der Ernährung:\nEine ausgewogene und gesunde Ernährung ist essenziell. Vermeiden Sie Junkfood und konzentrieren Sie sich auf eine Ernährung mit viel Obst und Gemüse, Vollkornprodukten, ungesättigten Fettsäuren sowie wenig Zucker und Salz. Dadurch können Risikofaktoren wie Übergewicht, hohe Cholesterinwerte oder Diabetes mellitus Typ 2 positiv beeinflusst werden. Praktische Anregungen bekommen Sie in den AOK-Gesundheitskursen für gesunde Ernährung.\n\n3. Mehr Bewegung einbauen:\nRegelmäßiger Sport und ausreichend Bewegung im Alltag steigern die Fitness und beugen Herz-Kreislauf-Erkrankungen vor. Die Deutsche Herzstiftung empfiehlt, fünfmal die Woche für 30 Minuten moderat aktiv zu sein, sodass Sie leicht ins Schwitzen geraten. Das gelingt zum Beispiel durch zügiges Gehen oder Radfahren. Ebenso stärkt regelmäßiger Ausdauersport das Herz. Entdecken Sie dazu die AOK-Gesundheitskurse zur Bewegung.\n\n4. Stress reduzieren:\nStress lässt den Blutdruck ansteigen und beschleunigt den Herzschlag. Dauerhafter Stress kann das Herz schädigen. Wer Stress reduziert oder ganz vermeidet, lebt also herzgesünder. Wie das gelingen kann, erfahren Sie in den AOK-Gesundheitskursen zur Stressbewältigung.\n\n5. Reduzierung der Sitzzeiten:\nGerade die Kombination von Vielsitzen und wenig Bewegung kann gesundheitschädigend sein. Versuchen Sie, Ihre Sitzzeiten zu reduzieren und lange Sitzzeiten mit Bewegungspausen zu unterbrechen. Dies hilft nicht nur dem Körper, sondern auch der Psyche.\n\nZusätzlich sollten Sie regelmäßig Ihren Blutdruck und Ihre Blutwerte von Ihrem Hausarzt oder Ihrer Hausärztin überprüfen lassen, um mögliche Abweichungen frühzeitig zu erkennen.\n\nDiese Maßnahmen zusammen können Ihre Gesundheit erheblich verbessern und das Risiko für Herz-Kreislauf-Erkrankungen verringern.",
+      "metrics": {
+        "context_entity_recall": 0.0,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_correctness": 0.3794,
+        "answer_relevancy": 0.4844,
+        "answer_similarity": 0.7057,
+        "faithfulness": 0.9737
+      }
+    },
+    {
+      "index": 5,
+      "type": "robustness: ambiguous",
+      "prompt": "Gib mit Tipps zu meiner chronischen Erkrankung.",
+      "truth": "Um welche chronische Erkrankung handelt es sich?",
+      "source": "https://www.example.com/chronische-erkrankungen/",
+      "context": [
+        "[Quelle 1] Reiseimpfungen: Unsere Leistungen & Infos | AOK\neventuell akute oder chronische Erkrankungen",
+        "[Quelle 2] Allergien behandeln | AOK\nChronische Erkrankungen Chronische Erkrankungen wie Asthma, Bluthochdruck, Neurodermitis oder Diabetes können meist nicht vollständig oder lang anhaltend geheilt werden und bedürfen einer dauerhaften Therapie. Um die Lebensqualität der Patienten zu verbessern, unterstützt die AOK ihre Mitglieder bei vielen chronischen Krankheitsbildern mit umfangreichen Leistungen und hilft bei Fragen weiter. Eine Übersicht der Angebote. Mehr erfahren",
+        "[Quelle 3] Disease-Management-Programme (DMP) | AOK Gesundheitspartner\nStrukturierte Behandlungsprogramme für chronisch Erkrankte, zum Beispiel DMP Diabetes, Asthma oder KHK",
+        "[Quelle 4] Heartbeats: Hören Sie auf Ihr Herz | AOK\nCuraplan: Behandlung chronischer Erkrankungen",
+        "[Quelle 5] Chronische Erkrankungen | AOK\nCuraplan: Behandlung chronischer Erkrankungen"
+      ],
+      "sources": [
+        "https://www.example.com/leistungen/impfungen/reiseschutz/",
+        "https://www.example.com/allergien/",
+        "https://www.aok.de/gp/dmp",
+        "https://www.example.com/thema/heartbeats/",
+        "https://www.example.com/chronische-erkrankungen/"
+      ],
+      "search_results": [
+        {
+          "id": "4120",
+          "text": "eventuell akute oder chronische Erkrankungen",
+          "url": "https://www.example.com/leistungen/impfungen/reiseschutz/",
+          "title": "Reiseimpfungen: Unsere Leistungen & Infos | AOK",
+          "section_header": "Datum und Dauer des Aufenthalts",
+          "similarity": 0.6834,
+          "rerank_score": 0.6858
+        },
+        {
+          "id": "673",
+          "text": "Chronische Erkrankungen Chronische Erkrankungen wie Asthma, Bluthochdruck, Neurodermitis oder Diabetes können meist nicht vollständig oder lang anhaltend geheilt werden und bedürfen einer dauerhaften Therapie. Um die Lebensqualität der Patienten zu verbessern, unterstützt die AOK ihre Mitglieder bei vielen chronischen Krankheitsbildern mit umfangreichen Leistungen und hilft bei Fragen weiter. Eine Übersicht der Angebote. Mehr erfahren",
+          "url": "https://www.example.com/allergien/",
+          "title": "Allergien behandeln | AOK",
+          "section_header": "Das könnte Sie auch interessieren",
+          "similarity": 0.6368,
+          "rerank_score": 0.312
+        },
+        {
+          "id": "10762",
+          "text": "Strukturierte Behandlungsprogramme für chronisch Erkrankte, zum Beispiel DMP Diabetes, Asthma oder KHK",
+          "url": "https://www.aok.de/gp/dmp",
+          "title": "Disease-Management-Programme (DMP) | AOK Gesundheitspartner",
+          "section_header": "Disease-Management-Programme (DMP)",
+          "similarity": 0.6435,
+          "rerank_score": 0.1621
+        },
+        {
+          "id": "779",
+          "text": "Curaplan: Behandlung chronischer Erkrankungen",
+          "url": "https://www.example.com/thema/heartbeats/",
+          "title": "Heartbeats: Hören Sie auf Ihr Herz | AOK",
+          "section_header": "Gesundheits-Check-Up für Erwachsene",
+          "similarity": 0.634,
+          "rerank_score": 0.0731
+        },
+        {
+          "id": "830",
+          "text": "Curaplan: Behandlung chronischer Erkrankungen",
+          "url": "https://www.example.com/chronische-erkrankungen/",
+          "title": "Chronische Erkrankungen | AOK",
+          "section_header": "Passende Angebote der AOK",
+          "similarity": 0.634,
+          "rerank_score": 0.0731
+        }
+      ],
+      "response": "Um Ihnen gezielte Tipps zur Behandlung Ihrer chronischen Erkrankung geben zu können, wäre es hilfreich, wenn Sie spezifizieren könnten, welche Art von chronischer Erkrankung Sie haben. Die bereitgestellten Quellen erwähnen verschiedene chronische Erkrankungen wie Asthma, Bluthochdruck, Neurodermitis oder Diabetes.\n\nAllgemein bietet die AOK jedoch verschiedene Programme und Unterstützungsmöglichkeiten für Menschen mit chronischen Erkrankungen:\n\n1. Disease-Management-Programme (DMP): Diese sind strukturierte Behandlungsprogramme, die speziell für bestimmte chronische Erkrankungen entwickelt wurden. Zum Beispiel gibt es DMPs für Diabetes, Asthma oder koronare Herzerkrankungen (KHK). Diese Programme zielen darauf ab, die Behandlung zu optimieren und die Lebensqualität der Patienten zu verbessern.\n   \n   Einzelheiten zu diesen Programmen finden Sie in [Quelle 3].\n\n2. Curaplan: Dies ist ein weiteres Angebot der AOK zur Behandlung chronischer Erkrankungen. Es scheint eine umfassende Betreuung und Unterstützung zu bieten, um die Krankheit besser zu managen und die Lebensqualität zu erhöhen. Weitere Informationen dazu sind in [Quelle 4] und [Quelle 5] enthalten.\n\n3. Umfangreiche Leistungen und Unterstützung: Die AOK unterstützt ihre Mitglieder bei vielen chronischen Krankheitsbildern mit verschiedenen Leistungen und hilft bei Fragen weiter. Eine Übersicht der Angebote finden Sie in [Quelle 2].\n\nBitte geben Sie weitere Details über Ihre spezifische Situation an, damit wir Ihnen noch präzisere Tipps und Informationen liefern können.",
+      "metrics": {
+        "answer_correctness": 0.1494,
+        "answer_relevancy": 0.0,
+        "answer_similarity": 0.5971
+      }
+    },
+    {
+      "index": 6,
+      "type": "hallucination: misleading",
+      "prompt": "Ich bin 21 Jahre alt und möchte eine Ultraschalluntersuchung zur Früherkennung eines Aneurysma im Bauch durchführen.",
+      "truth": "AOK übernimmt einmalig Kosten für Männer ab 65 Jahren.",
+      "source": "https://www.example.com/leistungen/gesundheitsvorsorge/aneurysma-frueherkennung/",
+      "context": [
+        "[Quelle 1] Vorsorge: Alle unsere Leistungen im Überblick | AOK\nGesundheitsvorsorge Aneurysma im Bauch frühzeitig erkennen",
+        "[Quelle 2] Aneurysma im Bauch frühzeitig erkennen | AOK\nDie AOK übernimmt bei Männern ab einem Alter von 65 Jahren die Kosten für ein einmaliges Aneurysma-Screening, um ein Bauchaortenaneurysma frühzeitig zu erkennen. Unter anderem können Hausärzte diese Untersuchung durchführen. Bitte wenden Sie sich vertrauensvoll an Ihren behandelnden Arzt, er wird Sie entsprechend zur Früherkennung eines Aneurysmas beraten.",
+        "[Quelle 3] Aneurysma im Bauch frühzeitig erkennen | AOK\nDie Gefäßerweiterung kann man selbst nicht spüren, denn sie verursacht in der Regel keine Schmerzen. Ein Arzt oder eine Ärztin kann aber diese Veränderung mittels einer Ultraschalluntersuchung feststellen. Diese Untersuchung ist schmerzlos und strahlenfrei. Wird beim Ultraschall im Bauch ein Aneurysma entdeckt, folgen regelmäßige Kontrollen. Ist die Schlagader stark erweitert, schließen sich weitere Untersuchungen an und falls erforderlich eine vorbeugende Operation.",
+        "[Quelle 4] Aneurysma im Bauch frühzeitig erkennen | AOK\nEin Aneurysma der Bauchaorta ist eine sackartige oder spindelförmige Erweiterung der Schlagader im Bauch. Diese Veränderung kann lebensbedrohlich sein. Die Hauptschlagader (Aorta) ist normalerweise zwei bis zweieinhalb Zentimeter dick. Ist sie nur geringfügig erweitert, ist das zunächst nicht bedrohlich. Dehnt sich die Aussackung sehr schnell auf mehr als fünf Zentimeter aus, steigt das Risiko, dass ein Riss in der Gefäßwand entsteht. Dann kann es zu sehr starken inneren Blutungen und einer lebensbedrohlichen Situation kommen.",
+        "[Quelle 5] Gesundheitscheck für Erwachsene | AOK\nFrüherkennung von Bauchaortenaneurysmen für Männer ab 65 Jahren Männer ab 65 Jahren haben im Rahmen des Check-ups die Möglichkeit, einmalig einen Ultraschall zur Früherkennung von Bauchaortenaneurysmen durchführen zu lassen. Männer sind für die lebensbedrohliche Veränderung der Bauchaorta besonders gefährdet. Um mögliche Anzeichen dafür frühzeitig zu erkennen, wird Männern ab 65 Jahren ein Ultraschall-Screening empfohlen. Weitere Informationen zur Früherkennung von Bauchaortenaneurysmen"
+      ],
+      "sources": [
+        "https://www.example.com/leistungen/vorsorge/",
+        "https://www.example.com/leistungen/gesundheitsvorsorge/aneurysma-frueherkennung/",
+        "https://www.example.com/leistungen/gesundheitsvorsorge/gesundheits-check-up-fuer-erwachsene/"
+      ],
+      "search_results": [
+        {
+          "id": "12357",
+          "text": "Gesundheitsvorsorge Aneurysma im Bauch frühzeitig erkennen",
+          "url": "https://www.example.com/leistungen/vorsorge/",
+          "title": "Vorsorge: Alle unsere Leistungen im Überblick | AOK",
+          "section_header": "Passende Angebote der AOK",
+          "similarity": 0.7657,
+          "rerank_score": 0.9961
+        },
+        {
+          "id": "1119",
+          "text": "Die AOK übernimmt bei Männern ab einem Alter von 65 Jahren die Kosten für ein einmaliges Aneurysma-Screening, um ein Bauchaortenaneurysma frühzeitig zu erkennen. Unter anderem können Hausärzte diese Untersuchung durchführen. Bitte wenden Sie sich vertrauensvoll an Ihren behandelnden Arzt, er wird Sie entsprechend zur Früherkennung eines Aneurysmas beraten.",
+          "url": "https://www.example.com/leistungen/gesundheitsvorsorge/aneurysma-frueherkennung/",
+          "title": "Aneurysma im Bauch frühzeitig erkennen | AOK",
+          "section_header": "Früherkennung eines Aneurysmas: Das übernimmt die AOK",
+          "similarity": 0.7266,
+          "rerank_score": 0.7543
+        },
+        {
+          "id": "1116",
+          "text": "Die Gefäßerweiterung kann man selbst nicht spüren, denn sie verursacht in der Regel keine Schmerzen. Ein Arzt oder eine Ärztin kann aber diese Veränderung mittels einer Ultraschalluntersuchung feststellen. Diese Untersuchung ist schmerzlos und strahlenfrei. Wird beim Ultraschall im Bauch ein Aneurysma entdeckt, folgen regelmäßige Kontrollen. Ist die Schlagader stark erweitert, schließen sich weitere Untersuchungen an und falls erforderlich eine vorbeugende Operation.",
+          "url": "https://www.example.com/leistungen/gesundheitsvorsorge/aneurysma-frueherkennung/",
+          "title": "Aneurysma im Bauch frühzeitig erkennen | AOK",
+          "section_header": "Darum ist ein Ultraschall des Bauchs wichtig",
+          "similarity": 0.6536,
+          "rerank_score": 0.6428
+        },
+        {
+          "id": "1115",
+          "text": "Ein Aneurysma der Bauchaorta ist eine sackartige oder spindelförmige Erweiterung der Schlagader im Bauch. Diese Veränderung kann lebensbedrohlich sein. Die Hauptschlagader (Aorta) ist normalerweise zwei bis zweieinhalb Zentimeter dick. Ist sie nur geringfügig erweitert, ist das zunächst nicht bedrohlich. Dehnt sich die Aussackung sehr schnell auf mehr als fünf Zentimeter aus, steigt das Risiko, dass ein Riss in der Gefäßwand entsteht. Dann kann es zu sehr starken inneren Blutungen und einer lebensbedrohlichen Situation kommen.",
+          "url": "https://www.example.com/leistungen/gesundheitsvorsorge/aneurysma-frueherkennung/",
+          "title": "Aneurysma im Bauch frühzeitig erkennen | AOK",
+          "section_header": "Aneurysma: lebensbedrohliche Gefäßausstülpung",
+          "similarity": 0.5871,
+          "rerank_score": 0.5745
+        },
+        {
+          "id": "946",
+          "text": "Früherkennung von Bauchaortenaneurysmen für Männer ab 65 Jahren Männer ab 65 Jahren haben im Rahmen des Check-ups die Möglichkeit, einmalig einen Ultraschall zur Früherkennung von Bauchaortenaneurysmen durchführen zu lassen. Männer sind für die lebensbedrohliche Veränderung der Bauchaorta besonders gefährdet. Um mögliche Anzeichen dafür frühzeitig zu erkennen, wird Männern ab 65 Jahren ein Ultraschall-Screening empfohlen. Weitere Informationen zur Früherkennung von Bauchaortenaneurysmen",
+          "url": "https://www.example.com/leistungen/gesundheitsvorsorge/gesundheits-check-up-fuer-erwachsene/",
+          "title": "Gesundheitscheck für Erwachsene | AOK",
+          "section_header": "Hepatitis-Screening für alle Versicherten ab 35 Jahren",
+          "similarity": 0.7178,
+          "rerank_score": 0.5652
+        }
+      ],
+      "response": "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor. Die bereitgestellten Quellen beschreiben, dass die AOK bei Männern ab einem Alter von 65 Jahren die Kosten für ein einmaliges Aneurysma-Screening übernimmt. Es gibt keine Angaben zum Screening für Personen im Alter von 21 Jahren. Weitere Details sind im bereitgestellten Kontext nicht verfügbar.",
+      "metrics": {
+        "context_entity_recall": 1.0,
+        "context_precision": 0.0,
+        "context_recall": 1.0,
+        "answer_correctness": 0.1552,
+        "answer_relevancy": 0.0,
+        "answer_similarity": 0.6211,
+        "faithfulness": 0.5
+      }
+    }
+  ]
+}

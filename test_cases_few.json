@@ -1,0 +1,8 @@
+[
+  {
+      "type": "retrieval: exact match",
+      "prompt": "An wen richtet sich der Familiencoach Krebs?",
+      "truth": "Online-Selbsthilfe-Programm der AOK für Angehörige von Krebspatienten; entwickelt mit dem Universitätsklinikum Leipzig und dem Krebsinformationsdienst (DKFZ); kostenlos für alle Interessierten.",
+      "source": "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/"
+  }
+]

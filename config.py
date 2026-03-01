@@ -74,7 +74,7 @@ GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Frag
     - Erkläre komplexe Sachverhalte verständlich
     - Bei unvollständigen Informationen im Kontext: ergänze mit "Weitere Details sind im bereitgestellten Kontext nicht verfügbar"
     - Bei fehlenden Informationen: "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor"
-    - Bei unzurecheichendem oder widersprüchlichem Input: "Bitte präzisiere deine Frage oder gib mehr Informationen an."
+    - Bei unzurecheichendem oder widersprüchlichem Input: stelle spezifische Rückfragen, um die benötigten Informationen zu erhalten
 
     ANTWORTFORMAT:
     1. Beginne direkt mit der Antwort
@@ -84,5 +84,4 @@ GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Frag
 # Evaluation
 EVALUATION_MODEL = "gpt-4o-mini"
 EVALUATION_EMBEDDING_MODEL = "text-embedding-3-large"
-EVALUATION_TEST_CASES_PATH = "test_cases.json"
-EVALUATION_OUTPUT_PATH = "evaluation_results.json"
+EVALUATION_TEST_CASES_PATH = "test_cases_few.json"

@@ -155,15 +155,19 @@ class Generator:
     
     def generate(self, query: str) -> dict:
         search_results = self.retriever.search(query)
-        context = self.retriever.format_context(search_results)
+        context_list = self.retriever.format_context(search_results)
+
+        # Kontext von Liste zu String umwandeln
+        context_string = "\n\n---\n\n".join(context_list)
+
         sources = self.retriever.get_sources(search_results)
-        prompt = self.create_prompt(query, context)
+        prompt = self.create_prompt(query, context_string)
         llm_response = self.call_llm(prompt)
 
         result = {
             'query': query,
             'answer': llm_response['text'],
-            'context': context,
+            'context': context_list,
             'sources': sources,
             'search_results': search_results,
             # Metriken für diese einzelne Generierung

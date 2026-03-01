@@ -14,7 +14,6 @@ class Retriever:
         self.top_k = config.RETRIEVAL_TOP_K
         self.reranking_top_k = config.RETRIEVAL_RERANKING_TOP_K
         self.model_path = config.MODELS_DIRECTORY
-        self.stats_path = config.EVALUATION_OUTPUT_PATH
         self.cross_encoder_model = config.RETRIEVAL_CROSS_ENCODER_MODEL
         self.chroma_client = None
         self.collection = None
@@ -175,7 +174,7 @@ class Retriever:
         self.reranking_times_ms = []
         self.similarity_scores = []
 
-    def format_context(self, results: list[dict]) -> str:
+    def format_context(self, results: list[dict]) -> list[str]:
         context_parts = []
         
         # Kontext aus Ergebnissen zusammenbauen
@@ -187,9 +186,7 @@ class Retriever:
             context_part = f"{source_info}\n{text}"
             context_parts.append(context_part)
         
-        # Alle Teile verbinden
-        context = " ".join(context_parts)
-        return context
+        return context_parts
     
     def get_sources(self, results: list[dict]) -> list[str]:
         sources = []
