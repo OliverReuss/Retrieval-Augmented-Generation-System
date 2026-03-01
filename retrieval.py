@@ -166,7 +166,7 @@ class Retriever:
             'retrieval_avg_similarity': round(avg_similarity, 4),
             'retrieval_min_similarity': round(min_similarity, 4),
             'retrieval_max_similarity': round(max_similarity, 4),
-            'retrieval_avg_reranking_time_ms': round(avg_reranking_time_ms, 4)
+            'retrieval_avg_reranking_time': round(avg_reranking_time_ms, 4)
         }
         
         return stats

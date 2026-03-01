@@ -30,7 +30,7 @@ logging.getLogger("ragas.prompt.pydantic_prompt").setLevel(logging.ERROR)
 
 # Web Scraping
 WEB_SCRAPING_START_URL = "https://www.example.com/"
-WEB_SCRAPING_MAX_DEPTH = 1
+WEB_SCRAPING_MAX_DEPTH = 5
 WEB_SCRAPING_EXCLUDED_TERMS = ["nordwest", "bw", "bayern", "bremen", "hessen", "nordost", "plus", "niedersachsen", "rps", "rh", "fm", "pp", "magazin", "datenschutzerklaerung", "karriere"]
 WEB_SCRAPING_DOWNLOAD_DELAY = 0.0
 WEB_SCRAPING_OUTPUT_PATH = "data/documents.json"

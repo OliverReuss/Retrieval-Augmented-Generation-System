@@ -195,8 +195,8 @@ class Generator:
             avg_output_tokens = self.total_output_tokens / self.generation_count
         
         stats = {
-            'generation_avg_response_length': round(avg_response_length, 4),
-            'generation_avg_time_ms': round(avg_generation_time_ms, 4),
+            'generation_avg_length': round(avg_response_length, 4),
+            'generation_avg_time': round(avg_generation_time_ms, 4),
             'generation_avg_input_tokens': round(avg_input_tokens, 4),
             'generation_avg_output_tokens': round(avg_output_tokens, 4),
             'generation_api_errors': self.api_errors,

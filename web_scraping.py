@@ -96,7 +96,7 @@ class WebScraper:
         statistics = {
             'web_scraping_unique_pages': unique_pages,
             'web_scraping_elements_total': total_elements,
-            'web_scraping_duplicate_rate_by_text': round(duplicate_rate, 4),
+            'web_scraping_duplicate_rate': round(duplicate_rate, 4),
             'web_scraping_average_text_length': round(average_text_length, 4)
         }
         return statistics
@@ -119,7 +119,7 @@ class Spider(scrapy.Spider):
         self.link_extractor = LinkExtractor(allow_domains=[self.allowed_domain], deny_extensions=['pdf', 'jpg', 'png', 'gif', 'css', 'js', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'])
         # HTML-Elemente für Überschriften und Content
         self.header_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
-        self.content_tags = ['p', 'div', 'li', 'span', 'td']
+        self.content_tags = ['p', 'li', 'td']
         # Selektoren die ausgeschlossen werden (Navigation, Footer etc.)
         self.excluded_selectors = [
             'nav', 'header', 'footer', 'aside',
@@ -223,9 +223,6 @@ class Spider(scrapy.Spider):
         # Parsel Selector für Hauptinhalt erstellen
         content_selector = Selector(text=main_content)
         
-        # Ausgeschlossene Elemente mit XPath entfernen
-        exclude_xpath = ' | '.join([f'.//{sel}' for sel in self.excluded_selectors if not sel.startswith('.') and not sel.startswith('#')])
-        
         # Alle relevanten Elemente finden
         all_tags = self.header_tags + self.content_tags
         xpath_query = ' | '.join([f'.//{tag}' for tag in all_tags])
@@ -233,8 +230,9 @@ class Spider(scrapy.Spider):
         
         current_header = ""
         current_texts = []
-        seen_texts = set()  # Set um bereits gesehene Texte zu tracken
-        
+        # Set um bereits gesehene Texte zu tracken
+        seen_texts = set()
+
         for element in elements:
             # Element-Namen ermitteln
             tag_name = element.xpath('name()').get()
@@ -266,13 +264,6 @@ class Spider(scrapy.Spider):
             
             # Content-Elemente sammeln
             elif tag_name in self.content_tags:
-                # Nur direkte Text-Inhalte (keine verschachtelten Divs)
-                if tag_name == 'div':
-                    # Prüfen ob div weitere divs enthält
-                    nested_divs = element.xpath('.//div')
-                    if nested_divs:
-                        continue
-                
                 text_content = ' '.join(element.xpath('.//text()').getall())
                 text_content = self.clean_text(text_content)
                 
@@ -283,10 +274,15 @@ class Spider(scrapy.Spider):
                     
                     # Nur hinzufügen wenn nicht bereits gesehen
                     if normalized_text not in seen_texts:
-                        # Prüfen ob der Text nicht als Substring in bereits gesehenen Texten enthalten ist
+                        # Überschriften nicht nochmal als Text aufnehmen
+                        if normalized_text == current_header.lower():
+                            continue
+
+                        # Prüfen ob der aktuelle Text ein Teil eines bereits erfassten längeren Textes ist.
+                        # Achtung: Die umgekehrte Prüfung würde valide Absätze löschen!
                         is_substring = False
                         for seen in seen_texts:
-                            if normalized_text in seen or seen in normalized_text:
+                            if normalized_text in seen:
                                 is_substring = True
                                 break
                         
