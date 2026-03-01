@@ -7,7 +7,6 @@ import logging
 DATA_DIRECTORY = "data"
 MODELS_DIRECTORY = "models"
 PROXY = "http://proxy.your-company.com:8080"
-# CERTIFICATE = "certificate.crt"
 CERTIFICATE = r"./cert/cacert.pem"
 
 # Proxy
@@ -26,6 +25,7 @@ os.environ["TQDM_DISABLE"] = "1"
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
 os.environ["HF_HUB_DISABLE_XET"] = "1"
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
 logging.getLogger("ragas.prompt.pydantic_prompt").setLevel(logging.ERROR)
 
 # Web Scraping
@@ -37,11 +37,11 @@ WEB_SCRAPING_OUTPUT_PATH = "data/documents.json"
 
 # Chunking
 CHUNKING_CHUNK_SIZE = 1200
-CHUNKING_CHUNK_OVERLAP = 100
+CHUNKING_CHUNK_OVERLAP = 200
 CHUNKING_OUTPUT_PATH = "data/chunks.json"
 
 # Embedding
-EMBEDDING_MODEL = "snowflake/snowflake-arctic-embed-m-v1.5"
+EMBEDDING_MODEL = "BAAI/bge-m3"
 EMBEDDING_BATCH_SIZE = 32
 
 # Retrieval
@@ -50,13 +50,13 @@ RETRIEVAL_COLLECTION_NAME = "documents_collection"
 RETRIEVAL_TOP_K = 10
 RETRIEVAL_HNSW_SPACE = "cosine"
 RETRIEVAL_HNSW_M = 32
-RETRIEVAL_CROSS_ENCODER_MODEL = "mixedbread-ai/mxbai-rerank-base-v1"
+RETRIEVAL_CROSS_ENCODER_MODEL = "BAAI/bge-reranker-v2-m3"
 RETRIEVAL_RERANKING_TOP_K = 5
 
 # Generation
 GENERATION_API_URL = "https://api.your-company.com/v1/chat/completions" # "https://openrouter.ai/api/v1/chat/completions"
 GENERATION_API_KEY = os.getenv("CHATBOT_API_KEY")
-GENERATION_MODEL =  "Qwen/Qwen2.5-VL-72B-Instruct" # "Qwen3-30B-A3B-Q6_K.gguf:latest" # "mistralai/mistral-small-3.1-24b-instruct:free"
+GENERATION_MODEL = "Qwen/Qwen2.5-VL-72B-Instruct" # "Qwen3-30B-A3B-Q6_K.gguf:latest"  # "mistralai/mistral-small-3.1-24b-instruct:free"
 GENERATION_TEMPERATURE = 0.1
 GENERATION_MAX_TOKENS = 800
 GENERATION_TOP_P = 0.9

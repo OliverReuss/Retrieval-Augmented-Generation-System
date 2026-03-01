@@ -93,8 +93,7 @@ class Retriever:
                     'url': metadatas[i].get('url', ''),
                     'title': metadatas[i].get('title', ''),
                     'section_header': metadatas[i].get('section_header', ''),
-                    'distance': distances[i],
-                    # Ähnlichkeit = 1 - Distanz bei Cosinus
+                    # Ähnlichkeit = 1 - distance bei Kosinus
                     'similarity': similarity
                 }
                 search_results.append(result)
@@ -189,7 +188,7 @@ class Retriever:
             context_parts.append(context_part)
         
         # Alle Teile verbinden
-        context = "\n\n---\n\n".join(context_parts)
+        context = " ".join(context_parts)
         return context
     
     def get_sources(self, results: list[dict]) -> list[str]:

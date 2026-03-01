@@ -11,16 +11,16 @@ import json
 import os
 
 # retrieval
-    # context_entity_recall: Misst den Anteil der Begriffe aus der Ground Truth, die im abgerufenen Kontext gefunden wurden.
-    # context_precision: Bewertet, ob die relevanten Informationen im Kontext möglichst weit oben in der Gewichtung stehen (Signal-Rausch-Verhältnis der Rankings).
-    # context_recall: Analysiert, ob der abgerufene Kontext alle zur Beantwortung der Ground Truth notwendigen Informationen enthält.
+    # context_entity_recall (angestrebt: > 0.60): Misst den Anteil der Begriffe aus der Ground Truth, die im abgerufenen Kontext gefunden wurden.
+    # context_precision (angestrebt: > 0.70): Bewertet, ob die relevanten Informationen im Kontext möglichst weit oben in der Gewichtung stehen (Signal-Rausch-Verhältnis der Rankings).
+    # context_recall (angestrebt: > 0.80): Analysiert, ob der abgerufene Kontext alle zur Beantwortung der Ground Truth notwendigen Informationen enthält.
 
 # generation
-    # answer_correctness: Eine gewichtete Kombination aus der faktischen Übereinstimmung und der semantischen Ähnlichkeit zur Ground Truth.
-    # answer_relevancy: Bewertet, wie treffend die Antwort auf die ursprüngliche Frage eingeht.
-    # answer_similarity: Misst die rein semantische Nähe zwischen der generierten Antwort und der Ground Truth mittels Kosinus-Ähnlichkeit.
-    # summary_score: Misst wie präzise und vollständig die Informationen des Kontextes in der Antwort zusammengefasst wurden.
-    # faithfulness: Misst die Treue zum Kontext. Jede Antwort wird darauf geprüft, ob sie direkt auf den abgerufenen Informationen basiert.
+    # answer_correctness (angestrebt: > 0.75): Eine gewichtete Kombination aus der faktischen Übereinstimmung und der semantischen Ähnlichkeit zur Ground Truth.
+    # answer_relevancy (angestrebt: > 0.80): Bewertet, wie treffend die Antwort auf die ursprüngliche Frage eingeht.
+    # answer_similarity (angestrebt: > 0.80): Misst die rein semantische Nähe zwischen der generierten Antwort und der Ground Truth mittels Kosinus-Ähnlichkeit.
+    # summary_score (angestrebt: > 0.70): Misst wie präzise und vollständig die Informationen des Kontextes in der Antwort zusammengefasst wurden.
+    # faithfulness (angestrebt: > 0.85): Misst die Treue zum Kontext. Jede Antwort wird darauf geprüft, ob sie direkt auf den abgerufenen Informationen basiert.
 
 class Evaluator:
 
@@ -101,7 +101,7 @@ class Evaluator:
         
         return result
     
-    def evaluate_ragas(self, prompt: str, response: str, context: str, truth: str) -> list[dict]:
+    def evaluate_ragas(self, prompt: str, response: str, context: str, truth: str, test_type: str) -> dict:
         data = {
             "question": [prompt],
             "answer": [response],
@@ -114,23 +114,26 @@ class Evaluator:
         # Dict zu Dataset umwandeln
         dataset = Dataset.from_dict(data)
         
-        # Summarization Score erstellen
+        # Metriken in Gruppen definieren
+        retrieval_metrics = [context_entity_recall, context_precision, context_recall]
+        generation_metrics = [answer_correctness, answer_relevancy, answer_similarity, faithfulness]
         summary_score = SummarizationScore()
+        
+        # Metriken passend zu Test-Typ zuweisen, da nicht alle für jeden Test-Typ relevant
+        metrics_to_run = []
+        
+        if test_type == "generation: summary":
+            metrics_to_run = retrieval_metrics + generation_metrics + [summary_score]
+        elif test_type in ["robustness: not in context", "robustness: ambiguous"]:
+            metrics_to_run = [answer_correctness, answer_relevancy, answer_similarity]
+        else:
+            metrics_to_run = retrieval_metrics + generation_metrics
         
         try:
             # RAGAS Evaluation ausführen
             ragas_results = evaluate(
                 dataset=dataset,
-                metrics=[
-                    answer_correctness,
-                    answer_relevancy,
-                    answer_similarity,
-                    context_entity_recall,
-                    context_precision,
-                    context_recall,
-                    faithfulness,
-                    summary_score,
-                ],
+                metrics=metrics_to_run,
                 llm=self.llm,
                 embeddings=self.embeddings,
                 show_progress=False
@@ -151,9 +154,10 @@ class Evaluator:
             response = result['response']
             context = result['context']
             truth = result['truth']
+            test_type = result['type']
             
             # RAGAS Evaluation für Testfall
-            ragas_scores = self.evaluate_ragas(prompt, response, context, truth)
+            ragas_scores = self.evaluate_ragas(prompt, response, context, truth, test_type)
             
             metrics = {}
             
@@ -194,8 +198,11 @@ class Evaluator:
                         values.append(value)
             
             # Durchschnitt berechnen
-            average = sum(values) / len(values)
-            averages[metric_name] = round(average, 4)
+            if values:
+                average = sum(values) / len(values)
+                averages[metric_name] = round(average, 4)
+            else:
+                averages[metric_name] = 0.0
         
         return averages
     
@@ -276,9 +283,14 @@ class Evaluator:
         averages = self.calculate_averages(results)
         # Konfiguration speichern
         config_params = self.get_config_parameters()
+
+        # Zeitstempel für eindeutige Dateinamen hinzufügen
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        base_name, ext = os.path.splitext(self.output_path)
+        self.output_path = f"{base_name}_{timestamp}{ext}"
         
         final_results = {
-            'evaluation_timestamp': datetime.now().isoformat(),
+            'evaluation_timestamp': timestamp,
             'configuration': config_params,
             'statistics': statistics,
             'metric_averages': averages,
