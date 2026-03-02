@@ -84,4 +84,4 @@ GENERATION_SYSTEM_PROMPT = """Du bist ein Experte für die Beantwortung von Frag
 # Evaluation
 EVALUATION_MODEL = "gpt-4o-mini"
 EVALUATION_EMBEDDING_MODEL = "text-embedding-3-large"
-EVALUATION_TEST_CASES_PATH = "test_cases_few.json"
+EVALUATION_TEST_CASES_PATH = "test_cases.json"

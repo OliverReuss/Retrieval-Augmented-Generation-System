@@ -140,9 +140,9 @@ class Retriever:
     
     def get_statistics(self) -> dict:       
         # Durchschnittliche Retrieval-Zeit
-        avg_retrieval_time_ms = 0.0
+        avg_retrieval_time = 0.0
         if self.retrieval_times_ms:
-            avg_retrieval_time_ms = sum(self.retrieval_times_ms) / len(self.retrieval_times_ms)
+            avg_retrieval_time = sum(self.retrieval_times_ms) / len(self.retrieval_times_ms)
         
         # Durchschnittliche Reranking-Zeit
         avg_reranking_time_ms = 0.0
@@ -160,7 +160,7 @@ class Retriever:
             max_similarity = max(self.similarity_scores)
         
         stats = {
-            'retrieval_avg_time_ms': round(avg_retrieval_time_ms, 4),
+            'retrieval_avg_time_ms': round(avg_retrieval_time, 4),
             'retrieval_avg_similarity': round(avg_similarity, 4),
             'retrieval_min_similarity': round(min_similarity, 4),
             'retrieval_max_similarity': round(max_similarity, 4),

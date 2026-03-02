@@ -8,18 +8,17 @@ from ragas.metrics import (context_entity_recall, context_precision, context_rec
 from ragas.metrics._summarization import SummarizationScore
 import config
 import json
-import os
 
 # retrieval
-    # context_entity_recall (angestrebt: > 0.60): Misst den Anteil der Begriffe aus der Ground Truth, die im abgerufenen Kontext gefunden wurden.
     # context_precision (angestrebt: > 0.70): Bewertet, ob die relevanten Informationen im Kontext möglichst weit oben in der Gewichtung stehen (Signal-Rausch-Verhältnis der Rankings).
     # context_recall (angestrebt: > 0.80): Analysiert, ob der abgerufene Kontext alle zur Beantwortung der Ground Truth notwendigen Informationen enthält.
-
+    # context_entity_recall (angestrebt: > 0.60): Misst den Anteil der Begriffe aus der Ground Truth, die im abgerufenen Kontext gefunden wurden.
+    
 # generation
-    # answer_correctness (angestrebt: > 0.75): Eine gewichtete Kombination aus der faktischen Übereinstimmung und der semantischen Ähnlichkeit zur Ground Truth.
-    # answer_relevancy (angestrebt: > 0.80): Bewertet, wie treffend die Antwort auf die ursprüngliche Frage eingeht.
     # answer_similarity (angestrebt: > 0.80): Misst die rein semantische Nähe zwischen der generierten Antwort und der Ground Truth mittels Kosinus-Ähnlichkeit.
+    # answer_correctness (angestrebt: > 0.75): Eine gewichtete Kombination aus der faktischen Übereinstimmung und der semantischen Ähnlichkeit zur Ground Truth.
     # summary_score (angestrebt: > 0.70): Misst wie präzise und vollständig die Informationen des Kontextes in der Antwort zusammengefasst wurden.
+    # answer_relevancy (angestrebt: > 0.80): Bewertet, wie treffend die Antwort auf die ursprüngliche Frage eingeht.
     # faithfulness (angestrebt: > 0.85): Misst die Treue zum Kontext. Jede Antwort wird darauf geprüft, ob sie direkt auf den abgerufenen Informationen basiert.
 
 class Evaluator:
@@ -149,7 +148,7 @@ class Evaluator:
 
         # Für jeden Testfall
         for i, result in enumerate(results):
-            print(f"Evaluation | Testfall: {i + 1}/{len(results)}")
+            print(f"Evaluation | Berechne Metriken für Testfall: {i + 1}/{len(results)}")
             
             prompt = result['prompt']
             response = result['response']
@@ -165,9 +164,9 @@ class Evaluator:
             # Metriken zum Ergebnis hinzufügen
             for metric_name, value in ragas_scores.items():
                 if value is not None:
-                    # NaN-Werte durch 0 ersetzen
-                    if isinstance(value, float) and value != value:  # NaN check
-                        metrics[metric_name] = 0.0
+                    # NaN-Werte ignorieren
+                    if isinstance(value, float) and value != value:
+                        continue
                     else:
                         # Auf 4 Nachkommastellen runden
                         metrics[metric_name] = round(float(value), 4)
@@ -273,6 +272,7 @@ class Evaluator:
         
         # Einzelne Testfälle ausführen
         for i, test_case in enumerate(test_cases):
+            print(f"\nEvaluation | Generiere Antwprt für Testfall: {i+1}/{len(test_cases)}")
             result = self.run_single_test(test_case, i)
             results.append(result)
         
@@ -287,7 +287,7 @@ class Evaluator:
 
         # Zeitstempel für eindeutige Dateinamen hinzufügen
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        self.output_path = f"evalation_results_{timestamp}"
+        self.output_path = f"evalation_results_{timestamp}.json"
         
         final_results = {
             'evaluation_timestamp': timestamp,
