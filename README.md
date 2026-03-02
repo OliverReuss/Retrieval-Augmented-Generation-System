@@ -15,9 +15,7 @@ Das Ausführen von `main.py` startet den gesamten Prozess und legt alle benötig
 ## Konfiguration
 Das System kann über `config.py` angepasst werden. Optional kann hier ein Proxy-Server und SSL-Zertifikat hinterlegt werden.
 
-## Autor
-Oliver Reuß (Mtr. Nr.: 368522)
-
-Vorgelegt bei: Prof. Dr. Michael Spangenberg
-
-Hochschule für Angewandte Wissenschaften Hof | Fakultät Informatik | Studiengang Medieninformatik | Wintersemester 2025/26
+## Infos
+- Autor: Oliver Reuß (Mtr. Nr.: 368522)
+- Vorgelegt bei: Prof. Dr. Michael Spangenberg
+- Hochschule für Angewandte Wissenschaften Hof | Fakultät Informatik | Studiengang Medieninformatik | Wintersemester 2025/26
