@@ -272,7 +272,7 @@ class Evaluator:
         
         # Einzelne Testfälle ausführen
         for i, test_case in enumerate(test_cases):
-            print(f"\nEvaluation | Generiere Antwprt für Testfall: {i+1}/{len(test_cases)}")
+            print(f"Evaluation | Generiere Antwort für Testfall: {i+1}/{len(test_cases)}")
             result = self.run_single_test(test_case, i)
             results.append(result)
         

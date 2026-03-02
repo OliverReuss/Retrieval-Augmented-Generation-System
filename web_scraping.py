@@ -115,6 +115,8 @@ class Spider(scrapy.Spider):
         self.excluded_terms = excluded_terms
         self.scraped_data = scraped_data
         self.proxy = proxy
+        # Set, um Duplikate bei der Erfassung zu vermeiden
+        self.global_seen_texts = set()
         # Link Extractor extrahiert Links auf Seite
         self.link_extractor = LinkExtractor(allow_domains=[self.allowed_domain], deny_extensions=['pdf', 'jpg', 'png', 'gif', 'css', 'js', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'])
         # HTML-Elemente für Überschriften und Content
@@ -167,14 +169,21 @@ class Spider(scrapy.Spider):
         
         # Jede Sektion als eigenes Dokument speichern
         for idx, section in enumerate(sections):
-            if section['text'].strip():  # Nur nicht-leere Sektionen
-                document = {
-                    'url': current_url,
-                    'page_title': page_title,
-                    'section_header': section['header'],
-                    'text': section['text'],
-                }
-                self.scraped_data.append(document)
+            text_to_save = section['text'].strip()
+            if text_to_save:
+                normalized_text = text_to_save.lower()
+                
+                # Duplikat-Prüfung
+                if normalized_text not in self.global_seen_texts:
+                    self.global_seen_texts.add(normalized_text)
+                    
+                    document = {
+                        'url': current_url,
+                        'page_title': page_title,
+                        'section_header': section['header'],
+                        'text': text_to_save,
+                    }
+                    self.scraped_data.append(document)
         
         print(f"Web Scraping | Seite verarbeitet: {current_url}")
         
