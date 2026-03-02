@@ -39,6 +39,7 @@ class Retriever:
             if os.path.exists(local_model_path):
                 self.cross_encoder = CrossEncoder(local_model_path)
             else:
+                print("\nℹ️ Lade Cross-Encoder-Modell herunter...")
                 self.cross_encoder = CrossEncoder(self.cross_encoder_model, trust_remote_code=True)
                 os.makedirs(local_model_path, exist_ok=True)
                 self.cross_encoder.save(local_model_path)

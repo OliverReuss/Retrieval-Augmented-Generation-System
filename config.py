@@ -10,22 +10,26 @@ PROXY = "http://proxy.your-company.com:8080"
 CERTIFICATE = r"./cert/cacert.pem"
 
 # Proxy
-os.environ["HTTP_PROXY"] = PROXY
-os.environ["HTTPS_PROXY"] = PROXY
-os.environ["http_proxy"] = PROXY
-os.environ["https_proxy"] = PROXY
+if PROXY:
+    os.environ["HTTP_PROXY"] = PROXY
+    os.environ["HTTPS_PROXY"] = PROXY
+    os.environ["http_proxy"] = PROXY
+    os.environ["https_proxy"] = PROXY
 
 # SSL-Zertifikat
-os.environ["CURL_CA_BUNDLE"] = CERTIFICATE
-os.environ["REQUESTS_CA_BUNDLE"] = CERTIFICATE
-os.environ["SSL_CERT_FILE"] = CERTIFICATE
+if CERTIFICATE:
+    os.environ["CURL_CA_BUNDLE"] = CERTIFICATE
+    os.environ["REQUESTS_CA_BUNDLE"] = CERTIFICATE
+    os.environ["SSL_CERT_FILE"] = CERTIFICATE
 
 # Konsolen-Output unterdrücken
 os.environ["TQDM_DISABLE"] = "1"
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN")
 os.environ["HF_HUB_DISABLE_XET"] = "1"
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["HF_HUB_DISABLE_PROGRESS_BAR"] = "1"
 logging.getLogger("ragas.prompt.pydantic_prompt").setLevel(logging.ERROR)
 
 # Web Scraping

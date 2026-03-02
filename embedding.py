@@ -31,6 +31,7 @@ class Embedder:
             if os.path.exists(local_model_path):
                 self.model = SentenceTransformer(local_model_path)
             else:
+                print("\nℹ️ Lade Embedding-Modell herunter...")
                 self.model = SentenceTransformer(self.embedding_model, trust_remote_code=True)
                 os.makedirs(local_model_path, exist_ok=True)
                 self.model.save(local_model_path)
