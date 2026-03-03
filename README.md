@@ -11,7 +11,7 @@ Es wurde ein Retrieval-Augmented Generation (RAG) System auf Basis von Web-Scrap
 - Installation der Abhängigkeiten aus der requirements.txt mit dem Befehl `pip install -r requirements.txt`
 - Ein OpenAI-Konto mit Guthaben wird für die Evaluation und Generierung benötigt und ein API-Key muss in der `.env` hinterlegt werden (`OPENAI_API_KEY=VALUE`) (Hinweis: ein kompletter Testlauf mit dem Modell `gpt-4o-mini` kostet ca. 0,12 €)
 - Alternativ zu OpenAI kann für die Generierung (nicht Evaluation) auch ein kostenloses Modell von OpenRouter eingebunden werden (`OPENROUTER_API_KEY=VALUE`)
-- Optional aber sehr empfohlen: ein Hugging Face Konto erstellen und einen API-Key für einen schnelleren Download von Modellen hinterlegen (`HF_TOKEN=VALUE`)
+- Optional aber empfohlen: ein Hugging Face Konto erstellen und einen API-Key für einen schnelleren Download von Modellen hinterlegen (`HF_TOKEN=VALUE`)
 
 ## Nutzung
 

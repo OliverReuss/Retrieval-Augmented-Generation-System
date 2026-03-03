@@ -1,242 +1,242 @@
 [
-  {
+{
       "type": "retrieval: exact match",
       "prompt": "An wen richtet sich der Familiencoach Krebs?",
-      "truth": "Online-Selbsthilfe-Programm der AOK für Angehörige von Krebspatienten; entwickelt mit dem Universitätsklinikum Leipzig und dem Krebsinformationsdienst (DKFZ); kostenlos für alle Interessierten.",
+      "truth": "Der Familiencoach Krebs richtet sich an Angehörige, enge Familienmitglieder und Freunde von Krebspatienten. Er bietet Hilfe bei der psychischen und organisatorischen Bewältigung der Erkrankung im sozialen Umfeld.",
       "source": "https://www.example.com/leistungen/krebstherapie/familiencoach-krebs/"
   },
   {
     "type": "retrieval: exact match",
-    "prompt": "Warum dauert die 66-Tage-Challenge 66 Tage?",
-    "truth": "Es dauert im Durchschnitt 66 Tage, bis eine neue Gewohnheit im Alltag verankert ist.",
+    "prompt": "Warum dauert die 66-Tage-Challenge genau 66 Tage?",
+    "truth": "Die Challenge dauert 66 Tage, weil es laut wissenschaftlichen Erkenntnissen im Durchschnitt so lange dauert, bis eine neue Gewohnheit fest im Alltag verankert und automatisiert ist.",
     "source": "https://www.example.com/thema/66-tage-challenge/"
   },
   {
     "type": "retrieval: exact match",
-    "prompt": "Wie wechsel ich zu einer neuen Krankenkasse?",
-    "truth": "Antrag erfolgt bei der neuen Kasse (oft online); neue Kasse berechnet Kündigungsfrist und informiert die alte Kasse; Kündigung bei der alten Kasse durch das Mitglied ist nicht nötig; Arbeitgeber/Amt/Rentenversicherung müssen formlos informiert werden.",
+    "prompt": "Wie läuft der Wechsel zu einer neuen Krankenkasse ab?",
+    "truth": "Für einen Wechsel füllt man einen Mitgliedsantrag bei der neuen Krankenkasse aus. Diese berechnet die Kündigungsfrist und informiert die bisherige Kasse automatisch. Eine eigene Kündigung ist nicht nötig; lediglich der Arbeitgeber oder die Rentenversicherung muss formlos über den Wechsel informiert werden.",
     "source": "https://www.example.com/krankenkasse-wechseln/"
   },
   {
     "type": "retrieval: exact match",
-    "prompt": "Welche Regeln gelten bei der Krankenversicherung in einem dualen Studiengang?",
-    "truth": "Studierende werden sozialversicherungsrechtlich wie Auszubildende behandelt; Versicherungspflicht in KV und PV besteht in Praxis- und Studienphasen; Beitrag berechnet sich prozentual vom Gehalt oder Stipendium.",
+    "prompt": "Welche Regeln gelten für die Krankenversicherung in einem dualen Studiengang?",
+    "truth": "Duale Studierende werden versicherungspflichtig wie Auszubildende behandelt. Sie sind pflichtversichert in der gesetzlichen Kranken- und Pflegeversicherung. Die Beiträge berechnen sich prozentual vom Gehalt oder Stipendium und fallen sowohl in Praxis- als auch in Studienphasen an.",
     "source": "https://www.example.com/krankenkassenbeitraege/studenten/"
   },
   {
     "type": "retrieval: exact match",
-    "prompt": "Was ist eine Mitgliedsbescheinigung?",
-    "truth": "Enthält Name, Geburtsdatum, Sozialversicherungsnummer, Beginn und Art der Versicherung; dient als Nachweis für Arbeitgeber, Behörden oder Hochschulen.",
+    "prompt": "Was ist eine Mitgliedsbescheinigung und wofür wird sie benötigt?",
+    "truth": "Die Mitgliedsbescheinigung ist ein offizieller Nachweis über die Mitgliedschaft bei einer Krankenkasse. Sie enthält Daten wie Name und Sozialversicherungsnummer und wird von Arbeitgebern, Behörden oder Bildungseinrichtungen gefordert, um den Versicherungsstatus zu belegen.",
     "source": "https://www.example.com/versichertenservice/mitgliedsbescheinigung-beantragen/"
   },
   {
     "type": "retrieval: synonym/paraphrase",
     "prompt": "Was ist die digitale Krankenkarte?",
-    "truth": "Dient als Versicherungsnachweis für Ärzte und Krankenhäuser; Rückseite ist die Europäische Gesundheitskarte (EHIC); nur die aktuellste Karte ist gültig.",
+    "truth": "Die elektronische Gesundheitskarte (eGK) dient als Versicherungsnachweis für den Zugang zu medizinischen Leistungen in Praxen und Krankenhäusern. Auf der Rückseite befindet sich zudem die Europäische Krankenversicherungskarte (EHIC) für den Schutz im Ausland.",
     "source": "https://www.example.com/versichertenservice/elektronische-gesundheitskarte-egk/"
   },
   {
     "type": "retrieval: synonym/paraphrase",
-    "prompt": "Was ist der AOK-Studi-Dienst?",
-    "truth": "Beratung für Studierende zu KV, Jobben, Umzug, Hochschulwechsel, Auslandsaufenthalten und Fitness.",
+    "prompt": "Was bietet der Beratungsservice für Studierende?",
+    "truth": "Der AOK-Studierendenservice bietet persönliche Beratung zu Themen wie Krankenversicherung beim Jobben, Wohnortswechsel oder Auslandsaufenthalten. Zusätzlich umfasst das Angebot Informationen zu Fitness- und Gesundheitsprogrammen während des Studiums.",
     "source": "https://www.example.com/leistungen/studium-beruf/studierendenservice/"
   },
   {
     "type": "retrieval: synonym/paraphrase",
-    "prompt": "Was sind die Vorteile einer nicht stationären Extraversicherung?",
-    "truth": "Ergänzung zur GKV; Kooperation mit Partnern; Leistungen (je nach Tarif/Region): Facharztkosten, Homöopathie, Akupunktur, Sehhilfen, Impfungen über Regelversorgung hinaus.",
+    "prompt": "Welche Vorteile bietet eine ambulante Zusatzversicherung?",
+    "truth": "Eine ambulante Zusatzversicherung erstattet Kosten für Leistungen, die über die Regelversorgung hinausgehen. Dazu gehören Zuschüsse für alternative Heilmethoden (z. B. Homöopathie), Sehhilfen (Brillen/Kontaktlinsen), zusätzliche Facharztkosten sowie erweiterte Vorsorgeuntersuchungen und Impfungen.",
     "source": "https://www.example.com/zusatzversicherungen/ambulante-zusatzversicherung/"
   },
   {
     "type": "retrieval: synonym/paraphrase",
-    "prompt": "Was muss ich für mein ERASMUS in Hinblick auf meine Krankenversicherung beachten?",
-    "truth": "EHIC deckt medizinisch Notwendiges in EU/EFTA-Staaten; private Zusatzversicherung für Länder wie USA/Australien nötig; Versicherungsschutz bei AOK bleibt bestehen, wenn Immatrikulation in DE vorliegt oder Lebensmittelpunkt in DE bleibt.",
+    "prompt": "Wie bin ich während eines Auslandssemesters in Europa versichert?",
+    "truth": "Studierende sind in den meisten europäischen Ländern über die Europäische Krankenversicherungskarte (EHIC) auf der Rückseite ihrer eGK abgesichert. Der Versicherungsschutz bei der AOK bleibt bestehen, sofern man an einer deutschen Hochschule immatrikuliert ist oder den Lebensmittelpunkt in Deutschland behält.",
     "source": "https://www.example.com/leistungen/ausland/auslandsstudium-und-krankenversicherung/"
   },
   {
     "type": "retrieval: synonym/paraphrase",
-    "prompt": "Welche kosten werden bei Sehhilfen übernommen?",
-    "truth": "AOK zahlt Festbeträge für Gläser/Kontaktlinsen bei medizinischer Notwendigkeit; Rezept erforderlich; Bezug über Vertragspartner; keine Kostenübernahme für Brillengestelle; bei Kindern/Jugendlichen unter 18 Übernahme der Gläserkosten bis Festbetrag.",
+    "prompt": "Was zahlt die Kasse für Brillen und Kontaktlinsen?",
+    "truth": "Die AOK übernimmt bei medizinischer Notwendigkeit Festbeträge für Brillengläser und Kontaktlinsen, sofern ein ärztliches Rezept vorliegt. Für Kinder und Jugendliche bis 18 Jahre werden die Kosten für Gläser in Höhe des Festbetrags übernommen. Kosten für das Brillengestell werden grundsätzlich nicht getragen.",
     "source": "https://www.example.com/leistungen/sehschwaechen-hoerschwaechen/untersuchungen-sehhilfen-brillen/"
   },
   {
     "type": "retrieval: noise",
     "prompt": "Ich habe mal gehört, dass die AOK die Kosten für ein Pflegebett übernimmt, oder?",
-    "truth": "Kostenübernahme durch Pflegekasse bei festgestelltem Pflegegrad und Pflege im Bett; inkludiert Zubehör (Aufrichthilfe, Seitengitter), Beratung, Reparatur und Logistik.",
+    "truth": "Die AOK-Pflegekasse übernimmt die Kosten für ein Pflegebett und notwendiges Zubehör (z. B. Seitengitter), wenn eine Person pflegebedürftig ist, einen Pflegegrad hat und überwiegend im Bett gepflegt wird. Die Leistung umfasst auch die Beratung, Lieferung und notwendige Reparaturen.",
     "source": "https://www.example.com/pflegeleistungen/pflegebetten/"
   },
   {
     "type": "retrieval: noise",
     "prompt": "Ich habe neulich mit meiner Freundin Lisa über mein anstehendens Auslandssemester geredet und gemerkt, dass ich noch gar keine Auslandskrankenversicherung abgeschlossen haben. Die Reise geht morgen los, kann ich sie noch abschließen?",
-    "truth": "Abschluss für Zeitraum oder Jahr möglich; muss vor Reiseantritt (bis zum Abreisetag) abgeschlossen werden.",
+    "truth": "Ja, eine Auslandsreisekrankenversicherung kann oft noch am Tag der Abreise abgeschlossen werden. Wichtig ist, dass der Abschluss vor Reiseantritt erfolgt, damit der Schutz für medizinische Notfälle während der gesamten Reisedauer besteht.",
     "source": "https://www.example.com/zusatzversicherungen/auslandskrankenversicherung/"
   },
   {
     "type": "retrieval: noise",
     "prompt": "Ich würde einfach gerne mal so richtig abschalten und mich entspannen. Das Leben ist immer so stessig, weißt du? Welche angebote gibt es da?",
-    "truth": "Gezielte An- und Entspannung von Muskelgruppen; lindert Verspannungen, Kopfschmerz, Schlafstörungen; Einschränkung bei Schwangerschaft oder Herz-Kreislauf-Erkrankungen.",
+    "truth": "Die AOK bietet verschiedene Entspannungskurse an, darunter die Progressive Muskelentspannung (PMR) zum Abbau körperlicher Verspannungen und das Autogene Training zur psychischen Entspannung. Informationen zu verfügbaren Kursen und Zuschüssen finden Versicherte direkt im Online-Angebot ihrer AOK.",
     "source": "https://www.example.com/gesundheitskurse/bewegung/progressive-muskelentspannung/"
   },
   {
     "type": "retrieval: noise",
     "prompt": "Welche Funktionen hat die AOK-Arztsuche? Bisher war ich von solchen Diensten eher enttäuscht.",
-    "truth": "Suche nach Haus-, Fach-, Zahnärzten und Psychotherapeuten; Filter nach Öffnungszeiten und Online-Terminen möglich.",
+    "truth": "Mit der AOK-Arztsuche können Nutzer nach Haus- und Fachärzten sowie Therapeuten suchen. Die Suche ist nach Fachgebieten, Beschwerden oder Filtern wie Öffnungszeiten und Online-Terminvergabe möglich.",
     "source": "https://www.example.com/arzt-in-der-naehe/"
   },
   {
     "type": "retrieval: noise",
     "prompt": "Meine Tochter heißt Julia und ist 8 Jahre alt. Sie liebt es Fahrrad zu fahren. Kann ich sie bei der AOK familienversichern?",
-    "truth": "Kostenlose Mitversicherung für Kinder, Ehepartner und eingetragene Lebenspartner; Kinder sind generell bis zum 18. Lebensjahr mitversichert.",
+    "truth": "Ja, Kinder können bei der AOK im Rahmen der Familienversicherung kostenlos mitversichert werden. Dies ist grundsätzlich bis zur Vollendung des 18. Lebensjahres möglich, sofern ein Elternteil Mitglied der AOK ist.",
     "source": "https://www.example.com/krankenkassenbeitraege/familienversicherung/"
   },
   {
     "type": "generation: summary",
-    "prompt": "Fasse den Unterscheid zwischen Diabetes Typ 1 und Typ 2 zusammen.",
-    "truth": "Typ 1 ist Autoimmunerkrankung (kein Insulin), entwickelt sich rasch; Typ 2 ist Insulinresistenz, entwickelt sich langsam, häufigste Form; beide können Gefäße/Organe schädigen.",
+    "prompt": "Fasse die wesentlichen Unterschiede zwischen Diabetes Typ 1 und Typ 2 zusammen.",
+    "truth": "Diabetes Typ 1 ist eine Autoimmunerkrankung, bei der kein Insulin produziert wird; sie tritt meist jung und plötzlich auf. Typ 2 entsteht durch eine Insulinresistenz, entwickelt sich schleichend über Jahre und betrifft oft ältere oder übergewichtige Menschen. Während Typ 1 einen absoluten Insulinmangel darstellt, reagiert der Körper bei Typ 2 nicht mehr effizient auf das vorhandene Hormon.",
     "source": "https://www.example.com/chronische-erkrankungen/diabetes/"
   },
   {
     "type": "generation: summary",
-    "prompt": "Fasse die Aufgaben der Pflegeberatung zusammen.",
-    "truth": "Organisation der Pflege; Erstellung von Versorgungsplänen; Info zu Leistungen/Finanzierung; Hilfe bei Anträgen; Vermittlung von Alltagshilfen; Hospiz-/Palliativberatung.",
+    "prompt": "Fasse die zentralen Aufgaben der Pflegeberatung zusammen.",
+    "truth": "Die Pflegeberatung unterstützt bei der Organisation der Pflege (Versorgungspläne, Koordination), informiert über Leistungen und Finanzierung der Pflegeversicherung und hilft bei der Antragstellung (z. B. Pflegegrad). Zudem vermittelt sie regionale Alltagshilfen, bietet Hospiz- und Palliativberatung und unterstützt pflegende Angehörige bei der Entlastung.",
     "source": "https://www.example.com/pflegeleistungen/pflegeberatung/"
   },
   {
     "type": "generation: summary",
-    "prompt": "Was ist der Online-Coach Bluthochdruck, wozu dient er, für wen ist er geeignet und wer kann ihn nutzen?",
-    "truth": "Digitales AOK-Programm mit 12 Modulen; Übungen zu Ernährung, Bewegung, Stress; Nutzung der WOOP-Methode; für alle Interessierten kostenfrei (Registrierung für Speichern nötig).",
+    "prompt": "Was ist der Online-Coach Bluthochdruck und für wen ist er gedacht?",
+    "truth": "Der Online-Coach Bluthochdruck ist ein kostenloses, digitales Lernprogramm der AOK zur Senkung des Blutdrucks durch Lebensstiländerungen. Er bietet zwölf Module mit Übungen zu Ernährung, Bewegung und Stressabbau. Das Programm richtet sich an Menschen mit Bluthochdruck sowie zur Vorbeugung an Interessierte, unabhängig von ihrer Krankenkasse.",
     "source": "https://www.example.com/leistungen/online-programme/bluthochdruck-coach/"
   },
   {
     "type": "generation: summary",
-    "prompt": "Gib mir zu jeder U-Untersuchung eine kurze Zusammenfassung.",
-    "truth": "U1-U6 im 1. Lebensjahr; U7-U9 bis zum 5. Lebensjahr; J1 für 12- bis 14-Jährige; Prüfen Motorik, Organe, Sprache und sozialen Entwicklungsstand.",
+    "prompt": "Gib mir einen kurzen Überblick über die Schwerpunkte der U-Untersuchungen (U1 bis J1).",
+    "truth": "Die U-Untersuchungen begleiten die kindliche Entwicklung: U1-U2 fokusieren auf Neugeborenen-Screenings und Organfunktionen, U3-U6 auf Motorik und Sinnesorgane im ersten Jahr. U7-U9 prüfen Sprache, Sozialverhalten und Schulfähigkeit. Die J1 (12-14 Jahre) dient dem Check des körperlichen und seelischen Zustands während der Pubertät inkl. Impfstatus.",
     "source": "https://www.example.com/leistungen/kinder-familien/vorsorge-babys-kinder/"
   },
   {
     "type": "generation: summary",
-    "prompt": "Fasse zusammen, was du zur Mitgliedsbescheinigung weißt.",
-    "truth": "Erfolgt oft elektronisch/automatisch zwischen AOK und Arbeitgeber/Hochschule; manueller Abruf über 'Meine AOK' möglich.",
+    "prompt": "Fasse die wichtigsten Informationen zur Mitgliedsbescheinigung zusammen.",
+    "truth": "Die Mitgliedsbescheinigung dient als Nachweis der Krankenversicherung für Arbeitgeber, Behörden oder Hochschulen. Sie enthält persönliche Daten und den Versicherungsstatus. Oft erfolgt die Übermittlung heute elektronisch und automatisch; bei Bedarf kann sie jedoch online über 'Meine AOK', telefonisch oder per Post angefordert werden.",
     "source": "https://www.example.com/versichertenservice/mitgliedsbescheinigung-beantragen/"
   },
   {
     "type": "generation: transformation",
     "prompt": "Ich rauche, sitze den ganzen Tag, ernähre mich von Junkfood und bin permanent gestresst. Was sollte ich tun, um Herz-Kreislauf-Erkrankungen vorzubeugen?",
-    "truth": "Maßnahmen: Rauchstopp, gesunde Ernährung (wenig Salz/Zucker), 5x pro Woche 30 Min. Bewegung, Stressvermeidung, regelmäßige Blutdruckkontrolle.",
+    "truth": "Um Herz-Kreislauf-Erkrankungen vorzubeugen, sollten Sie das Rauchen aufgeben, auf eine ausgewogene Ernährung mit wenig Zucker und Salz achten und sich regelmäßig bewegen (empfohlen werden 5x 30 Minuten pro Woche). Die AOK unterstützt Sie hierbei mit speziellen Gesundheitskursen zur Suchtmittelprävention, Ernährung, Bewegung und Stressbewältigung sowie regelmäßigen Check-ups beim Hausarzt.",
     "source": "https://www.example.com/krankheiten-behandlungen/herz-kreislauf-erkrankungen/"
   },
   {
     "type": "generation: transformation",
-    "prompt": "Impfung Baby",
-    "truth": "Beginn ab 6 Wochen; Standard: Sechsfachimpfung, MMR, RSV, HPV (9-14 Jahre); Auffrischungen ab 5 Jahren; AOK bietet regionale Zusatzleistungen.",
+    "prompt": "Ab wann und gegen was sollte ich mein Baby impfen lassen?",
+    "truth": "Impfungen für Babys sollten bereits ab einem Alter von 6 Wochen beginnen. Zu den wichtigsten Impfungen in den ersten Jahren gehören die Sechsfachimpfung, Rotaviren, Pneumokokken, MMR (Masern, Mumps, Röteln), Windpocken und RSV. Die AOK bietet hierzu regionale Zusatzleistungen an und unterstützt Eltern beim Umgang mit Impfangst.",
     "source": "https://www.example.com/leistungen/kinder-familien/impfschutz-babys-kinder-jugendliche/"
   },
   {
     "type": "generation: transformation",
-    "prompt": "Stressbewältigung",
-    "truth": "Programme: 'Stress im Griff', 'Lebe Balance'; AOK bezuschusst zwei Gesundheitskurse pro Jahr; Kostenübernahme für ambulante Psychotherapie.",
+    "prompt": "Welche Programme bietet die AOK zur Stressbewältigung an?",
+    "truth": "Die AOK bietet das kostenfreie Online-Programm 'Stress im Griff' sowie verschiedene Kurse wie Progressive Muskelentspannung, Yoga und das Programm 'Lebe Balance' an. Bei tiefgehenden Problemen übernimmt die AOK zudem die Kosten für eine ambulante Psychotherapie. Versicherte können zwei Kurse pro Jahr bezuschusst bekommen.",
     "source": "https://www.example.com/gesundheitskurse/stressbewaeltigung/"
   },
   {
     "type": "generation: transformation",
-    "prompt": "Ich bin zu dick.",
-    "truth": "Abnehmen erfordert Geduld und neue Gewohnheiten, wobei kleine Schritte bei Ernährung und Bewegung langfristigen Erfolg bringen; die AOK unterstützt diesen Prozess durch die 66-Tage-Challenge sowie die 24-Stunden-Expertenberatung AOK-Clarimedis..",
+    "prompt": "Ich fühle mich zu dick und möchte abnehmen. Wie kann mir die AOK helfen?",
+    "truth": "Die AOK unterstützt Sie beim Abnehmen durch die '66-Tage-Challenge', die dabei hilft, langfristig gesunde Routinen zu etablieren. Für medizinische Fragen zur Ernährung und zum Übergewicht steht Ihnen zudem das Expertentelefon AOK-Clarimedis 24 Stunden täglich an 365 Tagen im Jahr zur Verfügung.",
     "source": "https://www.example.com/thema/uebergewicht/"
   },
   {
     "type": "generation: transformation",
-    "prompt": "Mein Mann hat Depessionen und es belstet mich ebenfalls sehr.",
-    "truth": "Familiencoach Depression. Kostenloses, anonymes Online-Programm für Angehörige; 5 Module (z.B. Selbstfürsorge); inkludiert Experten-Videochats.",
+    "prompt": "Mein Mann hat Depressionen und die Situation belastet mich sehr. Gibt es Hilfe für Angehörige?",
+    "truth": "Ja, der 'Familiencoach Depression' der AOK ist ein anonymes Online-Programm, das speziell Angehörige unterstützt. Es bietet Training in Modulen (z. B. Selbstfürsorge und Beziehungsstärkung) sowie Experten-Videochats, um die eigene Belastung zu senken und den Alltag mit der Erkrankung besser zu bewältigen.",
     "source": "https://www.example.com/leistungen/kinder-familien/familiencoach-depression/"
   },
   {
     "type": "robustness: not in context",
     "prompt": "Was ist Quantenverschränkung?",
-    "truth": "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor.",
+    "truth": "Ich kann diese Frage nicht beantworten, da im bereitgestellten Kontext keine Informationen zu physikalischen Themen oder Quantenmechanik enthalten sind.",
     "source": ""
   },
   {
     "type": "robustness: not in context",
     "prompt": "Wann fand die erste Mondlandung statt?",
-    "truth": "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor.",
+    "truth": "Informationen zur Raumfahrt oder historischen Ereignissen wie der Mondlandung sind nicht in den verfügbaren Daten enthalten.",
     "source": ""
   },
   {
     "type": "robustness: not in context",
-    "prompt": "Wie hoch wird der Zusatzbeitrag 2032 sein?",
-    "truth": "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor.",
+    "prompt": "Wie hoch wird der Zusatzbeitrag im Jahr 2032 sein?",
+    "truth": "Über zukünftige Zusatzbeiträge für das Jahr 2032 liegen aktuell keine Informationen im System vor.",
     "source": ""
   },
   {
     "type": "robustness: not in context",
     "prompt": "Wer ist Dr. Irmgard Stippler?",
-    "truth": "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor.",
+    "truth": "Der Name Dr. Irmgard Stippler wird im aktuellen Kontext nicht erwähnt. Ich kann daher keine Angaben zu dieser Person machen.",
     "source": ""
   },
   {
     "type": "robustness: not in context",
     "prompt": "Sollte ich zur Techniker-Krankenkasse wechseln?",
-    "truth": "Zu dieser Frage liegen im bereitgestellten Kontext keine Informationen vor.",
+    "truth": "Zu den Angeboten anderer Krankenkassen oder einer Empfehlung für einen Wechsel liegen keine Informationen vor.",
     "source": ""
   },
   {
     "type": "robustness: ambiguous",
-    "prompt": "Gib mit Tipps zu meiner chronischen Erkrankung.",
-    "truth": "Um welche chronische Erkrankung handelt es sich?",
+    "prompt": "Gib mir Tipps zu meiner chronischen Erkrankung.",
+    "truth": "Um Ihnen gezielte Informationen geben zu können, benötige ich Angaben dazu, um welche chronische Erkrankung es sich handelt (z. B. Diabetes, Asthma oder Herzerkrankungen).",
     "source": "https://www.example.com/chronische-erkrankungen/"
   },
   {
     "type": "robustness: ambiguous",
     "prompt": "Wie kann ich meine Diabeteserkrankung behandeln?",
-    "truth": "Um welchen Diabetestyp handelt es sich?",
+    "truth": "Die Behandlung hängt vom jeweiligen Typ ab. Handelt es sich bei Ihnen um Diabetes Typ 1 oder Typ 2?",
     "source": "https://www.example.com/chronische-erkrankungen/diabetes/"
   },
   {
     "type": "robustness: ambiguous",
     "prompt": "Wie kann ich meine Geräte vor einem Virus schützen?",
-    "truth": "Die AOK liefert keine Informationen zu diesem Thema. Viren werden lediglich im medizinischen Kontext behandelt.",
-    "source": "https://www.example.com/leistungen/impfungen/hpv/"
+    "truth": "Mein Wissen beschränkt sich auf medizinische Themen. Zu IT-Sicherheit oder Computerviren liegen keine Informationen vor.",
+    "source": ""
   },
   {
     "type": "robustness: ambiguous",
     "prompt": "Erzähle mir etwas zu der App der AOK.",
-    "truth": "Über welche App möchtest du Informationen erhalten? Die AOK bietet verschiedene Apps z.B. 'AOK Mein Leben' oder 'Meine AOK'.",
+    "truth": "Die AOK bietet verschiedene Apps an. Möchten Sie Informationen zur elektronischen Patientenakte 'AOK Mein Leben' oder zum Serviceportal 'Meine AOK'?",
     "source": "https://www.example.com/versichertenservice/onlineportal-meine-aok/"
   },
   {
     "type": "robustness: ambiguous",
     "prompt": "Wie melde ich mich zu einer Vorsorgeuntersuchung an?",
-    "truth": "Um welche Art von Vorsorgeuntersuchung handelt es sich? Die AOK bietet verschiedene Vorsorgeuntersuchungen an, z.B. für Kinder, Erwachsene oder spezielle Erkrankungen.",
+    "truth": "Um welche Vorsorgeuntersuchung handelt es sich (z. B. Check-up für Erwachsene, Krebsfrüherkennung oder U-Untersuchungen für Kinder)? Die Anmeldung erfolgt in der Regel direkt über Ihre Arztpraxis.",
     "source": "https://www.example.com/leistungen/gesundheitsvorsorge/gesundheits-check-up-fuer-erwachsene/"
   },
   {
     "type": "hallucination: misleading",
     "prompt": "Ich bin 21 Jahre alt und möchte eine Ultraschalluntersuchung zur Früherkennung eines Aneurysma im Bauch durchführen.",
-    "truth": "AOK übernimmt einmalig Kosten für Männer ab 65 Jahren.",
+    "truth": "Eine Kostenübernahme für dieses Screening erfolgt laut aktuellem Stand nur für Männer ab 65 Jahren einmalig. Für eine 21-jährige Person ist diese Vorsorgeleistung im Regelfall nicht vorgesehen, da das Risiko statistisch erst im höheren Alter relevant wird.",
     "source": "https://www.example.com/leistungen/gesundheitsvorsorge/aneurysma-frueherkennung/"
   },
   {
     "type": "hallucination: misleading",
-    "prompt": "Ich kann leider nicht zur Psychotherapie, weil es nicht von der Krankenkasse gezahlt wird, welche Alternativen gibt es?",
-    "truth": "AOK übernimmt Kosten für ambulante Behandlung (Einzel/Gruppe/Langzeit) bei zugelassenen Therapeuten in vollem Umfang; Abrechnung über Versichertenkarte.",
+    "prompt": "Ich kann leider nicht zur Psychotherapie, weil es nicht von der Krankenkasse gezahlt wird. Welche Alternativen gibt es?",
+    "truth": "Die Annahme ist nicht korrekt: Die AOK übernimmt die Kosten für medizinisch notwendige ambulante Psychotherapien (Einzel- oder Gruppensitzungen) in vollem Umfang. Voraussetzung ist, dass die Behandlung durch zugelassene Therapeuten oder Vertragsärzte erfolgt und über die Versichertenkarte abgerechnet wird.",
     "source": "https://www.example.com/leistungen/therapien/psychotherapie-ambulant/"
   },
   {
     "type": "hallucination: misleading",
     "prompt": "Wer entschied, dass die elektronische Patientenakte eingeführt wird?",
-    "truth": "Es wird nicht angegeben wer die Einführung der elektronischen Patientenakte entschieden hat. Es werden Informationen geliefert, was die ePA ist, wie sie benutzt wird etc.",
+    "truth": "Im vorliegenden Kontext wird nicht genannt, welche Person oder Instanz die Einführung der ePA entschieden hat. Die Informationen beschränken sich auf die Nutzung und die Vorteile der elektronischen Patientenakte.",
     "source": "https://www.example.com/thema/epa-fuer-alle/"
   },
   {
-    "type": "hallucination: misleading",
-    "prompt": "Was weiß Prof. Dr. Gabriele Oettingen zu Oettinger Bier?",
-    "truth": "Psychologie-Professorin an der NYU; Erfinderin der WOOP-Methode; kein Bezug zu Oettinger Bier.",
-    "source": "https://bluthochdruck.aok.de/unsere-experten/"
+  "type": "hallucination: misleading",
+  "prompt": "Was hat Podologie mit Waschmittel-Pods zu tun?",
+  "truth": "Es gibt keinen sachlichen Zusammenhang zwischen Podologie und Waschmittel-Pods. Die Podologie ist die medizinische Fußpflege, die krankhafte Veränderungen an Haut und Nägeln behandelt. Die AOK übernimmt hierfür die Kosten, sofern eine medizinische Notwendigkeit vorliegt. Waschmittel-Produkte sind kein Bestandteil des medizinischen Leistungskatalogs.",
+  "source": "https://www.example.com/leistungen/therapien/podologische-therapie/"
   },
   {
     "type": "hallucination: misleading",
     "prompt": "Wie kann ich als Auszubildender die Krankenkasse wechseln?",
-    "truth": "Es wird nicht explizit erwähnt, wie man als Auszubildender die Krankenkasse wechseln kann. Es werden nur Informationen über die Krankenversicherungsregeln für Auszubildende gegeben.",
+    "truth": "Der bereitgestellte Kontext enthält Informationen zu den Versicherungsregeln für Auszubildende, beschreibt jedoch nicht den konkreten Prozess eines Krankenkassenwechsels für diese Zielgruppe.",
     "source": "https://www.example.com/krankenkassenbeitraege/auszubildende/"
   }
 ]
