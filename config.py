@@ -59,9 +59,9 @@ RETRIEVAL_RERANKING_TOP_K = 5
 RETRIEVAL_RERANKING_THRESHOLD = 0.5
 
 # Generation
-GENERATION_API_URL = "https://api.openai.com/v1/chat/completions" # "https://api.your-company.com/v1/chat/completions" # "https://openrouter.ai/api/v1/chat/completions"
-GENERATION_API_KEY = os.getenv("OPENAI_API_KEY")
-GENERATION_MODEL = "gpt-4o" # "Qwen/Qwen2.5-VL-72B-Instruct" # "Qwen3-30B-A3B-Q6_K.gguf:latest"  # "mistralai/mistral-small-3.1-24b-instruct:free"
+GENERATION_API_URL = "https://api.your-company.com/v1/chat/completions" # "https://api.openai.com/v1/chat/completions" "https://openrouter.ai/api/v1/chat/completions"
+GENERATION_API_KEY = os.getenv("CHATBOT_API_KEY")
+GENERATION_MODEL = "Qwen/Qwen2.5-VL-72B-Instruct" # "Qwen3-30B-A3B-Q6_K.gguf:latest" "gpt-4o"
 GENERATION_TEMPERATURE = 0.0
 GENERATION_MAX_TOKENS = 1024
 GENERATION_TOP_P = 0.1
