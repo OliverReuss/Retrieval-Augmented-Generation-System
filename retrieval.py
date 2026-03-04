@@ -15,6 +15,7 @@ class Retriever:
         self.reranking_top_k = config.RETRIEVAL_RERANKING_TOP_K
         self.model_path = config.MODELS_DIRECTORY
         self.cross_encoder_model = config.RETRIEVAL_CROSS_ENCODER_MODEL
+        self.reranking_threshold = config.RETRIEVAL_RERANKING_THRESHOLD
         self.chroma_client = None
         self.collection = None
         self.embedder = Embedder()
@@ -24,6 +25,7 @@ class Retriever:
         self.retrieval_times_ms = []
         self.reranking_times_ms = []
         self.similarity_scores = []
+        self.final_similarity_scores = []
     
     def connect_to_db(self) -> chromadb.Collection:
         if self.collection is not None:
@@ -113,6 +115,13 @@ class Retriever:
         # Zeitmessung starten
         start_time = time.time()
         
+        # Nur Ergebnisse zulassen, deren similarity über dem threshold liegt
+        results = [r for r in results if r.get('similarity', 0) >= self.reranking_threshold]
+
+        if not results:
+            self.reranking_times_ms.append((time.time() - start_time) * 1000)
+            return []
+        
         if self.cross_encoder is None:
             self.load_cross_encoder()
         
@@ -126,7 +135,7 @@ class Retriever:
         scores = self.cross_encoder.predict(pairs)
         for i, result in enumerate(results):
             result['rerank_score'] = float(scores[i])
-        
+
         # Nach Rerank-Score sortieren (höher ist besser)
         results.sort(key=lambda x: x.get('rerank_score', 0), reverse=True)
         
@@ -136,6 +145,9 @@ class Retriever:
         # Reranking-Zeit messen
         reranking_time_ms = (time.time() - start_time) * 1000
         self.reranking_times_ms.append(reranking_time_ms)
+
+        # Ursprüngliche Similarity der finalen Ergebnisse speichern
+        self.final_similarity_scores.extend([r.get('similarity', 0.0) for r in reranked_results])
 
         return reranked_results
     
@@ -160,11 +172,20 @@ class Retriever:
             min_similarity = min(self.similarity_scores)
             max_similarity = max(self.similarity_scores)
         
+        # Finale Similarity Statistiken (nach Reranking)
+        final_min_similarity = 0.0
+        final_max_similarity = 0.0
+        if self.final_similarity_scores:
+            final_min_similarity = min(self.final_similarity_scores)
+            final_max_similarity = max(self.final_similarity_scores)
+        
         stats = {
             'retrieval_avg_time_ms': round(avg_retrieval_time, 4),
             'retrieval_avg_similarity': round(avg_similarity, 4),
             'retrieval_min_similarity': round(min_similarity, 4),
             'retrieval_max_similarity': round(max_similarity, 4),
+            'retrieval_final_min_similarity': round(final_min_similarity, 4),
+            'retrieval_final_max_similarity': round(final_max_similarity, 4),
             'retrieval_avg_reranking_time': round(avg_reranking_time_ms, 4)
         }
         
@@ -174,6 +195,7 @@ class Retriever:
         self.retrieval_times_ms = []
         self.reranking_times_ms = []
         self.similarity_scores = []
+        self.final_similarity_scores = []
 
     def format_context(self, results: list[dict]) -> list[str]:
         context_parts = []

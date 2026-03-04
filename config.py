@@ -51,17 +51,18 @@ EMBEDDING_BATCH_SIZE = 32
 # Retrieval
 RETRIEVAL_DB_PATH = "data/database"
 RETRIEVAL_COLLECTION_NAME = "documents_collection"
-RETRIEVAL_TOP_K = 10
+RETRIEVAL_TOP_K = 20
 RETRIEVAL_HNSW_SPACE = "cosine"
 RETRIEVAL_HNSW_M = 32
 RETRIEVAL_CROSS_ENCODER_MODEL = "BAAI/bge-reranker-v2-m3"
 RETRIEVAL_RERANKING_TOP_K = 5
+RETRIEVAL_RERANKING_THRESHOLD = 0.5
 
 # Generation
 GENERATION_API_URL = "https://api.openai.com/v1/chat/completions" # "https://api.your-company.com/v1/chat/completions" # "https://openrouter.ai/api/v1/chat/completions"
 GENERATION_API_KEY = os.getenv("OPENAI_API_KEY")
-GENERATION_MODEL = "gpt-4.1-mini" # "Qwen/Qwen2.5-VL-72B-Instruct" # "Qwen3-30B-A3B-Q6_K.gguf:latest"  # "mistralai/mistral-small-3.1-24b-instruct:free"
-GENERATION_TEMPERATURE = 0.1
+GENERATION_MODEL = "gpt-4o" # "Qwen/Qwen2.5-VL-72B-Instruct" # "Qwen3-30B-A3B-Q6_K.gguf:latest"  # "mistralai/mistral-small-3.1-24b-instruct:free"
+GENERATION_TEMPERATURE = 0.0
 GENERATION_MAX_TOKENS = 1024
 GENERATION_TOP_P = 0.1
 GENERATION_FREQUENCY_PENALTY = 0.1
@@ -74,6 +75,7 @@ Kern-Regeln:
 2. Korrektur von Fehlannahmen: Wenn eine Nutzerfrage auf einer falschen Prämisse beruht (z. B. "Warum zahlt die Kasse X nicht?"), korrigiere dies aktiv, falls der Kontext das Gegenteil belegt.
 3. Umgang mit Ambiguität: Wenn eine Frage zu vage ist (z. B. "Tipps zu meiner Krankheit"), nenne kurz die verfügbaren Themen aus dem Kontext und stelle eine gezielte Rückfrage.
 4. Sprache & Stil: Antworte seriös, aber verständlich. Vermeide reines Copy-Paste von Textwüsten; fasse Informationen stattdessen sinnvoll zusammen, ohne Fakten zu verfälschen.
+5. Belegpflicht & Zitate: Jede fachliche Aussage muss durch eine entsprechende Stelle im Kontext gedeckt sein.
 
 Umgang mit Wissenslücken:
 - Keine Infos vorhanden: "Zu dieser spezifischen Frage liegen im bereitgestellten Kontext keine Informationen vor."

@@ -9,18 +9,6 @@ from ragas.metrics._summarization import SummarizationScore
 import config
 import json
 
-# retrieval
-    # context_precision (angestrebt: > 0.70): Bewertet, ob die relevanten Informationen im Kontext möglichst weit oben in der Gewichtung stehen (Signal-Rausch-Verhältnis der Rankings).
-    # context_recall (angestrebt: > 0.80): Analysiert, ob der abgerufene Kontext alle zur Beantwortung der Ground Truth notwendigen Informationen enthält.
-    # context_entity_recall (angestrebt: > 0.60): Misst den Anteil der Begriffe aus der Ground Truth, die im abgerufenen Kontext gefunden wurden.
-    
-# generation
-    # answer_similarity (angestrebt: > 0.80): Misst die rein semantische Nähe zwischen der generierten Antwort und der Ground Truth mittels Kosinus-Ähnlichkeit.
-    # answer_correctness (angestrebt: > 0.75): Eine gewichtete Kombination aus der faktischen Übereinstimmung und der semantischen Ähnlichkeit zur Ground Truth.
-    # summary_score (angestrebt: > 0.70): Misst wie präzise und vollständig die Informationen des Kontextes in der Antwort zusammengefasst wurden.
-    # answer_relevancy (angestrebt: > 0.80): Bewertet, wie treffend die Antwort auf die ursprüngliche Frage eingeht.
-    # faithfulness (angestrebt: > 0.85): Misst die Treue zum Kontext. Jede Antwort wird darauf geprüft, ob sie direkt auf den abgerufenen Informationen basiert.
-
 class Evaluator:
 
     def __init__(self, web_scraper, chunker, embedder, retriever, generator) -> None:
@@ -113,21 +101,27 @@ class Evaluator:
         dataset = Dataset.from_dict(data)
         
         # Metriken in Gruppen definieren
-        retrieval_metrics = [context_entity_recall, context_precision, context_recall]
-        generation_metrics = [answer_correctness, answer_relevancy, answer_similarity, faithfulness]
         summary_score = SummarizationScore()
         
         # Metriken passend zu Test-Typ zuweisen, da nicht alle für jeden Test-Typ relevant
         metrics_to_run = []
         
-        if test_type == "generation: summary":
-            metrics_to_run = retrieval_metrics + generation_metrics + [summary_score]
+        if test_type in ["retrieval: exact match", "retrieval: synonym/paraphrase"]:
+            metrics_to_run = [context_precision, context_recall, context_entity_recall, answer_similarity, answer_correctness]
+        elif test_type == "retrieval: noise":
+            metrics_to_run = [context_precision, context_recall, answer_relevancy, faithfulness, answer_correctness]
+        elif test_type == "generation: summary":
+            metrics_to_run = [summary_score, faithfulness, answer_correctness, answer_similarity]
+        elif test_type == "generation: transformation":
+            metrics_to_run = [answer_correctness, answer_relevancy, answer_similarity, faithfulness]
         elif test_type == "robustness: not in context":
             metrics_to_run = [answer_correctness, answer_similarity]
         elif test_type == "robustness: ambiguous":
             metrics_to_run = [answer_correctness, answer_relevancy, answer_similarity]
+        elif test_type == "hallucination: misleading":
+            metrics_to_run = [faithfulness, answer_correctness, answer_similarity, context_precision]
         else:
-            metrics_to_run = retrieval_metrics + generation_metrics
+            metrics_to_run = [context_precision, context_recall, answer_correctness, answer_similarity, faithfulness]
         
         try:
             # RAGAS Evaluation ausführen
@@ -224,6 +218,7 @@ class Evaluator:
             'RETRIEVAL_HNSW_M': config.RETRIEVAL_HNSW_M,
             'RETRIEVAL_CROSS_ENCODER_MODEL': config.RETRIEVAL_CROSS_ENCODER_MODEL,
             'RETRIEVAL_RERANKING_TOP_K': config.RETRIEVAL_RERANKING_TOP_K,
+            'RETRIEVAL_RERANKING_THRESHOLD': config.RETRIEVAL_RERANKING_THRESHOLD,
             
             'GENERATION_API_URL': config.GENERATION_API_URL,
             'GENERATION_MODEL': config.GENERATION_MODEL,
