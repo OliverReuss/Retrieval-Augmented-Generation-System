@@ -4,12 +4,16 @@
 
 Es wurde ein Retrieval-Augmented Generation (RAG) System auf Basis von Web-Scraping-Daten implementiert. Das Projekt enthält die komplette Pipeline von der Datenextraktion bis hin zur Nutzung und der automatisierten Evaluation.
 
+## Hinweis
+
+Um die Bewertung der Arbeit zu erleichtern, wurde die erfassten Daten und lokal gespeicherten Modelle beigelegt. Um die Datenerfassung und den Download der Modelle zu testen, kann das `data` und das `models` Verzeichnis gelöscht werden. Ein OpenAI API-Key mit Guthaben wurde für die Ausführung des Systems und die Evaluation in der `.env` hinterlegt.
+
 ## Voraussetzungen und Installation
 
 - Python>=3.11.9
 - Empfohlen: Erstellung eines Virtual Environments mit `python -m venv .venv` und `.venv\Scripts\activate`
 - Installation der Abhängigkeiten aus der requirements.txt mit dem Befehl `pip install -r requirements.txt`
-- Ein OpenAI-Konto mit Guthaben wird für die Evaluation und Generierung benötigt und ein API-Key muss in der `.env` hinterlegt werden (`OPENAI_API_KEY=VALUE`) (Hinweis: ein kompletter Testlauf mit dem Modell `gpt-4o-mini` kostet ca. 0,12 €)
+- Ein OpenAI-Konto mit Guthaben wird für die Evaluation und Generierung benötigt und ein API-Key muss in der `.env` hinterlegt werden (`OPENAI_API_KEY=VALUE`) (Hinweis: ein kompletter Testlauf kostet < 1 €)
 - Alternativ zu OpenAI kann für die Generierung (nicht Evaluation) auch ein kostenloses Modell von OpenRouter eingebunden werden (`OPENROUTER_API_KEY=VALUE`)
 - Optional aber empfohlen: ein Hugging Face Konto erstellen und einen API-Key für einen schnelleren Download von Modellen hinterlegen (`HF_TOKEN=VALUE`)
 
