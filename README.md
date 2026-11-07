@@ -1,52 +1,66 @@
-# Bachelor Thesis: When Websites Learn to Speak: Implementation of a Retrieval-Augmented Generation System Based on Web-Scraped Data
+# Bachelor Thesis: When Websites Learn to Speak
+**Implementation of a Retrieval-Augmented Generation System Based on Web-Scraped Data**
 
-## Description
+This repository contains the code for my bachelor thesis. I built a complete Retrieval-Augmented Generation (RAG) pipeline from scratch, covering everything from initial web scraping and data extraction to querying the system and running automated evaluations.
 
-A Retrieval-Augmented Generation (RAG) system based on web-scraped data was implemented. The project contains the complete pipeline, from data extraction to system usage and automated evaluation.
+> **Note on testing:** To make evaluating the project easier, the pre-collected data and locally stored models are included in this repository. If you want to test the actual data collection and model download processes yourself, simply delete the `data` and `models` directories before running the code.
 
-## Note
+---
 
-To facilitate the evaluation of the project, the collected data and locally stored models have been included. To test the data collection and model download processes, the `data` and `models` directories can be deleted. An OpenAI API key with available credits has been stored in the `.env` file for running the system and performing the evaluation.
+## Requirements & Installation
 
-## Requirements and Installation
+The project requires **Python 3.11.9 or higher**. I recommend setting up a virtual environment:
 
-* Python >= 3.11.9
+```bash
+# Create and activate virtual environment
+python -m venv .venv
+.venv\Scripts\activate
 
-* Recommended: Create a virtual environment using `python -m venv .venv` and `.venv\Scripts\activate`
+# Install dependencies
+pip install -r requirements.txt
+```
 
-* Install the dependencies from `requirements.txt` using `pip install -r requirements.txt`
+### Environment Variables (`.env`)
 
-* An OpenAI account with available credits is required for evaluation and generation, and an API key must be stored in the `.env` file (`OPENAI_API_KEY=VALUE`)
-  *(Note: A complete test run costs less than €1.)*
+You need to provide API keys to run the generation and evaluation steps. Create a `.env` file in the root directory and configure the following:
 
-* As an alternative to OpenAI, a free model from OpenRouter can also be used for generation (but not evaluation) (`OPENROUTER_API_KEY=VALUE`)
+* **OpenAI (Required for evaluation):** You need an account with available credits (a full test run costs less than 1€).
+`OPENAI_API_KEY=your_key_here`
 
-* Optional but recommended: Create a Hugging Face account and provide an API key for faster model downloads (`HF_TOKEN=VALUE`)
+* **OpenRouter (Optional):** As an alternative to OpenAI, you can use a free model from OpenRouter for generation (note: automated evaluation still requires OpenAI).
+`OPENROUTER_API_KEY=your_key_here`
+
+* **Hugging Face (Optional but recommended):** Add an access token for faster model downloads.
+`HF_TOKEN=your_token_here`
+
+---
 
 ## Usage
 
-Running `main.py` starts the entire process and creates all required data and/or downloads the necessary models. The user can choose whether to perform an evaluation or proceed directly to using the system. Interaction with the system takes place through input and output in the terminal.
+You can start the entire pipeline by running:
+
+```bash
+python main.py
+```
+
+This script orchestrates the workflow. It creates the required data structures, downloads missing models, and then asks if you want to perform a full system evaluation or proceed directly to chatting with the RAG system in your terminal.
+
+---
 
 ## Configuration
 
-* The system can be configured through `config.py`
+You can tweak the system's behavior and network settings directly in `config.py`. 
 
-* Proxy server (optional): `PROXY`
+Available configurations include:
+* **Network:** `PROXY`, `CERTIFICATE`
+* **LLM Setup:** `GENERATION_API_URL`, `GENERATION_API_KEY`, `GENERATION_MODEL`
 
-* SSL certificate (optional): `CERTIFICATE`
+---
 
-* LLM provider: `GENERATION_API_URL`
+## Academic Context
 
-* LLM provider API key: `GENERATION_API_KEY`
-
-* LLM model: `GENERATION_MODEL`
-
-## Information
-
-* Author: Oliver Reuß
-
-* Submitted to: Prof. Dr. Michael Spangenberg
-
-* Company Supervisor: Thomas Pinsker
-
-* Hof University of Applied Sciences | Faculty of Computer Science | Media Informatics Program | Winter Semester 2025/26
+* **Author:** Oliver Reuß
+* **University:** Hof University of Applied Sciences (Faculty of Computer Science, Media Informatics B.Sc.)
+* **Semester:** Winter Semester 2025/26
+* **Academic Supervisor:** Prof. Dr. Michael Spangenberg
+* **Company Supervisor:** Thomas Pinsker
